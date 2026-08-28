@@ -17,6 +17,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
 import { Route as AuthenticatedSinteseRouteImport } from './routes/_authenticated/sintese'
 import { Route as Mf2IndexRouteImport } from './routes/mf2.index'
+import { Route as Mf2FontesRouteImport } from './routes/mf2.fontes'
 import { Route as AuthenticatedAtividadesIndexRouteImport } from './routes/_authenticated/atividades.index'
 import { Route as AuthenticatedAtividadesAtividadeIdRouteImport } from './routes/_authenticated/atividades.$atividadeId'
 import { Route as AuthenticatedBlocosBlocoIdRouteImport } from './routes/_authenticated/blocos.$blocoId'
@@ -60,6 +61,11 @@ const Mf2IndexRoute = Mf2IndexRouteImport.update({
   path: '/mf2/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Mf2FontesRoute = Mf2FontesRouteImport.update({
+  id: '/mf2/fontes',
+  path: '/mf2/fontes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAtividadesIndexRoute =
   AuthenticatedAtividadesIndexRouteImport.update({
     id: '/atividades/',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
+  '/mf2/fontes': typeof Mf2FontesRoute
   '/mf2/': typeof Mf2IndexRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
+  '/mf2/fontes': typeof Mf2FontesRoute
   '/mf2': typeof Mf2IndexRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/formador': typeof AuthenticatedFormadorRoute
   '/_authenticated/sintese': typeof AuthenticatedSinteseRoute
+  '/mf2/fontes': typeof Mf2FontesRoute
   '/mf2/': typeof Mf2IndexRoute
   '/_authenticated/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/_authenticated/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/formador'
     | '/sintese'
+    | '/mf2/fontes'
     | '/mf2/'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/formador'
     | '/sintese'
+    | '/mf2/fontes'
     | '/mf2'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/formador'
     | '/_authenticated/sintese'
+    | '/mf2/fontes'
     | '/mf2/'
     | '/_authenticated/atividades/$atividadeId'
     | '/_authenticated/blocos/$blocoId'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   FontesRoute: typeof FontesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  Mf2FontesRoute: typeof Mf2FontesRoute
   Mf2IndexRoute: typeof Mf2IndexRoute
 }
 
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Mf2IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mf2/fontes': {
+      id: '/mf2/fontes'
+      path: '/mf2/fontes'
+      fullPath: '/mf2/fontes'
+      preLoaderRoute: typeof Mf2FontesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/atividades/': {
       id: '/_authenticated/atividades/'
       path: '/atividades'
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   FontesRoute: FontesRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  Mf2FontesRoute: Mf2FontesRoute,
   Mf2IndexRoute: Mf2IndexRoute,
 }
 export const routeTree = rootRouteImport
