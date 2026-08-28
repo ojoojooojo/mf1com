@@ -196,8 +196,8 @@ export function RevealPanel({
   canReveal: boolean;
   children: ReactNode;
 }) {
-  const { state, saveAnswer, hydrated } = useProgress();
-  const stored = state.answers[id] === "1";
+  const { state, saveFlag, hydrated } = useProgress();
+  const stored = state.flags[id] === true;
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -215,7 +215,7 @@ export function RevealPanel({
         disabled={!canReveal}
         onClick={() => {
           setOpen(true);
-          saveAnswer(id, "1");
+          saveFlag(id);
         }}
         className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
       >
