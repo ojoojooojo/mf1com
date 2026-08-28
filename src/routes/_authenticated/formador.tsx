@@ -108,7 +108,8 @@ function TrainerPage() {
         supabase.from("progress").select("user_id, section_id, status, updated_at"),
         supabase
           .from("quiz_answers")
-          .select("user_id, quiz_id, selected_option, is_correct, answered_at"),
+          .select("user_id, quiz_id, selected_option, is_correct, answered_at")
+          .in("quiz_id", [...BLOCK_QUIZ_IDS]),
         supabase
           .from("written_responses")
           .select("user_id, activity_id, response_text, submitted_at"),

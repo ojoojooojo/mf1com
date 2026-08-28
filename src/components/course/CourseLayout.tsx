@@ -5,6 +5,17 @@ import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lu
 import { STOPS, MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { useProgress } from "@/lib/progress";
 import { useAuth, useIsFormador } from "@/lib/auth";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 
 
@@ -70,6 +81,9 @@ function TrailList({ onNavigate }: { onNavigate?: () => void }) {
 function ProgressPanel() {
   const { percent, reset, hydrated, synced } = useProgress();
   const { user } = useAuth();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [justReset, setJustReset] = useState(false);
+
   return (
     <div className="rounded-xl border border-sidebar-border bg-sidebar p-4">
       <p className="eyebrow">Progresso</p>
@@ -89,13 +103,42 @@ function ProgressPanel() {
             : "A sincronizar com a sua conta…"
           : "Guardado automaticamente neste navegador."}
       </p>
-      <button
-        type="button"
-        onClick={reset}
-        className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-      >
-        <RotateCcw className="size-3" /> Reiniciar progresso
-      </button>
+      {justReset ? (
+        <p className="mt-2 text-xs font-medium text-success">
+          O seu percurso foi reiniciado.
+        </p>
+      ) : null}
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogTrigger asChild>
+          <button
+            type="button"
+            onClick={() => setJustReset(false)}
+            className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            <RotateCcw className="size-3" /> Reiniciar progresso
+          </button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reiniciar progresso?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação vai apagar todo o teu progresso, respostas e resultados deste curso. Esta
+              operação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                reset();
+                setJustReset(true);
+              }}
+            >
+              Sim, apagar tudo
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

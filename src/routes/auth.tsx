@@ -32,7 +32,7 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-type Mode = "entrar" | "criar";
+type Mode = "entrar" | "criar" | "recuperar";
 
 function safePath(value: string | undefined): string {
   if (!value || !value.startsWith("/") || value.startsWith("//")) return "/blocos/1";
@@ -66,6 +66,23 @@ function AuthPage() {
       setError("Introduza um endereço de email válido.");
       return;
     }
+
+    if (mode === "recuperar") {
+      setBusy(true);
+      try {
+        await supabase.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        });
+        // Mensagem neutra: não confirmamos nem negamos a existência da conta.
+        setNotice(
+          "Se existir uma conta com este email, foi enviado um link de recuperação. Verifique a sua caixa de correio.",
+        );
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
+
     if (password.length < 6) {
       setError("A password tem de ter, no mínimo, 6 caracteres.");
       return;
@@ -127,6 +144,7 @@ function AuthPage() {
               onClick={() => {
                 setMode(m);
                 setError(null);
+                setNotice(null);
               }}
               className={cn(
                 "flex-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors",
@@ -156,21 +174,59 @@ function AuthPage() {
               required
             />
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              autoComplete={mode === "criar" ? "new-password" : "current-password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-              placeholder="Mínimo 6 caracteres"
-              required
-            />
-          </div>
+          {mode !== "recuperar" ? (
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                autoComplete={mode === "criar" ? "new-password" : "current-password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                placeholder="Mínimo 6 caracteres"
+                required
+              />
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Indique o email da sua conta e enviaremos um link para definir uma nova password.
+            </p>
+          )}
+
+          {mode === "entrar" ? (
+            <div className="-mt-2 text-right">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("recuperar");
+                  setError(null);
+                  setNotice(null);
+                }}
+                className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Esqueci-me da password
+              </button>
+            </div>
+          ) : null}
+
+          {mode === "recuperar" ? (
+            <div className="-mt-2 text-right">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("entrar");
+                  setError(null);
+                  setNotice(null);
+                }}
+                className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Voltar ao início de sessão
+              </button>
+            </div>
+          ) : null}
 
           {error ? (
             <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -193,7 +249,11 @@ function AuthPage() {
             ) : (
               <LogIn className="size-4" />
             )}
-            {mode === "criar" ? "Criar conta e começar" : "Entrar"}
+            {mode === "criar"
+              ? "Criar conta e começar"
+              : mode === "recuperar"
+                ? "Enviar link de recuperação"
+                : "Entrar"}
           </button>
         </form>
       </div>

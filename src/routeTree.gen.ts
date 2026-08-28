@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FontesRouteImport } from './routes/fontes'
 import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
 import { Route as AuthenticatedSinteseRouteImport } from './routes/_authenticated/sintese'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthenticatedAtividadesIndexRouteImport } from './routes/_authenticated/atividades.index'
 import { Route as AuthenticatedAtividadesAtividadeIdRouteImport } from './routes/_authenticated/atividades.$atividadeId'
 import { Route as AuthenticatedBlocosBlocoIdRouteImport } from './routes/_authenticated/blocos.$blocoId'
@@ -48,6 +49,11 @@ const AuthenticatedSinteseRoute = AuthenticatedSinteseRouteImport.update({
   path: '/sintese',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthenticatedAtividadesIndexRoute =
   AuthenticatedAtividadesIndexRouteImport.update({
     id: '/atividades/',
@@ -69,20 +75,22 @@ const AuthenticatedBlocosBlocoIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/fontes': typeof FontesRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
   '/atividades/': typeof AuthenticatedAtividadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/fontes': typeof FontesRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
   '/atividades': typeof AuthenticatedAtividadesIndexRoute
@@ -91,10 +99,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/fontes': typeof FontesRoute
   '/_authenticated/formador': typeof AuthenticatedFormadorRoute
   '/_authenticated/sintese': typeof AuthenticatedSinteseRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/_authenticated/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/_authenticated/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
   '/_authenticated/atividades/': typeof AuthenticatedAtividadesIndexRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/fontes'
     | '/formador'
     | '/sintese'
+    | '/auth/reset-password'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
     | '/atividades/'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/fontes'
     | '/formador'
     | '/sintese'
+    | '/auth/reset-password'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
     | '/atividades'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/fontes'
     | '/_authenticated/formador'
     | '/_authenticated/sintese'
+    | '/auth/reset-password'
     | '/_authenticated/atividades/$atividadeId'
     | '/_authenticated/blocos/$blocoId'
     | '/_authenticated/atividades/'
@@ -136,7 +148,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   FontesRoute: typeof FontesRoute
 }
 
@@ -184,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSinteseRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_authenticated/atividades/': {
       id: '/_authenticated/atividades/'
       path: '/atividades'
@@ -228,10 +247,20 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AuthRouteChildren {
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   FontesRoute: FontesRoute,
 }
 export const routeTree = rootRouteImport
