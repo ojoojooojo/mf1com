@@ -16,6 +16,7 @@ import {
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { Block1ContentMf2 } from "@/components/course/Block1ContentMf2";
+import { Block2ContentMf2 } from "@/components/course/Block2ContentMf2";
 
 /** Primeiro micro-quiz avaliado de cada bloco do MF2 (id estável, já a gravar no backend). */
 const FIRST_QUIZ_ID: Record<string, string> = {
@@ -102,7 +103,13 @@ function Mf2BlockPage() {
         </div>
       </header>
 
-      {block.id === "1" ? <Block1ContentMf2 /> : <Mf2BlockPlaceholder block={block} />}
+      {block.id === "1" ? (
+        <Block1ContentMf2 />
+      ) : block.id === "2" ? (
+        <Block2ContentMf2 />
+      ) : (
+        <Mf2BlockPlaceholder block={block} />
+      )}
 
       <StopNav stopId={stopId} />
     </article>
