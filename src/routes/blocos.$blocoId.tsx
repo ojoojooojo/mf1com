@@ -97,7 +97,7 @@ function BlockPage() {
       {block.id === "1" ? (
         <Block1Content />
       ) : (
-        <BlockPlaceholder blockId={block.id} number={block.number} />
+        <BlockPlaceholder block={block} />
       )}
 
       <StopNav stopId={stopId} />
@@ -105,7 +105,7 @@ function BlockPage() {
   );
 }
 
-function BlockPlaceholder({ blockId, number }: { blockId: string; number: number }) {
+function BlockPlaceholder({ block }: { block: (typeof BLOCKS)[number] }) {
   return (
     <>
       {/* 1. CONTEÚDO */}
