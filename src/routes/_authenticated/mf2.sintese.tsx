@@ -54,10 +54,10 @@ const FINAL_QUIZ_IDS = [
   "mf2-sintese-quiz-4",
 ];
 const FINAL_CORRECT: Record<string, number> = {
-  "mf2-sintese-quiz-1": 0,
-  "mf2-sintese-quiz-2": 0,
+  "mf2-sintese-quiz-1": 1,
+  "mf2-sintese-quiz-2": 1,
   "mf2-sintese-quiz-3": 0,
-  "mf2-sintese-quiz-4": 0,
+  "mf2-sintese-quiz-4": 1,
 };
 
 function ScorePanel() {
