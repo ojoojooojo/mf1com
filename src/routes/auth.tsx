@@ -144,6 +144,7 @@ function AuthPage() {
               onClick={() => {
                 setMode(m);
                 setError(null);
+                setNotice(null);
               }}
               className={cn(
                 "flex-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors",
@@ -248,7 +249,11 @@ function AuthPage() {
             ) : (
               <LogIn className="size-4" />
             )}
-            {mode === "criar" ? "Criar conta e começar" : "Entrar"}
+            {mode === "criar"
+              ? "Criar conta e começar"
+              : mode === "recuperar"
+                ? "Enviar link de recuperação"
+                : "Entrar"}
           </button>
         </form>
       </div>
