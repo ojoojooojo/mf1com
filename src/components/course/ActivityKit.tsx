@@ -60,8 +60,8 @@ export function TaskField({
       <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
         <Pencil className="size-3" aria-hidden />
         {hydrated && value.trim().length > 0
-          ? "Guardado neste navegador."
-          : "Fica apenas neste navegador."}
+          ? "Guardado na sua conta."
+          : "Fica guardado na sua conta, visível apenas a si e ao formador."}
       </p>
     </div>
   );

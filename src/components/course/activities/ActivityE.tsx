@@ -29,10 +29,9 @@ export function ActivityE() {
           lead="Última atividade do módulo. Não há resposta certa nem errada — e nada aqui é avaliado."
         />
         <PrivacyNote>
-          O que escrever nesta página fica guardado <strong>apenas no seu navegador</strong>, em
-          localStorage. Não é enviado para nenhum servidor, não é lido por formadores nem por
-          ninguém, e desaparece se limpar os dados do navegador ou reiniciar o progresso. Escreva com
-          liberdade — e sem identificar pessoas.
+          A sua resposta fica guardada <strong>na sua conta</strong> e é visível apenas a si e ao
+          formador do curso. Não é avaliada, não é classificada e não é partilhada com o grupo.
+          Escreva com liberdade — e sem identificar pessoas.
         </PrivacyNote>
 
         <ContentCard tone="accent" title="Pergunta de reflexão">
