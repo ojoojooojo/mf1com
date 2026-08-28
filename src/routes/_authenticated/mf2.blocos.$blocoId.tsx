@@ -103,7 +103,13 @@ function Mf2BlockPage() {
         </div>
       </header>
 
-      {block.id === "1" ? <Block1ContentMf2 /> : <Mf2BlockPlaceholder block={block} />}
+      {block.id === "1" ? (
+        <Block1ContentMf2 />
+      ) : block.id === "2" ? (
+        <Block2ContentMf2 />
+      ) : (
+        <Mf2BlockPlaceholder block={block} />
+      )}
 
       <StopNav stopId={stopId} />
     </article>
