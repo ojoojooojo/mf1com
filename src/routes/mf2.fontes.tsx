@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SectionHeading } from "@/components/course/LessonKit";
-import { MF2_BLOCKS } from "@/lib/course-data-mf2";
 
 export const Route = createFileRoute("/mf2/fontes")({
   head: () => ({
