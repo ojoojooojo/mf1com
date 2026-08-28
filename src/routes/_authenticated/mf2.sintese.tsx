@@ -41,10 +41,10 @@ export const Route = createFileRoute("/_authenticated/mf2/sintese")({
 
 /** Recapitulação por bloco — texto definitivo a inserir com o conteúdo de cada bloco. */
 const RECAP: Record<string, string> = {
-  "1": "Síntese do Bloco 1 a inserir com o conteúdo definitivo.",
-  "2": "Síntese do Bloco 2 a inserir com o conteúdo definitivo.",
-  "3": "Síntese do Bloco 3 a inserir com o conteúdo definitivo.",
-  "4": "Síntese do Bloco 4 a inserir com o conteúdo definitivo.",
+  "1": "Um conflito existe sempre que atividades ou interesses são incompatíveis (Deutsch). Não é bom nem mau em si — o que decide é como é gerido. Pondy mostra que atravessa cinco fases (latente a resíduo); Rahim e Jehn ajudam a nomear o nível (inter/intra/intergrupal) e o conteúdo (tarefa/processo/relacional) em jogo.",
+  "2": "Três abordagens fundamentais — prevenção, intervenção, pós-resolução — atuam em momentos diferentes do mesmo conflito. O modelo de Glasl mostra que quanto mais cedo se atua, mais fácil é chegar a um desfecho onde ambas as partes ganham; e Deutsch lembra que cooperação tende a gerar cooperação, tal como competição gera competição.",
+  "3": "Os conflitos têm causas de fundo (recursos, objetivos, interdependência, comunicação) distintas dos detonadores que os tornam visíveis. Têm também custo mensurável em tempo e bem-estar (CPP, 2008) e consequências que podem ser funcionais ou disfuncionais, consoante como são geridos.",
+  "4": "O conflito tem custo pessoal, não só organizacional. Grande parte da escalada vem de como interpretamos as intenções do outro (realismo ingénuo, erro de atribuição) — e cada pessoa envolvida, incluindo o formador, é sempre, em algum grau, coautora da trajetória do conflito.",
 };
 
 const FINAL_QUIZ_IDS = [
