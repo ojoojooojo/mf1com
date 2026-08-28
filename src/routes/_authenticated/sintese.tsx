@@ -4,6 +4,8 @@ import { BLOCK_QUIZ_IDS, BLOCKS, LEARNING_OBJECTIVES } from "@/lib/course-data";
 import { ContentCard, Quiz, ReflectionPrompt, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useProgress } from "@/lib/progress";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/sintese")({
   head: () => ({
@@ -62,7 +64,8 @@ function ScorePanel() {
         .
       </p>
       <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">
-        Este número não é uma nota e não fica registado em lado nenhum além deste navegador. O valor
+        Este número não é uma nota nem uma classificação: fica guardado na sua conta e serve de feedback
+        formativo para si e para o formador do curso. O valor
         do módulo mede-se no que muda na sua próxima sessão: como formula uma frase difícil, como
         repara num sinal não-verbal, como devolve compreensão antes de responder.
       </p>
@@ -71,11 +74,28 @@ function ScorePanel() {
 }
 
 function QuizSummary() {
-  const { state, hydrated } = useProgress();
-  if (!hydrated) return null;
+  // Fonte de verdade: a tabela `quiz_answers` da conta autenticada.
+  const { data } = useQuery({
+    queryKey: ["sintese", "quiz-answers"],
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      const userId = auth.user?.id;
+      if (!userId) return { answered: 0, correct: 0 };
+      const { data: rows } = await supabase
+        .from("quiz_answers")
+        .select("quiz_id, is_correct")
+        .eq("user_id", userId)
+        .in("quiz_id", [...BLOCK_QUIZ_IDS]);
+      const relevant = rows ?? [];
+      return {
+        answered: relevant.length,
+        correct: relevant.filter((r) => r.is_correct).length,
+      };
+    },
+  });
 
-  const answered = BLOCK_QUIZ_IDS.filter((id) => typeof state.quiz[id] === "number");
-  const correct = answered.filter((id) => state.quizCorrect[id]).length;
+  if (!data) return null;
+  const { answered, correct } = data;
 
   return (
     <div className="mt-4 rounded-xl border border-primary/25 bg-primary-soft p-5">
@@ -84,8 +104,8 @@ function QuizSummary() {
         {correct}/{BLOCK_QUIZ_IDS.length} respostas corretas nos micro-quizzes dos blocos
       </p>
       <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">
-        {answered.length < BLOCK_QUIZ_IDS.length
-          ? `Respondeu a ${answered.length} dos ${BLOCK_QUIZ_IDS.length} micro-quizzes ao longo dos cinco blocos. `
+        {answered < BLOCK_QUIZ_IDS.length
+          ? `Respondeu a ${answered} dos ${BLOCK_QUIZ_IDS.length} micro-quizzes ao longo dos cinco blocos. `
           : "Respondeu a todos os micro-quizzes dos cinco blocos. "}
         Isto não é uma classificação: é apenas feedback formativo para si. Pode voltar a qualquer
         bloco e responder de novo — fica guardada a resposta mais recente.

@@ -78,7 +78,7 @@ export function ActivityE() {
               formas mais eficazes de desenvolvimento profissional contínuo.
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
-              A sua reflexão continua guardada neste navegador e pode ser retomada ou reescrita
+              A sua reflexão continua guardada na sua conta e pode ser retomada ou reescrita
               sempre que quiser. Se lhe fizer sentido, leve-a para a sessão síncrona: é material de
               trabalho, não um exercício de arquivo.
             </p>
