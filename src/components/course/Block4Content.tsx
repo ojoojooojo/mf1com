@@ -316,20 +316,6 @@ export function Block4Content() {
           <BarreirasSvg />
         </Figure>
 
-        <div className="grid gap-4 lg:grid-cols-3">
-          {CATEGORIAS.map((cat, ci) => (
-            <ContentCard key={cat.titulo} tone={ci === 1 ? "accent" : "primary"} title={cat.titulo}>
-              <dl className="space-y-3">
-                {cat.itens.map((item) => (
-                  <div key={item.nome}>
-                    <dt className="font-semibold">{item.nome}</dt>
-                    <dd className="text-sm text-muted-foreground">{item.texto}</dd>
-                  </div>
-                ))}
-              </dl>
-            </ContentCard>
-          ))}
-        </div>
         <SourceNote>
           Abreu, T.M.B. &amp; Bazoni, M.C. (2016). «Como superar barreiras da comunicação nas
           organizações.» <em>R. Dito Efeito</em>, 7(11), 74-94, citando Kunsch, M.M.K. (2003) e

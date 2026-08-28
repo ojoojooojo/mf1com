@@ -164,6 +164,7 @@ export function Block5Content() {
         </SourceNote>
 
         <SectionHeading
+          className="mt-12"
           eyebrow="Conteúdo"
           title="Três atitudes fundamentais"
           lead="Sem estas atitudes, os passos da escuta ativa tornam-se um procedimento vazio — e o outro nota."
