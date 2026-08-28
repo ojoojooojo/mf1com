@@ -71,7 +71,7 @@ function AuthPage() {
       setBusy(true);
       try {
         await supabase.auth.resetPasswordForEmail(email.trim(), {
-          redirectTo: `${window.location.origin}/auth/reset-password`,
+          redirectTo: `${window.location.origin}/reset-password`,
         });
         // Mensagem neutra: não confirmamos nem negamos a existência da conta.
         setNotice(
