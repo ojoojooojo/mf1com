@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight, ShieldAlert, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ACTIVITIES, BLOCK_QUIZ_IDS, STOPS } from "@/lib/course-data";
+import { MF2_ACTIVITIES, MF2_BLOCK_QUIZ_IDS, MF2_STOPS } from "@/lib/course-data-mf2";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/formador")({
@@ -45,20 +46,61 @@ type ResponseRow = {
   submitted_at: string;
 };
 
-/** Ordem canónica das secções, igual ao mapa do módulo (com as atividades A–E aninhadas). */
-const SECTION_ORDER: { id: string; label: string }[] = STOPS.flatMap((stop) =>
-  stop.id === "aprendizagem-ativa"
-    ? [
-        { id: stop.id, label: stop.shortTitle },
-        ...ACTIVITIES.map((a) => ({
-          id: `atividade-${a.id}`,
-          label: `  Atividade ${a.letter} · ${a.title}`,
-        })),
-      ]
-    : [{ id: stop.id, label: stop.shortTitle }],
-);
+type ModuleTab = "mf1" | "mf2";
 
-const STOP_IDS = STOPS.map((s) => s.id);
+type ModuleConfig = {
+  key: ModuleTab;
+  label: string;
+  sectionOrder: { id: string; label: string }[];
+  stopIds: string[];
+  quizIds: readonly string[];
+  /** Filtro de pertença de um id de secção/quiz/atividade a este módulo. */
+  owns: (id: string) => boolean;
+};
+
+/** Ordem canónica das secções, igual ao mapa do módulo (com as atividades aninhadas). */
+function buildSectionOrder(
+  stops: typeof STOPS,
+  activitiesStopId: string,
+  activities: typeof ACTIVITIES,
+  activityPrefix: string,
+) {
+  return stops.flatMap((stop) =>
+    stop.id === activitiesStopId
+      ? [
+          { id: stop.id, label: stop.shortTitle },
+          ...activities.map((a) => ({
+            id: `${activityPrefix}${a.id}`,
+            label: `  Atividade ${a.letter} · ${a.title}`,
+          })),
+        ]
+      : [{ id: stop.id, label: stop.shortTitle }],
+  );
+}
+
+const MODULES: Record<ModuleTab, ModuleConfig> = {
+  mf1: {
+    key: "mf1",
+    label: "MF1 · Comunicação e Escuta Ativa",
+    sectionOrder: buildSectionOrder(STOPS, "aprendizagem-ativa", ACTIVITIES, "atividade-"),
+    stopIds: STOPS.map((s) => s.id),
+    quizIds: BLOCK_QUIZ_IDS,
+    owns: (id) => !id.startsWith("mf2-"),
+  },
+  mf2: {
+    key: "mf2",
+    label: "MF2 · Dinâmicas e Causas do Conflito",
+    sectionOrder: buildSectionOrder(
+      MF2_STOPS,
+      "mf2-atividades",
+      MF2_ACTIVITIES,
+      "mf2-atividade-",
+    ),
+    stopIds: MF2_STOPS.map((s) => s.id),
+    quizIds: MF2_BLOCK_QUIZ_IDS,
+    owns: (id) => id.startsWith("mf2-"),
+  },
+};
 
 function formatDate(value: string) {
   return new Date(value).toLocaleString("pt-PT", {
@@ -82,6 +124,7 @@ function readOption(value: string) {
 /* ---------- Página ---------- */
 
 function TrainerPage() {
+  const [tab, setTab] = useState<ModuleTab>("mf1");
   const roleQuery = useQuery({
     queryKey: ["formador", "role"],
     queryFn: async () => {
@@ -109,7 +152,7 @@ function TrainerPage() {
         supabase
           .from("quiz_answers")
           .select("user_id, quiz_id, selected_option, is_correct, answered_at")
-          .in("quiz_id", [...BLOCK_QUIZ_IDS]),
+          .in("quiz_id", [...BLOCK_QUIZ_IDS, ...MF2_BLOCK_QUIZ_IDS]),
         supabase
           .from("written_responses")
           .select("user_id, activity_id, response_text, submitted_at"),
@@ -156,11 +199,34 @@ function TrainerPage() {
         </p>
       </header>
 
+      <nav
+        aria-label="Módulos"
+        className="mt-6 inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1"
+      >
+        {(["mf1", "mf2"] as ModuleTab[]).map((key) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => setTab(key)}
+            className={cn(
+              "rounded-lg px-3 py-2 text-xs font-semibold transition-colors sm:text-sm",
+              tab === key
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            )}
+          >
+            {MODULES[key].label}
+          </button>
+        ))}
+      </nav>
+
       {dataQuery.isLoading ? (
         <p className="mt-8 text-sm text-muted-foreground">A carregar dados…</p>
       ) : dataQuery.data ? (
         <ParticipantsTable
+          key={tab}
           ownId={roleQuery.data?.userId ?? null}
+          module={MODULES[tab]}
           data={dataQuery.data}
         />
       ) : (
@@ -176,9 +242,11 @@ type SortKey = "email" | "created_at" | "percent" | "score";
 
 function ParticipantsTable({
   ownId,
+  module,
   data,
 }: {
   ownId: string | null;
+  module: ModuleConfig;
   data: {
     profiles: ProfileRow[];
     progress: ProgressRow[];
@@ -196,18 +264,24 @@ function ParticipantsTable({
     return data.profiles
       .filter((p) => p.id !== ownId && p.role !== "formador")
       .map((profile) => {
-        const progress = data.progress.filter((r) => r.user_id === profile.id);
+        const progress = data.progress.filter(
+          (r) => r.user_id === profile.id && module.owns(r.section_id),
+        );
         const completedStops = progress.filter(
-          (r) => r.status === "concluido" && STOP_IDS.includes(r.section_id),
+          (r) => r.status === "concluido" && module.stopIds.includes(r.section_id),
         ).length;
-        const quiz = data.quiz.filter((r) => r.user_id === profile.id);
+        const quiz = data.quiz.filter(
+          (r) => r.user_id === profile.id && module.quizIds.includes(r.quiz_id),
+        );
         const correct = quiz.filter((r) => r.is_correct).length;
         return {
           profile,
           progress,
           quiz,
-          responses: data.responses.filter((r) => r.user_id === profile.id),
-          percent: Math.min(100, Math.round((completedStops / STOP_IDS.length) * 100)),
+          responses: data.responses.filter(
+            (r) => r.user_id === profile.id && module.owns(r.activity_id),
+          ),
+          percent: Math.min(100, Math.round((completedStops / module.stopIds.length) * 100)),
           answered: quiz.length,
           correct,
         };
@@ -225,7 +299,7 @@ function ParticipantsTable({
             return (a.correct - b.correct || a.answered - b.answered) * dir;
         }
       });
-  }, [data, ownId, sort]);
+  }, [data, module, ownId, sort]);
 
   const toggleSort = (key: SortKey) =>
     setSort((prev) => ({ key, asc: prev.key === key ? !prev.asc : true }));
@@ -287,9 +361,9 @@ function ParticipantsTable({
                       <span className="font-display">{row.percent}%</span>
                       <span className="ml-2 text-xs text-muted-foreground">
                         {row.progress.filter(
-                          (r) => r.status === "concluido" && STOP_IDS.includes(r.section_id),
+                          (r) => r.status === "concluido" && module.stopIds.includes(r.section_id),
                         ).length}
-                        /{STOP_IDS.length} secções
+                        /{module.stopIds.length} secções
                       </span>
                     </td>
                     <td className="px-4 py-3">
@@ -301,7 +375,7 @@ function ParticipantsTable({
                             {row.correct}/{row.answered}
                           </span>
                           <span className="ml-2 text-xs text-muted-foreground">
-                            corretas ({BLOCK_QUIZ_IDS.length} quizzes nos blocos)
+                            corretas ({module.quizIds.length} micro-quizzes avaliados nos blocos)
                           </span>
                         </>
                       )}
@@ -318,6 +392,7 @@ function ParticipantsTable({
                     <tr>
                       <td colSpan={5} className="border-b border-border bg-surface px-4 py-6">
                         <ParticipantDetail
+                          module={module}
                           email={row.profile.email}
                           progress={row.progress}
                           quiz={row.quiz}
@@ -339,11 +414,13 @@ function ParticipantsTable({
 /* ---------- Vista detalhada ---------- */
 
 function ParticipantDetail({
+  module,
   email,
   progress,
   quiz,
   responses,
 }: {
+  module: ModuleConfig;
   email: string;
   progress: ProgressRow[];
   quiz: QuizRow[];
@@ -370,7 +447,7 @@ function ParticipantDetail({
       <section>
         <h3 className="font-display text-lg">Estado das secções</h3>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-          {SECTION_ORDER.map((section) => {
+          {module.sectionOrder.map((section) => {
             const status = statusOf(section.id);
             return (
               <li
@@ -397,7 +474,9 @@ function ParticipantDetail({
       </section>
 
       <section>
-        <h3 className="font-display text-lg">Respostas aos micro-quizzes</h3>
+        <h3 className="font-display text-lg">
+          Respostas aos micro-quizzes avaliados dos blocos ({module.quizIds.length})
+        </h3>
         {sortedQuiz.length === 0 ? (
           <p className="mt-2 text-sm text-muted-foreground">Ainda sem respostas registadas.</p>
         ) : (
@@ -446,7 +525,9 @@ function ParticipantDetail({
       </section>
 
       <section>
-        <h3 className="font-display text-lg">Respostas escritas</h3>
+        <h3 className="font-display text-lg">
+          Respostas escritas (atividades e reflexões formativas — não avaliadas)
+        </h3>
         {sortedResponses.length === 0 ? (
           <p className="mt-2 text-sm text-muted-foreground">Ainda sem produções escritas.</p>
         ) : (

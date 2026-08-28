@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
 import { STOPS, MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
+import { MF2_STOPS, MF2_MODULE_CODE, MF2_MODULE_TITLE } from "@/lib/course-data-mf2";
 import { useProgress } from "@/lib/progress";
 import { useAuth, useIsFormador } from "@/lib/auth";
 import {
@@ -19,19 +20,36 @@ import {
 import { cn } from "@/lib/utils";
 
 
+/** Deteta o módulo ativo pelo pathname: /mf2* → MF2, tudo o resto → MF1. */
+function useModule() {
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const isMf2 = pathname.startsWith("/mf2");
+  return {
+    pathname,
+    isMf2,
+    stops: isMf2 ? MF2_STOPS : STOPS,
+    code: isMf2 ? MF2_MODULE_CODE : MODULE_CODE,
+    title: isMf2 ? MF2_MODULE_TITLE : MODULE_TITLE,
+    home: (isMf2 ? "/mf2" : "/") as "/mf2" | "/",
+    sources: (isMf2 ? "/mf2/fontes" : "/fontes") as "/mf2/fontes" | "/fontes",
+  };
+}
+
 function TrailList({ onNavigate }: { onNavigate?: () => void }) {
   const { isCompleted, isVisited } = useProgress();
-  const location = useLocation();
+  const { pathname, stops, isMf2 } = useModule();
 
   return (
     <nav aria-label="Mapa do módulo" className="space-y-1">
-      {STOPS.map((stop, i) => {
+      {stops.map((stop, i) => {
+        const blocosBase = isMf2 ? "/mf2/blocos" : "/blocos";
+        const root = isMf2 ? "/mf2" : "/";
         const active =
           stop.params
-            ? location.pathname === `/blocos/${stop.params["blocoId"]}`
-            : stop.to === "/"
-              ? location.pathname === "/"
-              : location.pathname.startsWith(stop.to);
+            ? pathname === `${blocosBase}/${stop.params["blocoId"]}`
+            : stop.to === root
+              ? pathname === root || pathname === `${root}/`
+              : pathname.startsWith(stop.to);
         const done = isCompleted(stop.id);
         const seen = isVisited(stop.id);
         return (
@@ -192,12 +210,36 @@ function SessionMenu() {
 }
 
 
+function ModuleSwitch({ isMf2 }: { isMf2: boolean }) {
+  const item = (active: boolean) =>
+    cn(
+      "rounded-md px-2 py-1 text-xs font-semibold transition-colors",
+      active
+        ? "bg-primary text-primary-foreground"
+        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+    );
+
+  return (
+    <nav
+      aria-label="Módulos do curso"
+      className="hidden shrink-0 items-center gap-1 rounded-lg border border-border p-0.5 sm:flex"
+    >
+      <Link to="/" className={item(!isMf2)}>
+        MF1
+      </Link>
+      <Link to="/mf2" className={item(isMf2)}>
+        MF2
+      </Link>
+    </nav>
+  );
+}
+
 export function CourseLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
+  const { pathname, code, title, home, sources, isMf2 } = useModule();
   const { percent, hydrated } = useProgress();
 
-  useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => setOpen(false), [pathname]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -211,14 +253,13 @@ export function CourseLayout({ children }: { children: ReactNode }) {
           >
             {open ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>
-          <Link to="/" className="min-w-0">
+          <Link to={home} className="min-w-0">
             <span className="eyebrow flex items-center gap-1">
-              {MODULE_CODE} <Dot className="size-3" /> Formação de Formadores
+              {code} <Dot className="size-3" /> Formação de Formadores
             </span>
-            <span className="block truncate font-display text-base font-semibold">
-              {MODULE_TITLE}
-            </span>
+            <span className="block truncate font-display text-base font-semibold">{title}</span>
           </Link>
+          <ModuleSwitch isMf2={isMf2} />
           <div className="ml-auto hidden items-center gap-3 sm:flex">
             <div className="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
               <div
@@ -259,11 +300,11 @@ export function CourseLayout({ children }: { children: ReactNode }) {
       <footer className="border-t border-border bg-surface">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>
-            {MODULE_CODE} · {MODULE_TITLE} — segue o referencial de Formação Pedagógica Contínua de
+            {code} · {title} — segue o referencial de Formação Pedagógica Contínua de
             Formadores do IEFP.
           </p>
           <Link
-            to="/fontes"
+            to={sources}
             className="font-medium underline-offset-4 hover:text-foreground hover:underline"
           >
             Fontes e referências

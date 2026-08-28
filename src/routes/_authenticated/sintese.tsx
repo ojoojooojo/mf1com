@@ -317,21 +317,26 @@ function SynthesisPage() {
           </p>
         </ContentCard>
 
-        <ContentCard title="A seguir: MF2 (fora do âmbito deste MOOC)">
+        <ContentCard title="A seguir: MF2">
           <p>
             «O próximo módulo, MF2 — Dinâmicas e Causas do Conflito na Formação, parte precisamente
             daqui: como as questões de comunicação que agora reconhece se transformam (ou não) em
             conflitos, e como reconhecer os seus sinais precoces.»
           </p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            O MF2 não faz parte deste MOOC e será disponibilizado separadamente.
-          </p>
           <Link
-            to="/atividades"
+            to="/mf2"
             className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
           >
-            Rever a Aprendizagem Ativa <ArrowRight className="size-4" />
+            Continuar para o MF2 <ArrowRight className="size-4" />
           </Link>
+          <p className="mt-3">
+            <Link
+              to="/atividades"
+              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Rever a Aprendizagem Ativa
+            </Link>
+          </p>
         </ContentCard>
       </div>
 

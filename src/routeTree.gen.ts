@@ -16,9 +16,15 @@ import { Route as FontesRouteImport } from './routes/fontes'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
 import { Route as AuthenticatedSinteseRouteImport } from './routes/_authenticated/sintese'
+import { Route as Mf2IndexRouteImport } from './routes/mf2.index'
+import { Route as Mf2FontesRouteImport } from './routes/mf2.fontes'
 import { Route as AuthenticatedAtividadesIndexRouteImport } from './routes/_authenticated/atividades.index'
 import { Route as AuthenticatedAtividadesAtividadeIdRouteImport } from './routes/_authenticated/atividades.$atividadeId'
 import { Route as AuthenticatedBlocosBlocoIdRouteImport } from './routes/_authenticated/blocos.$blocoId'
+import { Route as AuthenticatedMf2SinteseRouteImport } from './routes/_authenticated/mf2.sintese'
+import { Route as AuthenticatedMf2AtividadesIndexRouteImport } from './routes/_authenticated/mf2.atividades.index'
+import { Route as AuthenticatedMf2AtividadesAtividadeIdRouteImport } from './routes/_authenticated/mf2.atividades.$atividadeId'
+import { Route as AuthenticatedMf2BlocosBlocoIdRouteImport } from './routes/_authenticated/mf2.blocos.$blocoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,6 +60,16 @@ const AuthenticatedSinteseRoute = AuthenticatedSinteseRouteImport.update({
   path: '/sintese',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const Mf2IndexRoute = Mf2IndexRouteImport.update({
+  id: '/mf2/',
+  path: '/mf2/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Mf2FontesRoute = Mf2FontesRouteImport.update({
+  id: '/mf2/fontes',
+  path: '/mf2/fontes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAtividadesIndexRoute =
   AuthenticatedAtividadesIndexRouteImport.update({
     id: '/atividades/',
@@ -72,6 +88,29 @@ const AuthenticatedBlocosBlocoIdRoute =
     path: '/blocos/$blocoId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMf2SinteseRoute = AuthenticatedMf2SinteseRouteImport.update({
+  id: '/mf2/sintese',
+  path: '/mf2/sintese',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMf2AtividadesIndexRoute =
+  AuthenticatedMf2AtividadesIndexRouteImport.update({
+    id: '/mf2/atividades/',
+    path: '/mf2/atividades/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMf2AtividadesAtividadeIdRoute =
+  AuthenticatedMf2AtividadesAtividadeIdRouteImport.update({
+    id: '/mf2/atividades/$atividadeId',
+    path: '/mf2/atividades/$atividadeId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMf2BlocosBlocoIdRoute =
+  AuthenticatedMf2BlocosBlocoIdRouteImport.update({
+    id: '/mf2/blocos/$blocoId',
+    path: '/mf2/blocos/$blocoId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -80,9 +119,15 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
+  '/mf2/fontes': typeof Mf2FontesRoute
+  '/mf2/': typeof Mf2IndexRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
+  '/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/atividades/': typeof AuthenticatedAtividadesIndexRoute
+  '/mf2/atividades/$atividadeId': typeof AuthenticatedMf2AtividadesAtividadeIdRoute
+  '/mf2/blocos/$blocoId': typeof AuthenticatedMf2BlocosBlocoIdRoute
+  '/mf2/atividades/': typeof AuthenticatedMf2AtividadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,9 +136,15 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
+  '/mf2/fontes': typeof Mf2FontesRoute
+  '/mf2': typeof Mf2IndexRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
+  '/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/atividades': typeof AuthenticatedAtividadesIndexRoute
+  '/mf2/atividades/$atividadeId': typeof AuthenticatedMf2AtividadesAtividadeIdRoute
+  '/mf2/blocos/$blocoId': typeof AuthenticatedMf2BlocosBlocoIdRoute
+  '/mf2/atividades': typeof AuthenticatedMf2AtividadesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,9 +155,15 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/formador': typeof AuthenticatedFormadorRoute
   '/_authenticated/sintese': typeof AuthenticatedSinteseRoute
+  '/mf2/fontes': typeof Mf2FontesRoute
+  '/mf2/': typeof Mf2IndexRoute
   '/_authenticated/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/_authenticated/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
+  '/_authenticated/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/_authenticated/atividades/': typeof AuthenticatedAtividadesIndexRoute
+  '/_authenticated/mf2/atividades/$atividadeId': typeof AuthenticatedMf2AtividadesAtividadeIdRoute
+  '/_authenticated/mf2/blocos/$blocoId': typeof AuthenticatedMf2BlocosBlocoIdRoute
+  '/_authenticated/mf2/atividades/': typeof AuthenticatedMf2AtividadesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,9 +174,15 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/formador'
     | '/sintese'
+    | '/mf2/fontes'
+    | '/mf2/'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
+    | '/mf2/sintese'
     | '/atividades/'
+    | '/mf2/atividades/$atividadeId'
+    | '/mf2/blocos/$blocoId'
+    | '/mf2/atividades/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,9 +191,15 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/formador'
     | '/sintese'
+    | '/mf2/fontes'
+    | '/mf2'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
+    | '/mf2/sintese'
     | '/atividades'
+    | '/mf2/atividades/$atividadeId'
+    | '/mf2/blocos/$blocoId'
+    | '/mf2/atividades'
   id:
     | '__root__'
     | '/'
@@ -140,9 +209,15 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/formador'
     | '/_authenticated/sintese'
+    | '/mf2/fontes'
+    | '/mf2/'
     | '/_authenticated/atividades/$atividadeId'
     | '/_authenticated/blocos/$blocoId'
+    | '/_authenticated/mf2/sintese'
     | '/_authenticated/atividades/'
+    | '/_authenticated/mf2/atividades/$atividadeId'
+    | '/_authenticated/mf2/blocos/$blocoId'
+    | '/_authenticated/mf2/atividades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,6 +226,8 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   FontesRoute: typeof FontesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  Mf2FontesRoute: typeof Mf2FontesRoute
+  Mf2IndexRoute: typeof Mf2IndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -204,6 +281,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSinteseRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/mf2/': {
+      id: '/mf2/'
+      path: '/mf2'
+      fullPath: '/mf2/'
+      preLoaderRoute: typeof Mf2IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mf2/fontes': {
+      id: '/mf2/fontes'
+      path: '/mf2/fontes'
+      fullPath: '/mf2/fontes'
+      preLoaderRoute: typeof Mf2FontesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/atividades/': {
       id: '/_authenticated/atividades/'
       path: '/atividades'
@@ -225,6 +316,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBlocosBlocoIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mf2/sintese': {
+      id: '/_authenticated/mf2/sintese'
+      path: '/mf2/sintese'
+      fullPath: '/mf2/sintese'
+      preLoaderRoute: typeof AuthenticatedMf2SinteseRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mf2/atividades/': {
+      id: '/_authenticated/mf2/atividades/'
+      path: '/mf2/atividades'
+      fullPath: '/mf2/atividades/'
+      preLoaderRoute: typeof AuthenticatedMf2AtividadesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mf2/atividades/$atividadeId': {
+      id: '/_authenticated/mf2/atividades/$atividadeId'
+      path: '/mf2/atividades/$atividadeId'
+      fullPath: '/mf2/atividades/$atividadeId'
+      preLoaderRoute: typeof AuthenticatedMf2AtividadesAtividadeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mf2/blocos/$blocoId': {
+      id: '/_authenticated/mf2/blocos/$blocoId'
+      path: '/mf2/blocos/$blocoId'
+      fullPath: '/mf2/blocos/$blocoId'
+      preLoaderRoute: typeof AuthenticatedMf2BlocosBlocoIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -233,7 +352,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSinteseRoute: typeof AuthenticatedSinteseRoute
   AuthenticatedAtividadesAtividadeIdRoute: typeof AuthenticatedAtividadesAtividadeIdRoute
   AuthenticatedBlocosBlocoIdRoute: typeof AuthenticatedBlocosBlocoIdRoute
+  AuthenticatedMf2SinteseRoute: typeof AuthenticatedMf2SinteseRoute
   AuthenticatedAtividadesIndexRoute: typeof AuthenticatedAtividadesIndexRoute
+  AuthenticatedMf2AtividadesAtividadeIdRoute: typeof AuthenticatedMf2AtividadesAtividadeIdRoute
+  AuthenticatedMf2BlocosBlocoIdRoute: typeof AuthenticatedMf2BlocosBlocoIdRoute
+  AuthenticatedMf2AtividadesIndexRoute: typeof AuthenticatedMf2AtividadesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -242,7 +365,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAtividadesAtividadeIdRoute:
     AuthenticatedAtividadesAtividadeIdRoute,
   AuthenticatedBlocosBlocoIdRoute: AuthenticatedBlocosBlocoIdRoute,
+  AuthenticatedMf2SinteseRoute: AuthenticatedMf2SinteseRoute,
   AuthenticatedAtividadesIndexRoute: AuthenticatedAtividadesIndexRoute,
+  AuthenticatedMf2AtividadesAtividadeIdRoute:
+    AuthenticatedMf2AtividadesAtividadeIdRoute,
+  AuthenticatedMf2BlocosBlocoIdRoute: AuthenticatedMf2BlocosBlocoIdRoute,
+  AuthenticatedMf2AtividadesIndexRoute: AuthenticatedMf2AtividadesIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -254,6 +382,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   FontesRoute: FontesRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  Mf2FontesRoute: Mf2FontesRoute,
+  Mf2IndexRoute: Mf2IndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
