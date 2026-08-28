@@ -1,10 +1,10 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, X } from "lucide-react";
+import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
 import { STOPS, MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { useProgress } from "@/lib/progress";
-import { useAuth } from "@/lib/auth";
+import { useAuth, useIsFormador } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 
