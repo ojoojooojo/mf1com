@@ -14,7 +14,6 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FontesRouteImport } from './routes/fontes'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as TmpPreviewRouteImport } from './routes/tmp-preview'
 import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
 import { Route as AuthenticatedSinteseRouteImport } from './routes/_authenticated/sintese'
 import { Route as Mf2IndexRouteImport } from './routes/mf2.index'
@@ -49,11 +48,6 @@ const FontesRoute = FontesRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TmpPreviewRoute = TmpPreviewRouteImport.update({
-  id: '/tmp-preview',
-  path: '/tmp-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedFormadorRoute = AuthenticatedFormadorRouteImport.update({
@@ -123,7 +117,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/tmp-preview': typeof TmpPreviewRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
   '/mf2/fontes': typeof Mf2FontesRoute
@@ -141,7 +134,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/tmp-preview': typeof TmpPreviewRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
   '/mf2/fontes': typeof Mf2FontesRoute
@@ -161,7 +153,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/tmp-preview': typeof TmpPreviewRoute
   '/_authenticated/formador': typeof AuthenticatedFormadorRoute
   '/_authenticated/sintese': typeof AuthenticatedSinteseRoute
   '/mf2/fontes': typeof Mf2FontesRoute
@@ -181,7 +172,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/fontes'
     | '/reset-password'
-    | '/tmp-preview'
     | '/formador'
     | '/sintese'
     | '/mf2/fontes'
@@ -199,7 +189,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/fontes'
     | '/reset-password'
-    | '/tmp-preview'
     | '/formador'
     | '/sintese'
     | '/mf2/fontes'
@@ -218,7 +207,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/fontes'
     | '/reset-password'
-    | '/tmp-preview'
     | '/_authenticated/formador'
     | '/_authenticated/sintese'
     | '/mf2/fontes'
@@ -238,7 +226,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   FontesRoute: typeof FontesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  TmpPreviewRoute: typeof TmpPreviewRoute
   Mf2FontesRoute: typeof Mf2FontesRoute
   Mf2IndexRoute: typeof Mf2IndexRoute
 }
@@ -278,13 +265,6 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tmp-preview': {
-      id: '/tmp-preview'
-      path: '/tmp-preview'
-      fullPath: '/tmp-preview'
-      preLoaderRoute: typeof TmpPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/formador': {
@@ -402,7 +382,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   FontesRoute: FontesRoute,
   ResetPasswordRoute: ResetPasswordRoute,
-  TmpPreviewRoute: TmpPreviewRoute,
   Mf2FontesRoute: Mf2FontesRoute,
   Mf2IndexRoute: Mf2IndexRoute,
 }
