@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { authErrorMessage } from "@/lib/auth";
 import { MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 
-export const Route = createFileRoute("/auth/reset-password")({
+export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
