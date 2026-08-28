@@ -38,8 +38,8 @@ function ActivitiesHub() {
         </h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
           Não são quizzes: cada atividade pede-lhe produção própria — análise, reescrita, decisão
-          fundamentada, observação e planeamento. As suas respostas ficam guardadas neste
-          navegador e podem ser retomadas a qualquer momento.
+          fundamentada, observação e planeamento. As suas respostas ficam guardadas na sua
+          conta e podem ser retomadas a qualquer momento, em qualquer dispositivo.
         </p>
         <p className="mt-4 text-sm font-semibold">
           {hydrated ? doneCount : 0} de {ACTIVITIES.length} atividades concluídas

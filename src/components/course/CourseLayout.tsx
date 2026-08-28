@@ -187,6 +187,9 @@ export function CourseLayout({ children }: { children: ReactNode }) {
               {hydrated ? percent : 0}% concluído
             </span>
           </div>
+          <div className="ml-auto sm:ml-0">
+            <SessionMenu />
+          </div>
         </div>
       </header>
 

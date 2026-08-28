@@ -62,7 +62,8 @@ function ScorePanel() {
         .
       </p>
       <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">
-        Este número não é uma nota e não fica registado em lado nenhum além deste navegador. O valor
+        Este número não é uma nota nem uma classificação: fica guardado na sua conta e serve de feedback
+        formativo para si e para o formador do curso. O valor
         do módulo mede-se no que muda na sua próxima sessão: como formula uma frase difícil, como
         repara num sinal não-verbal, como devolve compreensão antes de responder.
       </p>
