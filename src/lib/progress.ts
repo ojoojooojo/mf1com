@@ -75,8 +75,9 @@ async function pullRemote(): Promise<ProgressState | null> {
     if (row.response_text) answers[row.activity_id] = row.response_text;
   }
 
-  const quiz = { ...local.quiz };
-  const quizCorrect = { ...local.quizCorrect };
+  // O backend é a fonte de verdade dos quizzes: estado local antigo é descartado.
+  const quiz: Record<string, number> = {};
+  const quizCorrect: Record<string, boolean> = {};
   for (const row of quizRows ?? []) {
     const index = Number.parseInt(row.selected_option, 10);
     if (!Number.isNaN(index)) quiz[row.quiz_id] = index;
