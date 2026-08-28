@@ -15,6 +15,7 @@ import {
   SourceNote,
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { Block1Content } from "@/components/course/Block1Content";
 
 export const Route = createFileRoute("/blocos/$blocoId")({
   loader: ({ params }) => {
@@ -93,6 +94,20 @@ function BlockPage() {
         </div>
       </header>
 
+      {block.id === "1" ? (
+        <Block1Content />
+      ) : (
+        <BlockPlaceholder blockId={block.id} number={block.number} />
+      )}
+
+      <StopNav stopId={stopId} />
+    </article>
+  );
+}
+
+function BlockPlaceholder({ blockId, number }: { blockId: string; number: number }) {
+  return (
+    <>
       {/* 1. CONTEÚDO */}
       <section className="mt-10">
         <SectionHeading eyebrow="Conteúdo" title="Enquadramento conceptual" />
