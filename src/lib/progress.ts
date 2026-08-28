@@ -259,6 +259,7 @@ export function useProgress() {
       if (!userId) return;
       await supabase.from("progress").delete().eq("user_id", userId);
       await supabase.from("quiz_answers").delete().eq("user_id", userId);
+      await supabase.from("written_responses").delete().eq("user_id", userId);
     })();
   }, []);
 
