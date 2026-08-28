@@ -10,15 +10,26 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FontesRouteImport } from './routes/fontes'
-import { Route as SinteseRouteImport } from './routes/sintese'
-import { Route as AtividadesIndexRouteImport } from './routes/atividades.index'
-import { Route as AtividadesAtividadeIdRouteImport } from './routes/atividades.$atividadeId'
-import { Route as BlocosBlocoIdRouteImport } from './routes/blocos.$blocoId'
+import { Route as AuthenticatedSinteseRouteImport } from './routes/_authenticated/sintese'
+import { Route as AuthenticatedAtividadesIndexRouteImport } from './routes/_authenticated/atividades.index'
+import { Route as AuthenticatedAtividadesAtividadeIdRouteImport } from './routes/_authenticated/atividades.$atividadeId'
+import { Route as AuthenticatedBlocosBlocoIdRouteImport } from './routes/_authenticated/blocos.$blocoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FontesRoute = FontesRouteImport.update({
@@ -26,56 +37,64 @@ const FontesRoute = FontesRouteImport.update({
   path: '/fontes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SinteseRoute = SinteseRouteImport.update({
+const AuthenticatedSinteseRoute = AuthenticatedSinteseRouteImport.update({
   id: '/sintese',
   path: '/sintese',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AtividadesIndexRoute = AtividadesIndexRouteImport.update({
-  id: '/atividades/',
-  path: '/atividades/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AtividadesAtividadeIdRoute = AtividadesAtividadeIdRouteImport.update({
-  id: '/atividades/$atividadeId',
-  path: '/atividades/$atividadeId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlocosBlocoIdRoute = BlocosBlocoIdRouteImport.update({
-  id: '/blocos/$blocoId',
-  path: '/blocos/$blocoId',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedAtividadesIndexRoute =
+  AuthenticatedAtividadesIndexRouteImport.update({
+    id: '/atividades/',
+    path: '/atividades/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAtividadesAtividadeIdRoute =
+  AuthenticatedAtividadesAtividadeIdRouteImport.update({
+    id: '/atividades/$atividadeId',
+    path: '/atividades/$atividadeId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBlocosBlocoIdRoute =
+  AuthenticatedBlocosBlocoIdRouteImport.update({
+    id: '/blocos/$blocoId',
+    path: '/blocos/$blocoId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
-  '/sintese': typeof SinteseRoute
-  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
-  '/blocos/$blocoId': typeof BlocosBlocoIdRoute
-  '/atividades/': typeof AtividadesIndexRoute
+  '/sintese': typeof AuthenticatedSinteseRoute
+  '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
+  '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
+  '/atividades/': typeof AuthenticatedAtividadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
-  '/sintese': typeof SinteseRoute
-  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
-  '/blocos/$blocoId': typeof BlocosBlocoIdRoute
-  '/atividades': typeof AtividadesIndexRoute
+  '/sintese': typeof AuthenticatedSinteseRoute
+  '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
+  '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
+  '/atividades': typeof AuthenticatedAtividadesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
-  '/sintese': typeof SinteseRoute
-  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
-  '/blocos/$blocoId': typeof BlocosBlocoIdRoute
-  '/atividades/': typeof AtividadesIndexRoute
+  '/_authenticated/sintese': typeof AuthenticatedSinteseRoute
+  '/_authenticated/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
+  '/_authenticated/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
+  '/_authenticated/atividades/': typeof AuthenticatedAtividadesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/fontes'
     | '/sintese'
     | '/atividades/$atividadeId'
@@ -84,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/fontes'
     | '/sintese'
     | '/atividades/$atividadeId'
@@ -92,20 +112,20 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/fontes'
-    | '/sintese'
-    | '/atividades/$atividadeId'
-    | '/blocos/$blocoId'
-    | '/atividades/'
+    | '/_authenticated/sintese'
+    | '/_authenticated/atividades/$atividadeId'
+    | '/_authenticated/blocos/$blocoId'
+    | '/_authenticated/atividades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   FontesRoute: typeof FontesRoute
-  SinteseRoute: typeof SinteseRoute
-  AtividadesAtividadeIdRoute: typeof AtividadesAtividadeIdRoute
-  BlocosBlocoIdRoute: typeof BlocosBlocoIdRoute
-  AtividadesIndexRoute: typeof AtividadesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,6 +137,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fontes': {
       id: '/fontes'
       path: '/fontes'
@@ -124,44 +158,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FontesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sintese': {
-      id: '/sintese'
+    '/_authenticated/sintese': {
+      id: '/_authenticated/sintese'
       path: '/sintese'
       fullPath: '/sintese'
-      preLoaderRoute: typeof SinteseRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedSinteseRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/atividades/': {
-      id: '/atividades/'
+    '/_authenticated/atividades/': {
+      id: '/_authenticated/atividades/'
       path: '/atividades'
       fullPath: '/atividades/'
-      preLoaderRoute: typeof AtividadesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAtividadesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/atividades/$atividadeId': {
-      id: '/atividades/$atividadeId'
+    '/_authenticated/atividades/$atividadeId': {
+      id: '/_authenticated/atividades/$atividadeId'
       path: '/atividades/$atividadeId'
       fullPath: '/atividades/$atividadeId'
-      preLoaderRoute: typeof AtividadesAtividadeIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAtividadesAtividadeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/blocos/$blocoId': {
-      id: '/blocos/$blocoId'
+    '/_authenticated/blocos/$blocoId': {
+      id: '/_authenticated/blocos/$blocoId'
       path: '/blocos/$blocoId'
       fullPath: '/blocos/$blocoId'
-      preLoaderRoute: typeof BlocosBlocoIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedBlocosBlocoIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedSinteseRoute: typeof AuthenticatedSinteseRoute
+  AuthenticatedAtividadesAtividadeIdRoute: typeof AuthenticatedAtividadesAtividadeIdRoute
+  AuthenticatedBlocosBlocoIdRoute: typeof AuthenticatedBlocosBlocoIdRoute
+  AuthenticatedAtividadesIndexRoute: typeof AuthenticatedAtividadesIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedSinteseRoute: AuthenticatedSinteseRoute,
+  AuthenticatedAtividadesAtividadeIdRoute:
+    AuthenticatedAtividadesAtividadeIdRoute,
+  AuthenticatedBlocosBlocoIdRoute: AuthenticatedBlocosBlocoIdRoute,
+  AuthenticatedAtividadesIndexRoute: AuthenticatedAtividadesIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   FontesRoute: FontesRoute,
-  SinteseRoute: SinteseRoute,
-  AtividadesAtividadeIdRoute: AtividadesAtividadeIdRoute,
-  BlocosBlocoIdRoute: BlocosBlocoIdRoute,
-  AtividadesIndexRoute: AtividadesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

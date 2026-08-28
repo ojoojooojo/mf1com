@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { STOPS } from "./course-data";
+import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "mf1-comunicacao-progresso-v1";
 
@@ -39,9 +40,69 @@ function write(state: ProgressState) {
   window.dispatchEvent(new CustomEvent("mf1-progress-change"));
 }
 
+async function currentUserId(): Promise<string | null> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.user.id ?? null;
+}
+
+/** Lê o progresso guardado na conta e funde-o com a cache local. */
+async function pullRemote(): Promise<ProgressState | null> {
+  const userId = await currentUserId();
+  if (!userId) return null;
+
+  const [{ data: rows }, { data: responses }] = await Promise.all([
+    supabase.from("progress").select("section_id, status").eq("user_id", userId),
+    supabase.from("written_responses").select("activity_id, response_text").eq("user_id", userId),
+  ]);
+
+  const local = read();
+  const visited = new Set(local.visited);
+  const completed = new Set(local.completed);
+  for (const row of rows ?? []) {
+    visited.add(row.section_id);
+    if (row.status === "concluido") completed.add(row.section_id);
+    else completed.delete(row.section_id);
+  }
+
+  const answers = { ...local.answers };
+  for (const row of responses ?? []) {
+    if (row.response_text) answers[row.activity_id] = row.response_text;
+  }
+
+  const merged: ProgressState = { ...local, visited: [...visited], completed: [...completed], answers };
+  write(merged);
+  return merged;
+}
+
+async function pushSection(sectionId: string, status: "iniciado" | "concluido") {
+  const userId = await currentUserId();
+  if (!userId) return;
+  await supabase
+    .from("progress")
+    .upsert(
+      { user_id: userId, section_id: sectionId, status, updated_at: new Date().toISOString() },
+      { onConflict: "user_id,section_id" },
+    );
+}
+
+async function pushResponse(activityId: string, text: string) {
+  const userId = await currentUserId();
+  if (!userId) return;
+  await supabase.from("written_responses").upsert(
+    {
+      user_id: userId,
+      activity_id: activityId,
+      response_text: text,
+      submitted_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id,activity_id" },
+  );
+}
+
 export function useProgress() {
   const [state, setState] = useState<ProgressState>(EMPTY);
   const [hydrated, setHydrated] = useState(false);
+  const [synced, setSynced] = useState(false);
 
   useEffect(() => {
     setState(read());
@@ -49,7 +110,22 @@ export function useProgress() {
     const sync = () => setState(read());
     window.addEventListener("mf1-progress-change", sync);
     window.addEventListener("storage", sync);
+
+    let cancelled = false;
+    void pullRemote()
+      .then((remote) => {
+        if (cancelled) return;
+        if (remote) {
+          setState(remote);
+          setSynced(true);
+        }
+      })
+      .catch(() => {
+        /* offline ou sem sessão — a cache local continua a servir */
+      });
+
     return () => {
+      cancelled = true;
       window.removeEventListener("mf1-progress-change", sync);
       window.removeEventListener("storage", sync);
     };
@@ -62,32 +138,38 @@ export function useProgress() {
   }, []);
 
   const markVisited = useCallback(
-    (id: string) =>
-      update((p) =>
-        p.visited.includes(id) ? p : { ...p, visited: [...p.visited, id] },
-      ),
+    (id: string) => {
+      update((p) => (p.visited.includes(id) ? p : { ...p, visited: [...p.visited, id] }));
+      if (!read().completed.includes(id)) void pushSection(id, "iniciado");
+    },
     [update],
   );
 
   const markCompleted = useCallback(
-    (id: string) =>
+    (id: string) => {
       update((p) => ({
         ...p,
         visited: p.visited.includes(id) ? p.visited : [...p.visited, id],
         completed: p.completed.includes(id) ? p.completed : [...p.completed, id],
-      })),
+      }));
+      void pushSection(id, "concluido");
+    },
     [update],
   );
 
   const unmarkCompleted = useCallback(
-    (id: string) =>
-      update((p) => ({ ...p, completed: p.completed.filter((x) => x !== id) })),
+    (id: string) => {
+      update((p) => ({ ...p, completed: p.completed.filter((x) => x !== id) }));
+      void pushSection(id, "iniciado");
+    },
     [update],
   );
 
   const saveAnswer = useCallback(
-    (key: string, value: string) =>
-      update((p) => ({ ...p, answers: { ...p.answers, [key]: value } })),
+    (key: string, value: string) => {
+      update((p) => ({ ...p, answers: { ...p.answers, [key]: value } }));
+      void pushResponse(key, value);
+    },
     [update],
   );
 
@@ -100,6 +182,11 @@ export function useProgress() {
   const reset = useCallback(() => {
     write(EMPTY);
     setState(EMPTY);
+    void (async () => {
+      const userId = await currentUserId();
+      if (!userId) return;
+      await supabase.from("progress").delete().eq("user_id", userId);
+    })();
   }, []);
 
   const trackable = STOPS.length;
@@ -108,6 +195,7 @@ export function useProgress() {
   return {
     state,
     hydrated,
+    synced,
     markVisited,
     markCompleted,
     unmarkCompleted,

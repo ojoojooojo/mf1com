@@ -5,7 +5,7 @@ import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useProgress } from "@/lib/progress";
 
-export const Route = createFileRoute("/atividades/")({
+export const Route = createFileRoute("/_authenticated/atividades/")({
   head: () => ({
     meta: [
       { title: "Aprendizagem Ativa — 5 atividades práticas | MF1" },

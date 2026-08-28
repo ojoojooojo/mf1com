@@ -10,7 +10,7 @@ import { ActivityE } from "@/components/course/activities/ActivityE";
 import { useProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/atividades/$atividadeId")({
+export const Route = createFileRoute("/_authenticated/atividades/$atividadeId")({
   loader: ({ params }) => {
     const activity = getActivity(params.atividadeId);
     if (!activity) throw notFound();

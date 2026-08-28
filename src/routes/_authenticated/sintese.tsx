@@ -5,7 +5,7 @@ import { ContentCard, Quiz, ReflectionPrompt, SectionHeading } from "@/component
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useProgress } from "@/lib/progress";
 
-export const Route = createFileRoute("/sintese")({
+export const Route = createFileRoute("/_authenticated/sintese")({
   head: () => ({
     meta: [
       { title: "Síntese Final e autoavaliação | MF1 Comunicação e Escuta Ativa" },
