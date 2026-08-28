@@ -155,7 +155,6 @@ export const MF2_BLOCK_QUIZ_IDS = [
   "mf2-bloco-3-quiz-causas",
   "mf2-bloco-3-quiz-custos",
   "mf2-bloco-3-quiz-consequencias",
-  "mf2-bloco-4-quiz-impacto",
   "mf2-bloco-4-quiz-percecao",
   "mf2-bloco-4-quiz-papel",
 ] as const;
