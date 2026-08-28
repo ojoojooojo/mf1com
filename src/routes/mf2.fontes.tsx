@@ -31,6 +31,57 @@ const REFERENCE = {
   ],
 };
 
+type Group = { title: string; items: string[] };
+
+const GROUPS: Group[] = [
+  {
+    title: "Bloco 1 · Definição e Tipos de Conflito",
+    items: [
+      "Deutsch, M. (1973). The Resolution of Conflict: Constructive and Destructive Processes.",
+      "Pondy, L.R. (1967). Organizational Conflict: Concepts and Models. Administrative Science Quarterly, 12(2), 296-320.",
+      "Rahim, M.A. (2002). Toward a Theory of Managing Organizational Conflict. International Journal of Conflict Management, 13(3), 206-235.",
+      "Jehn, K.A. (1997). A Qualitative Analysis of Conflict Types and Dimensions in Organizational Groups. Administrative Science Quarterly, 42(3), 530-557.",
+      "De Dreu, C.K.W. & Weingart, L.R. (2003). Task versus Relationship Conflict, Team Performance, and Team Member Satisfaction: A Meta-Analysis. Journal of Applied Psychology, 88(4), 741-749.",
+    ],
+  },
+  {
+    title: "Bloco 2 · Estratégias e Abordagens Fundamentais na Gestão de Conflitos",
+    items: [
+      "Referencial IEFP/CNQF (2024), enquadramento das abordagens de prevenção/intervenção/pós-resolução do Módulo 2.",
+      "Deutsch, M. (1973). The Resolution of Conflict.",
+      "Glasl, F., modelo dos nove níveis de escalada de conflito, síntese via Jordan, T. (2000). Glasl's Nine-Stage Model of Conflict Escalation.",
+    ],
+  },
+  {
+    title: "Bloco 3 · Causas, Custos e Consequências dos Conflitos",
+    items: [
+      "CPP Inc. (2008). Workplace Conflict and How Businesses Can Harness It to Thrive: The CPP Global Human Capital Report.",
+      "Referencial IEFP/CNQF (2024).",
+    ],
+  },
+  {
+    title: "Bloco 4 · O Impacto do Conflito nos Indivíduos e o Papel do Indivíduo",
+    items: [
+      "CPP Inc. (2008). Workplace Conflict and How Businesses Can Harness It to Thrive: The CPP Global Human Capital Report.",
+      "Ross, L. (2018). From the Fundamental Attribution Error to the Truly Fundamental Attribution Error and Beyond: My Research Journey. Perspectives on Psychological Science.",
+      "Deutsch, M. (1973).",
+      "Referencial IEFP/CNQF (2024).",
+    ],
+  },
+];
+
+const ALL_SOURCES = [
+  "IEFP/CNQF (2024). Referencial de Formação Pedagógica Contínua de Formadores — Gestão de Conflitos na Formação. Instituto do Emprego e Formação Profissional, I.P. 1.ª edição, julho de 2024.",
+  "Deutsch, M. (1973). The Resolution of Conflict: Constructive and Destructive Processes. Yale University Press.",
+  "Pondy, L.R. (1967). Organizational Conflict: Concepts and Models. Administrative Science Quarterly, 12(2), 296-320.",
+  "Rahim, M.A. (2002). Toward a Theory of Managing Organizational Conflict. International Journal of Conflict Management, 13(3), 206-235.",
+  "Jehn, K.A. (1997). A Qualitative Analysis of Conflict Types and Dimensions in Organizational Groups. Administrative Science Quarterly, 42(3), 530-557.",
+  "De Dreu, C.K.W. & Weingart, L.R. (2003). Task versus Relationship Conflict, Team Performance, and Team Member Satisfaction: A Meta-Analysis. Journal of Applied Psychology, 88(4), 741-749.",
+  "CPP Inc. (2008). Workplace Conflict and How Businesses Can Harness It to Thrive: The CPP Global Human Capital Report.",
+  "Glasl, F. — modelo dos nove níveis de escalada de conflito; síntese via Jordan, T. (2000). Glasl's Nine-Stage Model of Conflict Escalation.",
+  "Ross, L. (2018). From the Fundamental Attribution Error to the Truly Fundamental Attribution Error and Beyond: My Research Journey. Perspectives on Psychological Science.",
+];
+
 function Mf2SourcesPage() {
   return (
     <article>
@@ -65,14 +116,19 @@ function Mf2SourcesPage() {
           lead="Cada bloco indica, no fim das secções relevantes, a fonte concreta da afirmação."
         />
         <div className="space-y-4">
-          {MF2_BLOCKS.map((block) => (
-            <div key={block.id} className="rounded-xl border border-border bg-card p-5">
-              <h2 className="font-display text-lg">
-                Bloco {block.number} · {block.title}
-              </h2>
-              <p className="mt-3 border-l-2 border-border pl-3 text-[0.95rem] leading-relaxed text-muted-foreground">
-                A preencher com as fontes do conteúdo definitivo deste bloco.
-              </p>
+          {GROUPS.map((group) => (
+            <div key={group.title} className="rounded-xl border border-border bg-card p-5">
+              <h2 className="font-display text-lg">{group.title}</h2>
+              <ul className="mt-3 space-y-2">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className="border-l-2 border-border pl-3 text-[0.95rem] leading-relaxed text-muted-foreground"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
@@ -81,16 +137,13 @@ function Mf2SourcesPage() {
       <section className="mt-12">
         <SectionHeading eyebrow="Lista completa" title="Todas as fontes do módulo" />
         <ol className="space-y-2">
-          {REFERENCE.items.map((item, i) => (
+          {ALL_SOURCES.map((item, i) => (
             <li key={item} className="flex gap-3 text-[0.95rem] leading-relaxed">
               <span className="shrink-0 font-semibold tabular-nums text-primary">{i + 1}.</span>
               <span>{item}</span>
             </li>
           ))}
         </ol>
-        <p className="mt-3 text-sm text-muted-foreground">
-          A lista será completada à medida que o conteúdo definitivo de cada bloco for inserido.
-        </p>
       </section>
     </article>
   );
