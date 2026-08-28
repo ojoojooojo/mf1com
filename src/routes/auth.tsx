@@ -173,21 +173,59 @@ function AuthPage() {
               required
             />
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              autoComplete={mode === "criar" ? "new-password" : "current-password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-              placeholder="Mínimo 6 caracteres"
-              required
-            />
-          </div>
+          {mode !== "recuperar" ? (
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                autoComplete={mode === "criar" ? "new-password" : "current-password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                placeholder="Mínimo 6 caracteres"
+                required
+              />
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Indique o email da sua conta e enviaremos um link para definir uma nova password.
+            </p>
+          )}
+
+          {mode === "entrar" ? (
+            <div className="-mt-2 text-right">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("recuperar");
+                  setError(null);
+                  setNotice(null);
+                }}
+                className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Esqueci-me da password
+              </button>
+            </div>
+          ) : null}
+
+          {mode === "recuperar" ? (
+            <div className="-mt-2 text-right">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("entrar");
+                  setError(null);
+                  setNotice(null);
+                }}
+                className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Voltar ao início de sessão
+              </button>
+            </div>
+          ) : null}
 
           {error ? (
             <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
