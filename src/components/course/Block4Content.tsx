@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, ListChecks } from "lucide-react";
 import {
   ContentCard,
@@ -155,12 +155,16 @@ function MultiSelectCheck({
   options: MultiOption[];
   takeaway?: string;
 }) {
-  const { state, saveAnswer } = useProgress();
+  const { state, saveAnswer, hydrated } = useProgress();
   const stored = state.answers[id];
-  const [selected, setSelected] = useState<number[]>(() =>
-    stored ? stored.split(",").filter(Boolean).map(Number) : [],
-  );
-  const [revealed, setRevealed] = useState(Boolean(stored));
+  const [selected, setSelected] = useState<number[]>([]);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    if (!hydrated || !stored) return;
+    setSelected(stored.split(",").filter(Boolean).map(Number));
+    setRevealed(true);
+  }, [hydrated, stored]);
 
   const toggle = (i: number) =>
     setSelected((prev) => (prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]));
