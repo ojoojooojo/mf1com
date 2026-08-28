@@ -248,7 +248,7 @@ export function Quiz({
                 type="button"
                 onClick={() => {
                   setSelected(i);
-                  saveQuiz(id, i, Boolean(option.correct));
+                  saveQuiz(id, i, Boolean(option.correct), option.text);
                 }}
                 className={cn(
                   "flex w-full items-start gap-3 rounded-lg border p-3 text-left text-[0.95rem] transition-colors",

@@ -10,9 +10,11 @@ export type ProgressState = {
   answers: Record<string, string>;
   quiz: Record<string, number>;
   quizCorrect: Record<string, boolean>;
+  /** Estado de interface (ex. "já revelei a análise de referência") — só localStorage. */
+  flags: Record<string, boolean>;
 };
 
-const EMPTY: ProgressState = { visited: [], completed: [], answers: {}, quiz: {}, quizCorrect: {} };
+const EMPTY: ProgressState = { visited: [], completed: [], answers: {}, quiz: {}, quizCorrect: {}, flags: {} };
 
 function read(): ProgressState {
   if (typeof window === "undefined") return EMPTY;
@@ -26,6 +28,7 @@ function read(): ProgressState {
       answers: parsed.answers ?? {},
       quiz: parsed.quiz ?? {},
       quizCorrect: parsed.quizCorrect ?? {},
+      flags: parsed.flags ?? {},
     };
   } catch {
     return EMPTY;
@@ -103,14 +106,19 @@ async function pushSection(sectionId: string, status: "iniciado" | "concluido") 
     );
 }
 
-async function pushQuiz(quizId: string, optionIndex: number, isCorrect: boolean) {
+async function pushQuiz(
+  quizId: string,
+  optionIndex: number,
+  isCorrect: boolean,
+  optionText: string,
+) {
   const userId = await currentUserId();
   if (!userId) return;
   await supabase.from("quiz_answers").upsert(
     {
       user_id: userId,
       quiz_id: quizId,
-      selected_option: String(optionIndex),
+      selected_option: optionText ? `${optionIndex}|${optionText}` : String(optionIndex),
       is_correct: isCorrect,
       answered_at: new Date().toISOString(),
     },
@@ -224,16 +232,21 @@ export function useProgress() {
   );
 
   const saveQuiz = useCallback(
-    (key: string, optionIndex: number, isCorrect = false) => {
+    (key: string, optionIndex: number, isCorrect = false, optionText = "") => {
       update((p) => ({
         ...p,
         quiz: { ...p.quiz, [key]: optionIndex },
         quizCorrect: { ...p.quizCorrect, [key]: isCorrect },
       }));
-      void pushQuiz(key, optionIndex, isCorrect).catch(() => {
+      void pushQuiz(key, optionIndex, isCorrect, optionText).catch(() => {
         /* offline — fica a cache local */
       });
     },
+    [update],
+  );
+
+  const saveFlag = useCallback(
+    (key: string, value = true) => update((p) => ({ ...p, flags: { ...p.flags, [key]: value } })),
     [update],
   );
 
@@ -260,6 +273,7 @@ export function useProgress() {
     unmarkCompleted,
     saveAnswer,
     saveQuiz,
+    saveFlag,
     reset,
     percent: Math.min(100, Math.round((done / trackable) * 100)),
     isVisited: (id: string) => state.visited.includes(id),

@@ -1,10 +1,10 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, X } from "lucide-react";
+import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
 import { STOPS, MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { useProgress } from "@/lib/progress";
-import { useAuth } from "@/lib/auth";
+import { useAuth, useIsFormador } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 
@@ -102,6 +102,7 @@ function ProgressPanel() {
 
 function SessionMenu() {
   const { user, loading, signOut } = useAuth();
+  const isFormador = useIsFormador();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -123,6 +124,14 @@ function SessionMenu() {
       <span className="hidden max-w-[14rem] truncate text-xs text-muted-foreground md:block">
         {user.email}
       </span>
+      {isFormador ? (
+        <Link
+          to="/formador"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-primary hover:bg-muted"
+        >
+          <Users className="size-3.5" /> Formador
+        </Link>
+      ) : null}
       <button
         type="button"
         onClick={async () => {

@@ -37,6 +37,35 @@ export function useAuth() {
   return { session, user: session?.user ?? null, loading, signOut };
 }
 
+/** Indica se o utilizador autenticado tem o papel de formador. */
+export function useIsFormador() {
+  const [isFormador, setIsFormador] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const check = async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      const userId = auth.user?.id;
+      if (!userId) {
+        if (!cancelled) setIsFormador(false);
+        return;
+      }
+      const { data } = await supabase.from("profiles").select("role").eq("id", userId).maybeSingle();
+      if (!cancelled) setIsFormador(data?.role === "formador");
+    };
+    void check().catch(() => {
+      /* sem sessão — o link fica escondido */
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange(() => void check().catch(() => {}));
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  return isFormador;
+}
+
 export function authErrorMessage(message: string): string {
   const m = message.toLowerCase();
   if (m.includes("invalid login credentials")) return "Email ou password incorretos.";
