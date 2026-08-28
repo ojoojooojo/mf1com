@@ -102,10 +102,8 @@ export function useProgress() {
     setState(EMPTY);
   }, []);
 
-  const trackable = STOPS.filter((s) => s.kind !== "abertura").length + 1;
-  const done = state.completed.filter((id) =>
-    STOPS.some((s) => s.id === id) || id.startsWith("atividade-"),
-  ).length;
+  const trackable = STOPS.length;
+  const done = state.completed.filter((id) => STOPS.some((s) => s.id === id)).length;
 
   return {
     state,
