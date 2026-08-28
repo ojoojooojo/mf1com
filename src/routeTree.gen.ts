@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SinteseRouteImport } from './routes/sintese'
+import { Route as AtividadesIndexRouteImport } from './routes/atividades.index'
+import { Route as AtividadesAtividadeIdRouteImport } from './routes/atividades.$atividadeId'
+import { Route as BlocosBlocoIdRouteImport } from './routes/blocos.$blocoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SinteseRoute = SinteseRouteImport.update({
+  id: '/sintese',
+  path: '/sintese',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtividadesIndexRoute = AtividadesIndexRouteImport.update({
+  id: '/atividades/',
+  path: '/atividades/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtividadesAtividadeIdRoute = AtividadesAtividadeIdRouteImport.update({
+  id: '/atividades/$atividadeId',
+  path: '/atividades/$atividadeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlocosBlocoIdRoute = BlocosBlocoIdRouteImport.update({
+  id: '/blocos/$blocoId',
+  path: '/blocos/$blocoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sintese': typeof SinteseRoute
+  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
+  '/blocos/$blocoId': typeof BlocosBlocoIdRoute
+  '/atividades/': typeof AtividadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sintese': typeof SinteseRoute
+  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
+  '/blocos/$blocoId': typeof BlocosBlocoIdRoute
+  '/atividades': typeof AtividadesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sintese': typeof SinteseRoute
+  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
+  '/blocos/$blocoId': typeof BlocosBlocoIdRoute
+  '/atividades/': typeof AtividadesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/sintese'
+    | '/atividades/$atividadeId'
+    | '/blocos/$blocoId'
+    | '/atividades/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/sintese'
+    | '/atividades/$atividadeId'
+    | '/blocos/$blocoId'
+    | '/atividades'
+  id:
+    | '__root__'
+    | '/'
+    | '/sintese'
+    | '/atividades/$atividadeId'
+    | '/blocos/$blocoId'
+    | '/atividades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SinteseRoute: typeof SinteseRoute
+  AtividadesAtividadeIdRoute: typeof AtividadesAtividadeIdRoute
+  BlocosBlocoIdRoute: typeof BlocosBlocoIdRoute
+  AtividadesIndexRoute: typeof AtividadesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +104,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sintese': {
+      id: '/sintese'
+      path: '/sintese'
+      fullPath: '/sintese'
+      preLoaderRoute: typeof SinteseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atividades/': {
+      id: '/atividades/'
+      path: '/atividades'
+      fullPath: '/atividades/'
+      preLoaderRoute: typeof AtividadesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atividades/$atividadeId': {
+      id: '/atividades/$atividadeId'
+      path: '/atividades/$atividadeId'
+      fullPath: '/atividades/$atividadeId'
+      preLoaderRoute: typeof AtividadesAtividadeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blocos/$blocoId': {
+      id: '/blocos/$blocoId'
+      path: '/blocos/$blocoId'
+      fullPath: '/blocos/$blocoId'
+      preLoaderRoute: typeof BlocosBlocoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SinteseRoute: SinteseRoute,
+  AtividadesAtividadeIdRoute: AtividadesAtividadeIdRoute,
+  BlocosBlocoIdRoute: BlocosBlocoIdRoute,
+  AtividadesIndexRoute: AtividadesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
