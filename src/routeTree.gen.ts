@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AtividadesIndexRouteImport } from './routes/atividades.index'
+import { Route as AtividadesAtividadeIdRouteImport } from './routes/atividades.$atividadeId'
 import { Route as BlocosBlocoIdRouteImport } from './routes/blocos.$blocoId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const AtividadesIndexRoute = AtividadesIndexRouteImport.update({
   path: '/atividades/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AtividadesAtividadeIdRoute = AtividadesAtividadeIdRouteImport.update({
+  id: '/atividades/$atividadeId',
+  path: '/atividades/$atividadeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlocosBlocoIdRoute = BlocosBlocoIdRouteImport.update({
   id: '/blocos/$blocoId',
   path: '/blocos/$blocoId',
@@ -31,30 +37,40 @@ const BlocosBlocoIdRoute = BlocosBlocoIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof BlocosBlocoIdRoute
   '/atividades/': typeof AtividadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof BlocosBlocoIdRoute
   '/atividades': typeof AtividadesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof BlocosBlocoIdRoute
   '/atividades/': typeof AtividadesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blocos/$blocoId' | '/atividades/'
+  fullPaths:
+    '/' | '/atividades/$atividadeId' | '/blocos/$blocoId' | '/atividades/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blocos/$blocoId' | '/atividades'
-  id: '__root__' | '/' | '/blocos/$blocoId' | '/atividades/'
+  to: '/' | '/atividades/$atividadeId' | '/blocos/$blocoId' | '/atividades'
+  id:
+    | '__root__'
+    | '/'
+    | '/atividades/$atividadeId'
+    | '/blocos/$blocoId'
+    | '/atividades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AtividadesAtividadeIdRoute: typeof AtividadesAtividadeIdRoute
   BlocosBlocoIdRoute: typeof BlocosBlocoIdRoute
   AtividadesIndexRoute: typeof AtividadesIndexRoute
 }
@@ -75,6 +91,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AtividadesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/atividades/$atividadeId': {
+      id: '/atividades/$atividadeId'
+      path: '/atividades/$atividadeId'
+      fullPath: '/atividades/$atividadeId'
+      preLoaderRoute: typeof AtividadesAtividadeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blocos/$blocoId': {
       id: '/blocos/$blocoId'
       path: '/blocos/$blocoId'
@@ -87,6 +110,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AtividadesAtividadeIdRoute: AtividadesAtividadeIdRoute,
   BlocosBlocoIdRoute: BlocosBlocoIdRoute,
   AtividadesIndexRoute: AtividadesIndexRoute,
 }
