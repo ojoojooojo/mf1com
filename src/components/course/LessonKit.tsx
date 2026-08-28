@@ -203,8 +203,8 @@ export function ReflectionPrompt({
       />
       <p className="mt-2 text-xs text-muted-foreground">
         {hydrated && value.trim().length > 0
-          ? "Resposta guardada neste navegador."
-          : "A sua resposta é privada e fica apenas neste navegador."}
+          ? "Resposta guardada na sua conta."
+          : "A sua resposta fica guardada na sua conta e é visível apenas a si e ao formador do curso."}
       </p>
     </section>
   );
@@ -248,7 +248,7 @@ export function Quiz({
                 type="button"
                 onClick={() => {
                   setSelected(i);
-                  saveQuiz(id, i);
+                  saveQuiz(id, i, Boolean(option.correct));
                 }}
                 className={cn(
                   "flex w-full items-start gap-3 rounded-lg border p-3 text-left text-[0.95rem] transition-colors",
