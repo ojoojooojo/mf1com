@@ -1,12 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Check, Clock } from "lucide-react";
 import { ACTIVITIES, getActivity } from "@/lib/course-data";
-import {
-  ContentCard,
-  Placeholder,
-  ReflectionPrompt,
-  SectionHeading,
-} from "@/components/course/LessonKit";
+import { ContentCard } from "@/components/course/LessonKit";
+import { ActivityA } from "@/components/course/activities/ActivityA";
+import { ActivityB } from "@/components/course/activities/ActivityB";
+import { ActivityC } from "@/components/course/activities/ActivityC";
+import { ActivityD } from "@/components/course/activities/ActivityD";
+import { ActivityE } from "@/components/course/activities/ActivityE";
 import { useProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 
@@ -82,24 +82,17 @@ function ActivityPage() {
         </span>
       </header>
 
-      <section className="mt-10">
-        <SectionHeading eyebrow="Instruções" title="O que lhe é pedido" />
-        <Placeholder label="Enunciado completo, materiais de apoio e critérios de qualidade desta atividade a inserir com o conteúdo definitivo." />
-      </section>
-
-      <section className="mt-10">
-        <SectionHeading
-          eyebrow="Produção"
-          title="O seu trabalho"
-          lead="Escreva diretamente aqui. O texto é guardado automaticamente neste navegador."
-        />
-        <ReflectionPrompt
-          id={`${key}-resposta`}
-          question="Registo da atividade"
-          hint="Campo provisório: será substituído pela estrutura de resposta específica desta atividade."
-          rows={10}
-        />
-      </section>
+      {activity.id === "a" ? (
+        <ActivityA />
+      ) : activity.id === "b" ? (
+        <ActivityB />
+      ) : activity.id === "c" ? (
+        <ActivityC />
+      ) : activity.id === "d" ? (
+        <ActivityD />
+      ) : (
+        <ActivityE />
+      )}
 
       <div className="mt-8 space-y-4 border-t border-border pt-6">
         <button
