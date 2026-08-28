@@ -18,6 +18,8 @@ import { StopNav, useVisit } from "@/components/course/StopNav";
 import { Block1Content } from "@/components/course/Block1Content";
 import { Block2Content } from "@/components/course/Block2Content";
 import { Block3Content } from "@/components/course/Block3Content";
+import { Block4Content } from "@/components/course/Block4Content";
+import { Block5Content } from "@/components/course/Block5Content";
 
 export const Route = createFileRoute("/blocos/$blocoId")({
   loader: ({ params }) => {
@@ -102,6 +104,10 @@ function BlockPage() {
         <Block2Content />
       ) : block.id === "3" ? (
         <Block3Content />
+      ) : block.id === "4" ? (
+        <Block4Content />
+      ) : block.id === "5" ? (
+        <Block5Content />
       ) : (
         <BlockPlaceholder block={block} />
       )}
