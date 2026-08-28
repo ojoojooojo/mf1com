@@ -29,7 +29,7 @@ function FasesConflitoSvg() {
 
   return (
     <svg
-      viewBox={`0 0 ${W} 250`}
+      viewBox={`0 0 ${W} 272`}
       role="img"
       aria-label="Diagrama das cinco fases do conflito em sequência — latente, percebido, sentido, manifesto e resíduo — com uma seta de retorno do resíduo às condições latentes, mostrando que o ciclo se repete."
       className="w-full max-w-3xl"
@@ -137,7 +137,7 @@ function FasesConflitoSvg() {
       />
       <text
         x={W / 2}
-        y={y + boxH + 108}
+        y={y + boxH + 104}
         textAnchor="middle"
         fontSize={12}
         fontFamily="var(--font-sans)"
