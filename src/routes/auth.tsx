@@ -8,9 +8,11 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>) => ({
-    redirect: typeof search["redirect"] === "string" ? (search["redirect"] as string) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
+    const value = search["redirect"];
+    return typeof value === "string" ? { redirect: value } : {};
+  },
+
   head: () => ({
     meta: [
       { title: "Entrar ou criar conta — MF1 Comunicação e Escuta Ativa" },
