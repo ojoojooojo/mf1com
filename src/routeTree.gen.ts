@@ -21,6 +21,7 @@ import { Route as Mf2FontesRouteImport } from './routes/mf2.fontes'
 import { Route as AuthenticatedAtividadesIndexRouteImport } from './routes/_authenticated/atividades.index'
 import { Route as AuthenticatedAtividadesAtividadeIdRouteImport } from './routes/_authenticated/atividades.$atividadeId'
 import { Route as AuthenticatedBlocosBlocoIdRouteImport } from './routes/_authenticated/blocos.$blocoId'
+import { Route as AuthenticatedMf2BlocosBlocoIdRouteImport } from './routes/_authenticated/mf2.blocos.$blocoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -84,6 +85,12 @@ const AuthenticatedBlocosBlocoIdRoute =
     path: '/blocos/$blocoId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMf2BlocosBlocoIdRoute =
+  AuthenticatedMf2BlocosBlocoIdRouteImport.update({
+    id: '/mf2/blocos/$blocoId',
+    path: '/mf2/blocos/$blocoId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
   '/atividades/': typeof AuthenticatedAtividadesIndexRoute
+  '/mf2/blocos/$blocoId': typeof AuthenticatedMf2BlocosBlocoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +118,7 @@ export interface FileRoutesByTo {
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
   '/atividades': typeof AuthenticatedAtividadesIndexRoute
+  '/mf2/blocos/$blocoId': typeof AuthenticatedMf2BlocosBlocoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +134,7 @@ export interface FileRoutesById {
   '/_authenticated/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/_authenticated/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
   '/_authenticated/atividades/': typeof AuthenticatedAtividadesIndexRoute
+  '/_authenticated/mf2/blocos/$blocoId': typeof AuthenticatedMf2BlocosBlocoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
     | '/atividades/'
+    | '/mf2/blocos/$blocoId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
     | '/atividades'
+    | '/mf2/blocos/$blocoId'
   id:
     | '__root__'
     | '/'
@@ -167,6 +179,7 @@ export interface FileRouteTypes {
     | '/_authenticated/atividades/$atividadeId'
     | '/_authenticated/blocos/$blocoId'
     | '/_authenticated/atividades/'
+    | '/_authenticated/mf2/blocos/$blocoId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBlocosBlocoIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mf2/blocos/$blocoId': {
+      id: '/_authenticated/mf2/blocos/$blocoId'
+      path: '/mf2/blocos/$blocoId'
+      fullPath: '/mf2/blocos/$blocoId'
+      preLoaderRoute: typeof AuthenticatedMf2BlocosBlocoIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -274,6 +294,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAtividadesAtividadeIdRoute: typeof AuthenticatedAtividadesAtividadeIdRoute
   AuthenticatedBlocosBlocoIdRoute: typeof AuthenticatedBlocosBlocoIdRoute
   AuthenticatedAtividadesIndexRoute: typeof AuthenticatedAtividadesIndexRoute
+  AuthenticatedMf2BlocosBlocoIdRoute: typeof AuthenticatedMf2BlocosBlocoIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -283,6 +304,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedAtividadesAtividadeIdRoute,
   AuthenticatedBlocosBlocoIdRoute: AuthenticatedBlocosBlocoIdRoute,
   AuthenticatedAtividadesIndexRoute: AuthenticatedAtividadesIndexRoute,
+  AuthenticatedMf2BlocosBlocoIdRoute: AuthenticatedMf2BlocosBlocoIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
