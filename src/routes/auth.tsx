@@ -32,7 +32,7 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-type Mode = "entrar" | "criar";
+type Mode = "entrar" | "criar" | "recuperar";
 
 function safePath(value: string | undefined): string {
   if (!value || !value.startsWith("/") || value.startsWith("//")) return "/blocos/1";
@@ -66,6 +66,23 @@ function AuthPage() {
       setError("Introduza um endereço de email válido.");
       return;
     }
+
+    if (mode === "recuperar") {
+      setBusy(true);
+      try {
+        await supabase.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        });
+        // Mensagem neutra: não confirmamos nem negamos a existência da conta.
+        setNotice(
+          "Se existir uma conta com este email, foi enviado um link de recuperação. Verifique a sua caixa de correio.",
+        );
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
+
     if (password.length < 6) {
       setError("A password tem de ter, no mínimo, 6 caracteres.");
       return;
