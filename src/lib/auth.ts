@@ -46,6 +46,9 @@ export function authErrorMessage(message: string): string {
     return "A password tem de ter, no mínimo, 6 caracteres.";
   if (m.includes("invalid email") || m.includes("unable to validate email"))
     return "O endereço de email não é válido.";
+  if (m.includes("weak") || m.includes("easy to guess"))
+    return "Essa password é demasiado comum. Escolha uma password mais forte e única.";
+
   if (m.includes("email not confirmed"))
     return "Confirme o seu email antes de entrar (verifique a caixa de correio).";
   if (m.includes("rate limit") || m.includes("too many"))
