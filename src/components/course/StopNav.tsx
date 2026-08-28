@@ -1,7 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { STOPS } from "@/lib/course-data";
+import { MF2_STOPS } from "@/lib/course-data-mf2";
 import { useProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 
@@ -14,9 +15,11 @@ export function useVisit(stopId: string) {
 
 export function StopNav({ stopId }: { stopId: string }) {
   const { isCompleted, markCompleted, unmarkCompleted } = useProgress();
-  const index = STOPS.findIndex((s) => s.id === stopId);
-  const prev = index > 0 ? STOPS[index - 1] : undefined;
-  const next = index >= 0 && index < STOPS.length - 1 ? STOPS[index + 1] : undefined;
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const stops = pathname.startsWith("/mf2") ? MF2_STOPS : STOPS;
+  const index = stops.findIndex((s) => s.id === stopId);
+  const prev = index > 0 ? stops[index - 1] : undefined;
+  const next = index >= 0 && index < stops.length - 1 ? stops[index + 1] : undefined;
   const done = isCompleted(stopId);
 
   return (
