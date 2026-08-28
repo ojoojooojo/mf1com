@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight, ShieldAlert, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -270,9 +270,8 @@ function ParticipantsTable({
             {rows.map((row) => {
               const isOpen = openId === row.profile.id;
               return (
-                <>
+                <Fragment key={row.profile.id}>
                   <tr
-                    key={row.profile.id}
                     className={cn(
                       "cursor-pointer border-b border-border/70 transition-colors hover:bg-muted/60",
                       isOpen && "bg-primary-soft",
@@ -315,7 +314,7 @@ function ParticipantsTable({
                     </td>
                   </tr>
                   {isOpen ? (
-                    <tr key={`${row.profile.id}-detail`}>
+                    <tr>
                       <td colSpan={5} className="border-b border-border bg-surface px-4 py-6">
                         <ParticipantDetail
                           email={row.profile.email}
@@ -326,7 +325,7 @@ function ParticipantsTable({
                       </td>
                     </tr>
                   ) : null}
-                </>
+                </Fragment>
               );
             })}
           </tbody>

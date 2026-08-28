@@ -102,6 +102,7 @@ function ProgressPanel() {
 
 function SessionMenu() {
   const { user, loading, signOut } = useAuth();
+  const isFormador = useIsFormador();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -123,6 +124,14 @@ function SessionMenu() {
       <span className="hidden max-w-[14rem] truncate text-xs text-muted-foreground md:block">
         {user.email}
       </span>
+      {isFormador ? (
+        <Link
+          to="/formador"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-primary hover:bg-muted"
+        >
+          <Users className="size-3.5" /> Formador
+        </Link>
+      ) : null}
       <button
         type="button"
         onClick={async () => {

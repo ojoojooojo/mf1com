@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FontesRouteImport } from './routes/fontes'
+import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
 import { Route as AuthenticatedSinteseRouteImport } from './routes/_authenticated/sintese'
 import { Route as AuthenticatedAtividadesIndexRouteImport } from './routes/_authenticated/atividades.index'
 import { Route as AuthenticatedAtividadesAtividadeIdRouteImport } from './routes/_authenticated/atividades.$atividadeId'
@@ -36,6 +37,11 @@ const FontesRoute = FontesRouteImport.update({
   id: '/fontes',
   path: '/fontes',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedFormadorRoute = AuthenticatedFormadorRouteImport.update({
+  id: '/formador',
+  path: '/formador',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSinteseRoute = AuthenticatedSinteseRouteImport.update({
   id: '/sintese',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
+  '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
+  '/formador': typeof AuthenticatedFormadorRoute
   '/sintese': typeof AuthenticatedSinteseRoute
   '/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/fontes': typeof FontesRoute
+  '/_authenticated/formador': typeof AuthenticatedFormadorRoute
   '/_authenticated/sintese': typeof AuthenticatedSinteseRoute
   '/_authenticated/atividades/$atividadeId': typeof AuthenticatedAtividadesAtividadeIdRoute
   '/_authenticated/blocos/$blocoId': typeof AuthenticatedBlocosBlocoIdRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/fontes'
+    | '/formador'
     | '/sintese'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/fontes'
+    | '/formador'
     | '/sintese'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/fontes'
+    | '/_authenticated/formador'
     | '/_authenticated/sintese'
     | '/_authenticated/atividades/$atividadeId'
     | '/_authenticated/blocos/$blocoId'
@@ -158,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FontesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/formador': {
+      id: '/_authenticated/formador'
+      path: '/formador'
+      fullPath: '/formador'
+      preLoaderRoute: typeof AuthenticatedFormadorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/sintese': {
       id: '/_authenticated/sintese'
       path: '/sintese'
@@ -190,6 +209,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedFormadorRoute: typeof AuthenticatedFormadorRoute
   AuthenticatedSinteseRoute: typeof AuthenticatedSinteseRoute
   AuthenticatedAtividadesAtividadeIdRoute: typeof AuthenticatedAtividadesAtividadeIdRoute
   AuthenticatedBlocosBlocoIdRoute: typeof AuthenticatedBlocosBlocoIdRoute
@@ -197,6 +217,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedFormadorRoute: AuthenticatedFormadorRoute,
   AuthenticatedSinteseRoute: AuthenticatedSinteseRoute,
   AuthenticatedAtividadesAtividadeIdRoute:
     AuthenticatedAtividadesAtividadeIdRoute,
