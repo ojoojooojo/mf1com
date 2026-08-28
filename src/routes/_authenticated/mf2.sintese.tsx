@@ -8,7 +8,6 @@ import {
 } from "@/lib/course-data-mf2";
 import {
   ContentCard,
-  Placeholder,
   Quiz,
   ReflectionPrompt,
   SectionHeading,
