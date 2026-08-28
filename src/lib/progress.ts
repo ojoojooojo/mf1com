@@ -287,11 +287,6 @@ export function useProgress() {
     void (async () => {
       const userId = await currentUserId();
       if (!userId) return;
-      const scope = <T extends { eq: (c: string, v: string) => T }>(
-        query: T,
-        column: string,
-      ) => query;
-      void scope;
       const pattern = `${MF2_PREFIX}%`;
       if (module === "mf2") {
         await supabase.from("progress").delete().eq("user_id", userId).like("section_id", pattern);
