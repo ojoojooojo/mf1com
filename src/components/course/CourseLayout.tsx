@@ -14,7 +14,7 @@ function TrailList({ onNavigate }: { onNavigate?: () => void }) {
       {STOPS.map((stop, i) => {
         const active =
           stop.params
-            ? location.pathname === `/blocos/${stop.params.blocoId}`
+            ? location.pathname === `/blocos/${stop.params["blocoId"]}`
             : stop.to === "/"
               ? location.pathname === "/"
               : location.pathname.startsWith(stop.to);
