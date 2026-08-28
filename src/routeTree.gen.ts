@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FontesRouteImport } from './routes/fontes'
 import { Route as SinteseRouteImport } from './routes/sintese'
 import { Route as AtividadesIndexRouteImport } from './routes/atividades.index'
 import { Route as AtividadesAtividadeIdRouteImport } from './routes/atividades.$atividadeId'
@@ -18,6 +19,11 @@ import { Route as BlocosBlocoIdRouteImport } from './routes/blocos.$blocoId'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FontesRoute = FontesRouteImport.update({
+  id: '/fontes',
+  path: '/fontes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SinteseRoute = SinteseRouteImport.update({
@@ -43,6 +49,7 @@ const BlocosBlocoIdRoute = BlocosBlocoIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/fontes': typeof FontesRoute
   '/sintese': typeof SinteseRoute
   '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof BlocosBlocoIdRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/fontes': typeof FontesRoute
   '/sintese': typeof SinteseRoute
   '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof BlocosBlocoIdRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/fontes': typeof FontesRoute
   '/sintese': typeof SinteseRoute
   '/atividades/$atividadeId': typeof AtividadesAtividadeIdRoute
   '/blocos/$blocoId': typeof BlocosBlocoIdRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/fontes'
     | '/sintese'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/fontes'
     | '/sintese'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/fontes'
     | '/sintese'
     | '/atividades/$atividadeId'
     | '/blocos/$blocoId'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FontesRoute: typeof FontesRoute
   SinteseRoute: typeof SinteseRoute
   AtividadesAtividadeIdRoute: typeof AtividadesAtividadeIdRoute
   BlocosBlocoIdRoute: typeof BlocosBlocoIdRoute
@@ -102,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fontes': {
+      id: '/fontes'
+      path: '/fontes'
+      fullPath: '/fontes'
+      preLoaderRoute: typeof FontesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sintese': {
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FontesRoute: FontesRoute,
   SinteseRoute: SinteseRoute,
   AtividadesAtividadeIdRoute: AtividadesAtividadeIdRoute,
   BlocosBlocoIdRoute: BlocosBlocoIdRoute,

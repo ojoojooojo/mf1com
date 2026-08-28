@@ -152,6 +152,21 @@ export function CourseLayout({ children }: { children: ReactNode }) {
         </aside>
         <main className="min-w-0 flex-1 pb-16">{children}</main>
       </div>
+
+      <footer className="border-t border-border bg-surface">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            {MODULE_CODE} · {MODULE_TITLE} — segue o referencial de Formação Pedagógica Contínua de
+            Formadores do IEFP.
+          </p>
+          <Link
+            to="/fontes"
+            className="font-medium underline-offset-4 hover:text-foreground hover:underline"
+          >
+            Fontes e referências
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 }
