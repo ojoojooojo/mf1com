@@ -192,3 +192,23 @@ export const STOPS: Stop[] = [
 
 export const getBlock = (id: string) => BLOCKS.find((b) => b.id === id);
 export const getActivity = (id: string) => ACTIVITIES.find((a) => a.id === id);
+
+/** Identificadores estáveis de todos os micro-quizzes dos blocos de conteúdo (1 a 5). */
+export const BLOCK_QUIZ_IDS = [
+  "bloco-1-quiz-fatica",
+  "bloco-1-quiz-assoc-1",
+  "bloco-1-quiz-assoc-2",
+  "bloco-1-quiz-assoc-3",
+  "bloco-1-quiz-assoc-4",
+  "bloco-2-quiz-filtros",
+  "bloco-3-quiz-reformulacao",
+  "bloco-4-quiz-1",
+  "bloco-4-quiz-2",
+  "bloco-4-quiz-3",
+  "bloco-4-quiz-4",
+  "bloco-5-quiz-cenario",
+  "bloco-5-quiz-class-1",
+  "bloco-5-quiz-class-2",
+  "bloco-5-quiz-class-3",
+  "bloco-5-quiz-class-4",
+] as const;
