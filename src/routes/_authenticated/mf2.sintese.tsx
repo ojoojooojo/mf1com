@@ -8,7 +8,6 @@ import {
 } from "@/lib/course-data-mf2";
 import {
   ContentCard,
-  Placeholder,
   Quiz,
   ReflectionPrompt,
   SectionHeading,
@@ -41,10 +40,10 @@ export const Route = createFileRoute("/_authenticated/mf2/sintese")({
 
 /** Recapitulação por bloco — texto definitivo a inserir com o conteúdo de cada bloco. */
 const RECAP: Record<string, string> = {
-  "1": "Síntese do Bloco 1 a inserir com o conteúdo definitivo.",
-  "2": "Síntese do Bloco 2 a inserir com o conteúdo definitivo.",
-  "3": "Síntese do Bloco 3 a inserir com o conteúdo definitivo.",
-  "4": "Síntese do Bloco 4 a inserir com o conteúdo definitivo.",
+  "1": "Um conflito existe sempre que atividades ou interesses são incompatíveis (Deutsch). Não é bom nem mau em si — o que decide é como é gerido. Pondy mostra que atravessa cinco fases (latente a resíduo); Rahim e Jehn ajudam a nomear o nível (inter/intra/intergrupal) e o conteúdo (tarefa/processo/relacional) em jogo.",
+  "2": "Três abordagens fundamentais — prevenção, intervenção, pós-resolução — atuam em momentos diferentes do mesmo conflito. O modelo de Glasl mostra que quanto mais cedo se atua, mais fácil é chegar a um desfecho onde ambas as partes ganham; e Deutsch lembra que cooperação tende a gerar cooperação, tal como competição gera competição.",
+  "3": "Os conflitos têm causas de fundo (recursos, objetivos, interdependência, comunicação) distintas dos detonadores que os tornam visíveis. Têm também custo mensurável em tempo e bem-estar (CPP, 2008) e consequências que podem ser funcionais ou disfuncionais, consoante como são geridos.",
+  "4": "O conflito tem custo pessoal, não só organizacional. Grande parte da escalada vem de como interpretamos as intenções do outro (realismo ingénuo, erro de atribuição) — e cada pessoa envolvida, incluindo o formador, é sempre, em algum grau, coautora da trajetória do conflito.",
 };
 
 const FINAL_QUIZ_IDS = [
@@ -54,10 +53,10 @@ const FINAL_QUIZ_IDS = [
   "mf2-sintese-quiz-4",
 ];
 const FINAL_CORRECT: Record<string, number> = {
-  "mf2-sintese-quiz-1": 0,
-  "mf2-sintese-quiz-2": 0,
+  "mf2-sintese-quiz-1": 1,
+  "mf2-sintese-quiz-2": 1,
   "mf2-sintese-quiz-3": 0,
-  "mf2-sintese-quiz-4": 0,
+  "mf2-sintese-quiz-4": 1,
 };
 
 function ScorePanel() {
@@ -172,31 +171,101 @@ function Mf2SynthesisPage() {
           title="Quatro situações novas"
           lead="Uma pergunta por conteúdo, em situações que ainda não viu no curso. Cada resposta terá explicação — é aí que está a aprendizagem, não no número de acertos."
         />
-        <Placeholder label="As quatro perguntas de autoavaliação definitivas serão inseridas aqui." />
+        <Quiz
+          id="mf2-sintese-quiz-1"
+          question="Dois departamentos de uma escola de formação discordam sobre qual deve gerir o orçamento de materiais didáticos, e cada equipa evita colaborar com a outra em iniciativas conjuntas. Que nível de conflito (Rahim, Bloco 1) é este, predominantemente?"
+          options={[
+            {
+              text: "Interpessoal",
+              feedback:
+                "Interpessoal envolveria duas pessoas específicas, não dois departamentos a agir como unidades.",
+            },
+            {
+              text: "Intergrupal",
+              correct: true,
+              feedback:
+                "Correto. Dois grupos constituídos (os departamentos) opõem-se e evitam colaborar entre si como unidades — o traço distintivo do nível intergrupal.",
+            },
+            {
+              text: "Intrapessoal",
+              feedback:
+                "Intrapessoal seria um conflito dentro de uma só pessoa, entre objetivos ou valores próprios — não é o caso aqui.",
+            },
+          ]}
+          takeaway="Quando a oposição já não passa por indivíduos isolados mas por grupos inteiros a agir como blocos, o nível é intergrupal."
+        />
 
-        {FINAL_QUIZ_IDS.map((id, i) => (
-          <Quiz
-            key={id}
-            id={id}
-            question={`${i + 1}. Pergunta de autoavaliação a inserir com o conteúdo definitivo.`}
-            options={[
-              {
-                text: "Opção A (a substituir)",
-                correct: true,
-                feedback: "Feedback explicativo a inserir com o conteúdo definitivo.",
-              },
-              {
-                text: "Opção B (a substituir)",
-                feedback: "Feedback explicativo a inserir com o conteúdo definitivo.",
-              },
-              {
-                text: "Opção C (a substituir)",
-                feedback: "Feedback explicativo a inserir com o conteúdo definitivo.",
-              },
-            ]}
-            takeaway="Síntese a retirar desta pergunta."
-          />
-        ))}
+        <Quiz
+          id="mf2-sintese-quiz-2"
+          question="Um formador nota que dois formandos já trocam farpas indiretas mas ainda debatem abertamente o tema em disputa. Segundo o modelo de escalada de Glasl (Bloco 2), em que patamar estão, e que tipo de resposta é ainda mais provável de funcionar?"
+          options={[
+            {
+              text: "Patamar ganha-perde avançado; só a mediação externa resulta a esta altura",
+              feedback:
+                "Ganha-perde avançado envolveria já procura de coligações e ataques à reputação mais explícitos — este episódio ainda está a um nível mais inicial.",
+            },
+            {
+              text: "Patamar ganha-ganha; prevenção ou intervenção direta do formador ainda têm boas probabilidades de funcionar",
+              correct: true,
+              feedback:
+                "Correto. Ainda há diálogo direto sobre o tema, mesmo com alguma tensão — típico do patamar inicial, onde uma solução onde ambas as partes ficam satisfeitas continua ao alcance.",
+            },
+            {
+              text: "Patamar perde-perde; já não há solução construtiva possível",
+              feedback:
+                "Perde-perde implicaria disposição para se prejudicarem mutuamente mesmo a custo próprio — não há qualquer sinal disso aqui.",
+            },
+          ]}
+          takeaway="Quanto mais cedo se reconhece o patamar, maior a margem para uma resposta simples funcionar."
+        />
+
+        <Quiz
+          id="mf2-sintese-quiz-3"
+          question="Depois de vários atrasos seguidos de um formador, a coordenação decide apenas avisá-lo verbalmente sobre a pontualidade, sem investigar mais. Nas semanas seguintes, o mesmo problema volta a acontecer. Isto ilustra sobretudo..."
+          options={[
+            {
+              text: "Que a causa de fundo não foi tratada — só se respondeu ao detonador mais recente",
+              correct: true,
+              feedback:
+                "Correto. Tratar apenas o episódio visível, sem investigar a condição estrutural que o gera, tende a produzir o mesmo problema outra vez, com outro pretexto.",
+            },
+            {
+              text: "Que o formador é o único responsável por este conflito",
+              feedback:
+                "Atribuir toda a responsabilidade a uma só pessoa ignora precisamente a distinção entre causa de fundo e detonador que este módulo trabalhou.",
+            },
+            {
+              text: "Que este é um exemplo de consequência funcional",
+              feedback:
+                "Uma consequência funcional deixaria clareza ou aprendizagem ganhas; aqui o problema persiste sem alteração — não há ganho identificável.",
+            },
+          ]}
+          takeaway="Repetição do mesmo episódio é normalmente sinal de que a causa de fundo, não só o detonador, continua por tratar."
+        />
+
+        <Quiz
+          id="mf2-sintese-quiz-4"
+          question="Numa videochamada, um formando interpreta o silêncio prolongado de um colega como desinteresse, sem considerar que pode ter havido um problema técnico de som. Que mecanismo, estudado no Bloco 4, está mais provavelmente em jogo?"
+          options={[
+            {
+              text: "Escalada segundo o modelo de Glasl",
+              feedback:
+                "Escalada descreve como um conflito já em curso se agrava por fases — aqui ainda nem há confirmação de que exista sequer um conflito, só uma interpretação precipitada de um sinal ambíguo.",
+            },
+            {
+              text: "Realismo ingénuo / erro fundamental de atribuição",
+              correct: true,
+              feedback:
+                "Correto. O formando trata a sua própria leitura (desinteresse) como um facto, sem considerar explicações alternativas igualmente plausíveis (problema técnico) — o mecanismo descrito por Ross no Bloco 4.",
+            },
+            {
+              text: "Conflito de tarefa",
+              feedback:
+                "Conflito de tarefa seria um desacordo sobre o conteúdo do trabalho — aqui não há sequer um desacordo confirmado, apenas uma interpretação de um sinal ambíguo.",
+            },
+          ]}
+          takeaway="Antes de reagir a um sinal ambíguo, vale perguntar: que outra explicação, igualmente plausível, ainda não considerei?"
+        />
 
         <ScorePanel />
         <QuizSummary />
