@@ -9,9 +9,10 @@ export type ProgressState = {
   completed: string[];
   answers: Record<string, string>;
   quiz: Record<string, number>;
+  quizCorrect: Record<string, boolean>;
 };
 
-const EMPTY: ProgressState = { visited: [], completed: [], answers: {}, quiz: {} };
+const EMPTY: ProgressState = { visited: [], completed: [], answers: {}, quiz: {}, quizCorrect: {} };
 
 function read(): ProgressState {
   if (typeof window === "undefined") return EMPTY;
@@ -24,6 +25,7 @@ function read(): ProgressState {
       completed: parsed.completed ?? [],
       answers: parsed.answers ?? {},
       quiz: parsed.quiz ?? {},
+      quizCorrect: parsed.quizCorrect ?? {},
     };
   } catch {
     return EMPTY;
@@ -50,9 +52,10 @@ async function pullRemote(): Promise<ProgressState | null> {
   const userId = await currentUserId();
   if (!userId) return null;
 
-  const [{ data: rows }, { data: responses }] = await Promise.all([
+  const [{ data: rows }, { data: responses }, { data: quizRows }] = await Promise.all([
     supabase.from("progress").select("section_id, status").eq("user_id", userId),
     supabase.from("written_responses").select("activity_id, response_text").eq("user_id", userId),
+    supabase.from("quiz_answers").select("quiz_id, selected_option, is_correct").eq("user_id", userId),
   ]);
 
   const local = read();
@@ -69,7 +72,22 @@ async function pullRemote(): Promise<ProgressState | null> {
     if (row.response_text) answers[row.activity_id] = row.response_text;
   }
 
-  const merged: ProgressState = { ...local, visited: [...visited], completed: [...completed], answers };
+  const quiz = { ...local.quiz };
+  const quizCorrect = { ...local.quizCorrect };
+  for (const row of quizRows ?? []) {
+    const index = Number.parseInt(row.selected_option, 10);
+    if (!Number.isNaN(index)) quiz[row.quiz_id] = index;
+    quizCorrect[row.quiz_id] = row.is_correct;
+  }
+
+  const merged: ProgressState = {
+    ...local,
+    visited: [...visited],
+    completed: [...completed],
+    answers,
+    quiz,
+    quizCorrect,
+  };
   write(merged);
   return merged;
 }
@@ -83,6 +101,38 @@ async function pushSection(sectionId: string, status: "iniciado" | "concluido") 
       { user_id: userId, section_id: sectionId, status, updated_at: new Date().toISOString() },
       { onConflict: "user_id,section_id" },
     );
+}
+
+async function pushQuiz(quizId: string, optionIndex: number, isCorrect: boolean) {
+  const userId = await currentUserId();
+  if (!userId) return;
+  await supabase.from("quiz_answers").upsert(
+    {
+      user_id: userId,
+      quiz_id: quizId,
+      selected_option: String(optionIndex),
+      is_correct: isCorrect,
+      answered_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id,quiz_id" },
+  );
+}
+
+const responseTimers = new Map<string, ReturnType<typeof setTimeout>>();
+
+/** Debounce por campo: o localStorage serve de buffer enquanto a pessoa escreve. */
+function queueResponse(activityId: string, text: string) {
+  const existing = responseTimers.get(activityId);
+  if (existing) clearTimeout(existing);
+  responseTimers.set(
+    activityId,
+    setTimeout(() => {
+      responseTimers.delete(activityId);
+      void pushResponse(activityId, text).catch(() => {
+        /* sem sessão ou offline — a cache local mantém a resposta */
+      });
+    }, 700),
+  );
 }
 
 async function pushResponse(activityId: string, text: string) {
@@ -168,14 +218,22 @@ export function useProgress() {
   const saveAnswer = useCallback(
     (key: string, value: string) => {
       update((p) => ({ ...p, answers: { ...p.answers, [key]: value } }));
-      void pushResponse(key, value);
+      queueResponse(key, value);
     },
     [update],
   );
 
   const saveQuiz = useCallback(
-    (key: string, optionIndex: number) =>
-      update((p) => ({ ...p, quiz: { ...p.quiz, [key]: optionIndex } })),
+    (key: string, optionIndex: number, isCorrect = false) => {
+      update((p) => ({
+        ...p,
+        quiz: { ...p.quiz, [key]: optionIndex },
+        quizCorrect: { ...p.quizCorrect, [key]: isCorrect },
+      }));
+      void pushQuiz(key, optionIndex, isCorrect).catch(() => {
+        /* offline — fica a cache local */
+      });
+    },
     [update],
   );
 
@@ -186,6 +244,7 @@ export function useProgress() {
       const userId = await currentUserId();
       if (!userId) return;
       await supabase.from("progress").delete().eq("user_id", userId);
+      await supabase.from("quiz_answers").delete().eq("user_id", userId);
     })();
   }, []);
 
