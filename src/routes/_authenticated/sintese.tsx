@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { BLOCKS, LEARNING_OBJECTIVES } from "@/lib/course-data";
+import { BLOCK_QUIZ_IDS, BLOCKS, LEARNING_OBJECTIVES } from "@/lib/course-data";
 import { ContentCard, Quiz, ReflectionPrompt, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useProgress } from "@/lib/progress";
@@ -65,6 +65,30 @@ function ScorePanel() {
         Este número não é uma nota e não fica registado em lado nenhum além deste navegador. O valor
         do módulo mede-se no que muda na sua próxima sessão: como formula uma frase difícil, como
         repara num sinal não-verbal, como devolve compreensão antes de responder.
+      </p>
+    </div>
+  );
+}
+
+function QuizSummary() {
+  const { state, hydrated } = useProgress();
+  if (!hydrated) return null;
+
+  const answered = BLOCK_QUIZ_IDS.filter((id) => typeof state.quiz[id] === "number");
+  const correct = answered.filter((id) => state.quizCorrect[id]).length;
+
+  return (
+    <div className="mt-4 rounded-xl border border-primary/25 bg-primary-soft p-5">
+      <p className="eyebrow">O seu percurso nos micro-quizzes</p>
+      <p className="mt-1 font-display text-xl">
+        {correct}/{BLOCK_QUIZ_IDS.length} respostas corretas nos micro-quizzes dos blocos
+      </p>
+      <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">
+        {answered.length < BLOCK_QUIZ_IDS.length
+          ? `Respondeu a ${answered.length} dos ${BLOCK_QUIZ_IDS.length} micro-quizzes ao longo dos cinco blocos. `
+          : "Respondeu a todos os micro-quizzes dos cinco blocos. "}
+        Isto não é uma classificação: é apenas feedback formativo para si. Pode voltar a qualquer
+        bloco e responder de novo — fica guardada a resposta mais recente.
       </p>
     </div>
   );
@@ -238,6 +262,7 @@ function SynthesisPage() {
         />
 
         <ScorePanel />
+        <QuizSummary />
       </section>
 
       <section className="mt-12">
