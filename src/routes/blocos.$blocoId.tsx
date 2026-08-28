@@ -207,8 +207,6 @@ function BlockPlaceholder({ blockId, number }: { blockId: string; number: number
           </p>
         </ContentCard>
       </section>
-
-      <StopNav stopId={stopId} />
-    </article>
+    </>
   );
 }
