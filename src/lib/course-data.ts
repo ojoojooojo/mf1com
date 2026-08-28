@@ -106,10 +106,10 @@ export const ACTIVITIES: Activity[] = [
   {
     id: "a",
     letter: "A",
-    title: "Análise de situação",
+    title: "Análise de situação: a primeira sessão de um formador novo",
     kind: "Análise de caso",
     description:
-      "Ler um episódio real de sala de formação e identificar os elementos do processo comunicacional, as barreiras presentes e os pontos de rutura.",
+      "Analisar um cenário simulado de sala de formação em quatro partes — elementos do processo, barreiras, sinais não-verbais e primeira ação — e comparar com uma análise de referência comentada.",
     minutes: 25,
   },
   {
@@ -118,7 +118,7 @@ export const ACTIVITIES: Activity[] = [
     title: "Transformação de mensagens",
     kind: "Reescrita assertiva",
     description:
-      "Reescrever mensagens agressivas ou passivas em formulações assertivas, mantendo o conteúdo e mudando o efeito relacional.",
+      "Reescrever três frases agressivas ou passivas com a técnica D.E.E. e comparar cada versão com uma reformulação de referência anotada.",
     minutes: 25,
   },
   {
@@ -127,7 +127,7 @@ export const ACTIVITIES: Activity[] = [
     title: "Escolha e justificação",
     kind: "Decisão fundamentada",
     description:
-      "Escolher a resposta mais adequada em situações ambíguas de formação e justificar a escolha com base nos conceitos do módulo.",
+      "Escolher e justificar uma resposta a um formando que desafia publicamente a competência do formador — e ler o comentário pedagógico às quatro opções.",
     minutes: 20,
   },
   {
@@ -136,7 +136,7 @@ export const ACTIVITIES: Activity[] = [
     title: "Observação de comunicação verbal e não verbal",
     kind: "Observação guiada",
     description:
-      "Observar uma interação (gravada ou real) com uma grelha de observação e registar sinais verbais, paraverbais e não verbais.",
+      "Ler um diálogo anotado com tom, postura, olhar e distância, assinalar os momentos de incongruência entre verbal e não-verbal e registar o que observou.",
     minutes: 25,
   },
   {
@@ -145,8 +145,8 @@ export const ACTIVITIES: Activity[] = [
     title: "Reflexão aplicada à prática",
     kind: "Escrita reflexiva",
     description:
-      "Escrever um plano pessoal de melhoria: o que vai mudar na sua próxima sessão de formação, com base no que aprendeu.",
-    minutes: 25,
+      "Reflexão privada sobre uma situação de tensão já vivida: que conteúdo do módulo teria feito diferença e como o aplicaria da próxima vez.",
+    minutes: 15,
   },
 ];
 
