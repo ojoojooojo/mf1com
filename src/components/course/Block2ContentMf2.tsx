@@ -39,7 +39,7 @@ const TIERS = [
 ] as const;
 
 function EscaladaGlaslSvg() {
-  const W = 800;
+  const W = 960;
   const boxW = 232;
   const boxH = 46;
   const stepX = 60;
