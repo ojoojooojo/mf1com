@@ -15,13 +15,15 @@ export function SectionHeading({
   eyebrow,
   title,
   lead,
+  className,
 }: {
   eyebrow?: string;
   title: string;
   lead?: string;
+  className?: string;
 }) {
   return (
-    <header className="mb-6">
+    <header className={cn("mb-6", className)}>
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
       <h2 className="mt-1 font-display text-2xl leading-tight sm:text-3xl">{title}</h2>
       {lead ? <p className="mt-3 max-w-2xl text-muted-foreground">{lead}</p> : null}
