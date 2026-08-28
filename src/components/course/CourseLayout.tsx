@@ -68,7 +68,8 @@ function TrailList({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 function ProgressPanel() {
-  const { percent, reset, hydrated } = useProgress();
+  const { percent, reset, hydrated, synced } = useProgress();
+  const { user } = useAuth();
   return (
     <div className="rounded-xl border border-sidebar-border bg-sidebar p-4">
       <p className="eyebrow">Progresso</p>
@@ -82,7 +83,11 @@ function ProgressPanel() {
         <span className="text-sm font-semibold tabular-nums">{hydrated ? percent : 0}%</span>
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        Guardado automaticamente neste navegador.
+        {user
+          ? synced
+            ? "Guardado na sua conta."
+            : "A sincronizar com a sua conta…"
+          : "Guardado automaticamente neste navegador."}
       </p>
       <button
         type="button"
@@ -94,6 +99,46 @@ function ProgressPanel() {
     </div>
   );
 }
+
+function SessionMenu() {
+  const { user, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <Link
+        to="/auth"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
+      >
+        <LogIn className="size-3.5" /> Entrar
+      </Link>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="hidden max-w-[14rem] truncate text-xs text-muted-foreground md:block">
+        {user.email}
+      </span>
+      <button
+        type="button"
+        onClick={async () => {
+          await queryClient.cancelQueries();
+          queryClient.clear();
+          await signOut();
+          navigate({ to: "/auth", replace: true });
+        }}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
+      >
+        <LogOut className="size-3.5" /> Sair
+      </button>
+    </div>
+  );
+}
+
 
 export function CourseLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
