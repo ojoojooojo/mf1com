@@ -21,36 +21,43 @@ import {
 import { cn } from "@/lib/utils";
 
 
-/** Deteta o módulo ativo pelo pathname: /mf2* → MF2, tudo o resto → MF1. */
+/** Deteta o módulo ativo pelo pathname: /mf3* → MF3, /mf2* → MF2, tudo o resto → MF1. */
 function useModule() {
   const pathname = useLocation({ select: (l) => l.pathname });
-  const isMf2 = pathname.startsWith("/mf2");
+  const isMf3 = pathname.startsWith("/mf3");
+  const isMf2 = !isMf3 && pathname.startsWith("/mf2");
   return {
     pathname,
     isMf2,
-    stops: isMf2 ? MF2_STOPS : STOPS,
-    code: isMf2 ? MF2_MODULE_CODE : MODULE_CODE,
-    title: isMf2 ? MF2_MODULE_TITLE : MODULE_TITLE,
-    home: (isMf2 ? "/mf2" : "/") as "/mf2" | "/",
-    sources: (isMf2 ? "/mf2/fontes" : "/fontes") as "/mf2/fontes" | "/fontes",
+    isMf3,
+    stops: isMf3 ? MF3_STOPS : isMf2 ? MF2_STOPS : STOPS,
+    code: isMf3 ? MF3_MODULE_CODE : isMf2 ? MF2_MODULE_CODE : MODULE_CODE,
+    title: isMf3 ? MF3_MODULE_TITLE : isMf2 ? MF2_MODULE_TITLE : MODULE_TITLE,
+    home: (isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/") as "/mf3" | "/mf2" | "/",
+    sources: (isMf3 ? "/mf3/fontes" : isMf2 ? "/mf2/fontes" : "/fontes") as
+      | "/mf3/fontes"
+      | "/mf2/fontes"
+      | "/fontes",
   };
 }
 
+
 function TrailList({ onNavigate }: { onNavigate?: () => void }) {
   const { isCompleted, isVisited } = useProgress();
-  const { pathname, stops, isMf2 } = useModule();
+  const { pathname, stops, isMf2, isMf3 } = useModule();
 
   return (
     <nav aria-label="Mapa do módulo" className="space-y-1">
       {stops.map((stop, i) => {
-        const blocosBase = isMf2 ? "/mf2/blocos" : "/blocos";
-        const root = isMf2 ? "/mf2" : "/";
+        const blocosBase = isMf3 ? "/mf3/blocos" : isMf2 ? "/mf2/blocos" : "/blocos";
+        const root = isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/";
         const active =
           stop.params
             ? pathname === `${blocosBase}/${stop.params["blocoId"]}`
             : stop.to === root
               ? pathname === root || pathname === `${root}/`
               : pathname.startsWith(stop.to);
+
         const done = isCompleted(stop.id);
         const seen = isVisited(stop.id);
         return (
