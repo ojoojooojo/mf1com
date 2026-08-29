@@ -167,7 +167,7 @@ function TrainerPage() {
         supabase
           .from("quiz_answers")
           .select("user_id, quiz_id, selected_option, is_correct, answered_at")
-          .in("quiz_id", [...BLOCK_QUIZ_IDS, ...MF2_BLOCK_QUIZ_IDS]),
+          .in("quiz_id", [...BLOCK_QUIZ_IDS, ...MF2_BLOCK_QUIZ_IDS, ...MF3_BLOCK_QUIZ_IDS]),
         supabase
           .from("written_responses")
           .select("user_id, activity_id, response_text, submitted_at"),
@@ -218,7 +218,7 @@ function TrainerPage() {
         aria-label="Módulos"
         className="mt-6 inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1"
       >
-        {(["mf1", "mf2"] as ModuleTab[]).map((key) => (
+        {(["mf1", "mf2", "mf3"] as ModuleTab[]).map((key) => (
           <button
             key={key}
             type="button"
