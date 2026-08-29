@@ -2,26 +2,33 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { STOPS, type Stop } from "./course-data";
 import { MF2_STOPS } from "./course-data-mf2";
+import { MF3_STOPS } from "./course-data-mf3";
 import { supabase } from "@/integrations/supabase/client";
 
-export type ModuleKey = "mf1" | "mf2";
+export type ModuleKey = "mf1" | "mf2" | "mf3";
 
 const STORAGE_KEYS: Record<ModuleKey, string> = {
   mf1: "mf1-comunicacao-progresso-v1",
   mf2: "mf2-conflitos-progresso-v1",
+  mf3: "mf3-conflitos-progresso-v1",
 };
 
 const MODULE_STOPS: Record<ModuleKey, Stop[]> = {
   mf1: STOPS,
   mf2: MF2_STOPS,
+  mf3: MF3_STOPS,
 };
 
 const MF2_PREFIX = "mf2-";
+const MF3_PREFIX = "mf3-";
 
-/** Os ids do MF2 são prefixados; os do MF1 não têm prefixo. */
+/** Os ids do MF2/MF3 são prefixados; os do MF1 não têm prefixo. */
 function belongsTo(module: ModuleKey, id: string) {
-  return module === "mf2" ? id.startsWith(MF2_PREFIX) : !id.startsWith(MF2_PREFIX);
+  if (module === "mf2") return id.startsWith(MF2_PREFIX);
+  if (module === "mf3") return id.startsWith(MF3_PREFIX);
+  return !id.startsWith(MF2_PREFIX) && !id.startsWith(MF3_PREFIX);
 }
+
 
 export type ProgressState = {
   visited: string[];
