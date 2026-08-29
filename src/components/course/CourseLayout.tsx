@@ -248,7 +248,7 @@ function ModuleSwitch({ isMf2, isMf3 }: { isMf2: boolean; isMf3: boolean }) {
 
 export function CourseLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const { pathname, code, title, home, sources, isMf2 } = useModule();
+  const { pathname, code, title, home, sources, isMf2, isMf3 } = useModule();
   const { percent, hydrated } = useProgress();
 
   useEffect(() => setOpen(false), [pathname]);
