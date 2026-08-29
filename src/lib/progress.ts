@@ -189,7 +189,12 @@ async function pushResponse(activityId: string, text: string) {
 
 export function useProgress() {
   const pathname = useLocation({ select: (l) => l.pathname });
-  const module: ModuleKey = pathname.startsWith("/mf2") ? "mf2" : "mf1";
+  const module: ModuleKey = pathname.startsWith("/mf3")
+    ? "mf3"
+    : pathname.startsWith("/mf2")
+      ? "mf2"
+      : "mf1";
+
   const storageKey = STORAGE_KEYS[module];
   const stops = MODULE_STOPS[module];
 
