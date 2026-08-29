@@ -271,7 +271,7 @@ export function CourseLayout({ children }: { children: ReactNode }) {
             </span>
             <span className="block truncate font-display text-base font-semibold">{title}</span>
           </Link>
-          <ModuleSwitch isMf2={isMf2} />
+          <ModuleSwitch isMf2={isMf2} isMf3={isMf3} />
           <div className="ml-auto hidden items-center gap-3 sm:flex">
             <div className="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
               <div
