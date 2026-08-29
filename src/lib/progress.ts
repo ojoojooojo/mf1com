@@ -299,34 +299,63 @@ export function useProgress() {
     void (async () => {
       const userId = await currentUserId();
       if (!userId) return;
-      const pattern = `${MF2_PREFIX}%`;
+      const mf2Pattern = `${MF2_PREFIX}%`;
+      const mf3Pattern = `${MF3_PREFIX}%`;
       if (module === "mf2") {
-        await supabase.from("progress").delete().eq("user_id", userId).like("section_id", pattern);
-        await supabase.from("quiz_answers").delete().eq("user_id", userId).like("quiz_id", pattern);
+        await supabase
+          .from("progress")
+          .delete()
+          .eq("user_id", userId)
+          .like("section_id", mf2Pattern);
+        await supabase
+          .from("quiz_answers")
+          .delete()
+          .eq("user_id", userId)
+          .like("quiz_id", mf2Pattern);
         await supabase
           .from("written_responses")
           .delete()
           .eq("user_id", userId)
-          .like("activity_id", pattern);
+          .like("activity_id", mf2Pattern);
+      } else if (module === "mf3") {
+        await supabase
+          .from("progress")
+          .delete()
+          .eq("user_id", userId)
+          .like("section_id", mf3Pattern);
+        await supabase
+          .from("quiz_answers")
+          .delete()
+          .eq("user_id", userId)
+          .like("quiz_id", mf3Pattern);
+        await supabase
+          .from("written_responses")
+          .delete()
+          .eq("user_id", userId)
+          .like("activity_id", mf3Pattern);
       } else {
         await supabase
           .from("progress")
           .delete()
           .eq("user_id", userId)
-          .not("section_id", "like", pattern);
+          .not("section_id", "like", mf2Pattern)
+          .not("section_id", "like", mf3Pattern);
         await supabase
           .from("quiz_answers")
           .delete()
           .eq("user_id", userId)
-          .not("quiz_id", "like", pattern);
+          .not("quiz_id", "like", mf2Pattern)
+          .not("quiz_id", "like", mf3Pattern);
         await supabase
           .from("written_responses")
           .delete()
           .eq("user_id", userId)
-          .not("activity_id", "like", pattern);
+          .not("activity_id", "like", mf2Pattern)
+          .not("activity_id", "like", mf3Pattern);
       }
     })();
   }, [module, storageKey]);
+
 
   const trackable = stops.length;
   const done = useMemo(
