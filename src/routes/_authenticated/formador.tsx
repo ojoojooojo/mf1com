@@ -47,7 +47,7 @@ type ResponseRow = {
   submitted_at: string;
 };
 
-type ModuleTab = "mf1" | "mf2";
+type ModuleTab = "mf1" | "mf2" | "mf3";
 
 type ModuleConfig = {
   key: ModuleTab;
@@ -86,7 +86,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     sectionOrder: buildSectionOrder(STOPS, "aprendizagem-ativa", ACTIVITIES, "atividade-"),
     stopIds: STOPS.map((s) => s.id),
     quizIds: BLOCK_QUIZ_IDS,
-    owns: (id) => !id.startsWith("mf2-"),
+    owns: (id) => !id.startsWith("mf2-") && !id.startsWith("mf3-"),
   },
   mf2: {
     key: "mf2",
@@ -101,7 +101,21 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     quizIds: MF2_BLOCK_QUIZ_IDS,
     owns: (id) => id.startsWith("mf2-"),
   },
+  mf3: {
+    key: "mf3",
+    label: "MF3 · Estratégias de Resolução de Conflitos",
+    sectionOrder: buildSectionOrder(
+      MF3_STOPS,
+      "mf3-atividades",
+      MF3_ACTIVITIES,
+      "mf3-atividade-",
+    ),
+    stopIds: MF3_STOPS.map((s) => s.id),
+    quizIds: MF3_BLOCK_QUIZ_IDS,
+    owns: (id) => id.startsWith("mf3-"),
+  },
 };
+
 
 function formatDate(value: string) {
   return new Date(value).toLocaleString("pt-PT", {
