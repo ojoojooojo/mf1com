@@ -218,7 +218,7 @@ function SessionMenu() {
 }
 
 
-function ModuleSwitch({ isMf2 }: { isMf2: boolean }) {
+function ModuleSwitch({ isMf2, isMf3 }: { isMf2: boolean; isMf3: boolean }) {
   const item = (active: boolean) =>
     cn(
       "rounded-md px-2 py-1 text-xs font-semibold transition-colors",
@@ -232,15 +232,19 @@ function ModuleSwitch({ isMf2 }: { isMf2: boolean }) {
       aria-label="Módulos do curso"
       className="hidden shrink-0 items-center gap-1 rounded-lg border border-border p-0.5 sm:flex"
     >
-      <Link to="/" className={item(!isMf2)}>
+      <Link to="/" className={item(!isMf2 && !isMf3)}>
         MF1
       </Link>
       <Link to="/mf2" className={item(isMf2)}>
         MF2
       </Link>
+      <Link to="/mf3" className={item(isMf3)}>
+        MF3
+      </Link>
     </nav>
   );
 }
+
 
 export function CourseLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
