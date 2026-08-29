@@ -2,26 +2,33 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { STOPS, type Stop } from "./course-data";
 import { MF2_STOPS } from "./course-data-mf2";
+import { MF3_STOPS } from "./course-data-mf3";
 import { supabase } from "@/integrations/supabase/client";
 
-export type ModuleKey = "mf1" | "mf2";
+export type ModuleKey = "mf1" | "mf2" | "mf3";
 
 const STORAGE_KEYS: Record<ModuleKey, string> = {
   mf1: "mf1-comunicacao-progresso-v1",
   mf2: "mf2-conflitos-progresso-v1",
+  mf3: "mf3-conflitos-progresso-v1",
 };
 
 const MODULE_STOPS: Record<ModuleKey, Stop[]> = {
   mf1: STOPS,
   mf2: MF2_STOPS,
+  mf3: MF3_STOPS,
 };
 
 const MF2_PREFIX = "mf2-";
+const MF3_PREFIX = "mf3-";
 
-/** Os ids do MF2 são prefixados; os do MF1 não têm prefixo. */
+/** Os ids do MF2/MF3 são prefixados; os do MF1 não têm prefixo. */
 function belongsTo(module: ModuleKey, id: string) {
-  return module === "mf2" ? id.startsWith(MF2_PREFIX) : !id.startsWith(MF2_PREFIX);
+  if (module === "mf2") return id.startsWith(MF2_PREFIX);
+  if (module === "mf3") return id.startsWith(MF3_PREFIX);
+  return !id.startsWith(MF2_PREFIX) && !id.startsWith(MF3_PREFIX);
 }
+
 
 export type ProgressState = {
   visited: string[];
@@ -182,7 +189,12 @@ async function pushResponse(activityId: string, text: string) {
 
 export function useProgress() {
   const pathname = useLocation({ select: (l) => l.pathname });
-  const module: ModuleKey = pathname.startsWith("/mf2") ? "mf2" : "mf1";
+  const module: ModuleKey = pathname.startsWith("/mf3")
+    ? "mf3"
+    : pathname.startsWith("/mf2")
+      ? "mf2"
+      : "mf1";
+
   const storageKey = STORAGE_KEYS[module];
   const stops = MODULE_STOPS[module];
 
@@ -287,34 +299,63 @@ export function useProgress() {
     void (async () => {
       const userId = await currentUserId();
       if (!userId) return;
-      const pattern = `${MF2_PREFIX}%`;
+      const mf2Pattern = `${MF2_PREFIX}%`;
+      const mf3Pattern = `${MF3_PREFIX}%`;
       if (module === "mf2") {
-        await supabase.from("progress").delete().eq("user_id", userId).like("section_id", pattern);
-        await supabase.from("quiz_answers").delete().eq("user_id", userId).like("quiz_id", pattern);
+        await supabase
+          .from("progress")
+          .delete()
+          .eq("user_id", userId)
+          .like("section_id", mf2Pattern);
+        await supabase
+          .from("quiz_answers")
+          .delete()
+          .eq("user_id", userId)
+          .like("quiz_id", mf2Pattern);
         await supabase
           .from("written_responses")
           .delete()
           .eq("user_id", userId)
-          .like("activity_id", pattern);
+          .like("activity_id", mf2Pattern);
+      } else if (module === "mf3") {
+        await supabase
+          .from("progress")
+          .delete()
+          .eq("user_id", userId)
+          .like("section_id", mf3Pattern);
+        await supabase
+          .from("quiz_answers")
+          .delete()
+          .eq("user_id", userId)
+          .like("quiz_id", mf3Pattern);
+        await supabase
+          .from("written_responses")
+          .delete()
+          .eq("user_id", userId)
+          .like("activity_id", mf3Pattern);
       } else {
         await supabase
           .from("progress")
           .delete()
           .eq("user_id", userId)
-          .not("section_id", "like", pattern);
+          .not("section_id", "like", mf2Pattern)
+          .not("section_id", "like", mf3Pattern);
         await supabase
           .from("quiz_answers")
           .delete()
           .eq("user_id", userId)
-          .not("quiz_id", "like", pattern);
+          .not("quiz_id", "like", mf2Pattern)
+          .not("quiz_id", "like", mf3Pattern);
         await supabase
           .from("written_responses")
           .delete()
           .eq("user_id", userId)
-          .not("activity_id", "like", pattern);
+          .not("activity_id", "like", mf2Pattern)
+          .not("activity_id", "like", mf3Pattern);
       }
     })();
   }, [module, storageKey]);
+
 
   const trackable = stops.length;
   const done = useMemo(

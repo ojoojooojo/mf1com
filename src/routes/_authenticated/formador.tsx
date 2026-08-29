@@ -5,6 +5,7 @@ import { ChevronDown, ChevronRight, ShieldAlert, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ACTIVITIES, BLOCK_QUIZ_IDS, STOPS } from "@/lib/course-data";
 import { MF2_ACTIVITIES, MF2_BLOCK_QUIZ_IDS, MF2_STOPS } from "@/lib/course-data-mf2";
+import { MF3_ACTIVITIES, MF3_BLOCK_QUIZ_IDS, MF3_STOPS } from "@/lib/course-data-mf3";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/formador")({
@@ -46,7 +47,7 @@ type ResponseRow = {
   submitted_at: string;
 };
 
-type ModuleTab = "mf1" | "mf2";
+type ModuleTab = "mf1" | "mf2" | "mf3";
 
 type ModuleConfig = {
   key: ModuleTab;
@@ -85,7 +86,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     sectionOrder: buildSectionOrder(STOPS, "aprendizagem-ativa", ACTIVITIES, "atividade-"),
     stopIds: STOPS.map((s) => s.id),
     quizIds: BLOCK_QUIZ_IDS,
-    owns: (id) => !id.startsWith("mf2-"),
+    owns: (id) => !id.startsWith("mf2-") && !id.startsWith("mf3-"),
   },
   mf2: {
     key: "mf2",
@@ -100,7 +101,21 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     quizIds: MF2_BLOCK_QUIZ_IDS,
     owns: (id) => id.startsWith("mf2-"),
   },
+  mf3: {
+    key: "mf3",
+    label: "MF3 · Estratégias de Resolução de Conflitos",
+    sectionOrder: buildSectionOrder(
+      MF3_STOPS,
+      "mf3-atividades",
+      MF3_ACTIVITIES,
+      "mf3-atividade-",
+    ),
+    stopIds: MF3_STOPS.map((s) => s.id),
+    quizIds: MF3_BLOCK_QUIZ_IDS,
+    owns: (id) => id.startsWith("mf3-"),
+  },
 };
+
 
 function formatDate(value: string) {
   return new Date(value).toLocaleString("pt-PT", {
@@ -152,7 +167,7 @@ function TrainerPage() {
         supabase
           .from("quiz_answers")
           .select("user_id, quiz_id, selected_option, is_correct, answered_at")
-          .in("quiz_id", [...BLOCK_QUIZ_IDS, ...MF2_BLOCK_QUIZ_IDS]),
+          .in("quiz_id", [...BLOCK_QUIZ_IDS, ...MF2_BLOCK_QUIZ_IDS, ...MF3_BLOCK_QUIZ_IDS]),
         supabase
           .from("written_responses")
           .select("user_id, activity_id, response_text, submitted_at"),
@@ -203,7 +218,7 @@ function TrainerPage() {
         aria-label="Módulos"
         className="mt-6 inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1"
       >
-        {(["mf1", "mf2"] as ModuleTab[]).map((key) => (
+        {(["mf1", "mf2", "mf3"] as ModuleTab[]).map((key) => (
           <button
             key={key}
             type="button"

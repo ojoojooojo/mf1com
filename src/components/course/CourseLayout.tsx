@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
 import { STOPS, MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { MF2_STOPS, MF2_MODULE_CODE, MF2_MODULE_TITLE } from "@/lib/course-data-mf2";
+import { MF3_STOPS, MF3_MODULE_CODE, MF3_MODULE_TITLE } from "@/lib/course-data-mf3";
 import { useProgress } from "@/lib/progress";
 import { useAuth, useIsFormador } from "@/lib/auth";
 import {
@@ -20,36 +21,43 @@ import {
 import { cn } from "@/lib/utils";
 
 
-/** Deteta o módulo ativo pelo pathname: /mf2* → MF2, tudo o resto → MF1. */
+/** Deteta o módulo ativo pelo pathname: /mf3* → MF3, /mf2* → MF2, tudo o resto → MF1. */
 function useModule() {
   const pathname = useLocation({ select: (l) => l.pathname });
-  const isMf2 = pathname.startsWith("/mf2");
+  const isMf3 = pathname.startsWith("/mf3");
+  const isMf2 = !isMf3 && pathname.startsWith("/mf2");
   return {
     pathname,
     isMf2,
-    stops: isMf2 ? MF2_STOPS : STOPS,
-    code: isMf2 ? MF2_MODULE_CODE : MODULE_CODE,
-    title: isMf2 ? MF2_MODULE_TITLE : MODULE_TITLE,
-    home: (isMf2 ? "/mf2" : "/") as "/mf2" | "/",
-    sources: (isMf2 ? "/mf2/fontes" : "/fontes") as "/mf2/fontes" | "/fontes",
+    isMf3,
+    stops: isMf3 ? MF3_STOPS : isMf2 ? MF2_STOPS : STOPS,
+    code: isMf3 ? MF3_MODULE_CODE : isMf2 ? MF2_MODULE_CODE : MODULE_CODE,
+    title: isMf3 ? MF3_MODULE_TITLE : isMf2 ? MF2_MODULE_TITLE : MODULE_TITLE,
+    home: (isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/") as "/mf3" | "/mf2" | "/",
+    sources: (isMf3 ? "/mf3/fontes" : isMf2 ? "/mf2/fontes" : "/fontes") as
+      | "/mf3/fontes"
+      | "/mf2/fontes"
+      | "/fontes",
   };
 }
 
+
 function TrailList({ onNavigate }: { onNavigate?: () => void }) {
   const { isCompleted, isVisited } = useProgress();
-  const { pathname, stops, isMf2 } = useModule();
+  const { pathname, stops, isMf2, isMf3 } = useModule();
 
   return (
     <nav aria-label="Mapa do módulo" className="space-y-1">
       {stops.map((stop, i) => {
-        const blocosBase = isMf2 ? "/mf2/blocos" : "/blocos";
-        const root = isMf2 ? "/mf2" : "/";
+        const blocosBase = isMf3 ? "/mf3/blocos" : isMf2 ? "/mf2/blocos" : "/blocos";
+        const root = isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/";
         const active =
           stop.params
             ? pathname === `${blocosBase}/${stop.params["blocoId"]}`
             : stop.to === root
               ? pathname === root || pathname === `${root}/`
               : pathname.startsWith(stop.to);
+
         const done = isCompleted(stop.id);
         const seen = isVisited(stop.id);
         return (
@@ -210,7 +218,7 @@ function SessionMenu() {
 }
 
 
-function ModuleSwitch({ isMf2 }: { isMf2: boolean }) {
+function ModuleSwitch({ isMf2, isMf3 }: { isMf2: boolean; isMf3: boolean }) {
   const item = (active: boolean) =>
     cn(
       "rounded-md px-2 py-1 text-xs font-semibold transition-colors",
@@ -224,19 +232,23 @@ function ModuleSwitch({ isMf2 }: { isMf2: boolean }) {
       aria-label="Módulos do curso"
       className="hidden shrink-0 items-center gap-1 rounded-lg border border-border p-0.5 sm:flex"
     >
-      <Link to="/" className={item(!isMf2)}>
+      <Link to="/" className={item(!isMf2 && !isMf3)}>
         MF1
       </Link>
       <Link to="/mf2" className={item(isMf2)}>
         MF2
       </Link>
+      <Link to="/mf3" className={item(isMf3)}>
+        MF3
+      </Link>
     </nav>
   );
 }
 
+
 export function CourseLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const { pathname, code, title, home, sources, isMf2 } = useModule();
+  const { pathname, code, title, home, sources, isMf2, isMf3 } = useModule();
   const { percent, hydrated } = useProgress();
 
   useEffect(() => setOpen(false), [pathname]);
@@ -259,7 +271,7 @@ export function CourseLayout({ children }: { children: ReactNode }) {
             </span>
             <span className="block truncate font-display text-base font-semibold">{title}</span>
           </Link>
-          <ModuleSwitch isMf2={isMf2} />
+          <ModuleSwitch isMf2={isMf2} isMf3={isMf3} />
           <div className="ml-auto hidden items-center gap-3 sm:flex">
             <div className="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
               <div
