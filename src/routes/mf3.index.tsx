@@ -9,11 +9,110 @@ import {
 } from "@/lib/course-data-mf3";
 import {
   ContentCard,
-  DiagramPlaceholder,
   Figure,
   SectionHeading,
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+
+/* ---------- Infográfico: percurso conceptual do módulo ---------- */
+
+const STEPS = [
+  { n: "1", label: "Inteligência\nEmocional" },
+  { n: "2", label: "Empatia e\nComp. Sociais" },
+  { n: "3", label: "Gestão e\nPrevenção" },
+  { n: "4", label: "Stress e\nConflito" },
+  { n: "5", label: "Roda de\nMapeamento" },
+];
+
+const LAYERS = ["Eu", "A relação", "A ação"];
+
+function PercursoMf3Svg() {
+  return (
+    <svg
+      viewBox="0 0 640 230"
+      role="img"
+      aria-label="Percurso conceptual do MF3: dos blocos 1 e 2 centrados no formador e na relação, para os blocos 3, 4 e 5 centrados na ação sobre o conflito"
+      className="w-full"
+    >
+      {LAYERS.map((layer, i) => (
+        <g key={layer}>
+          <rect
+            x={12 + i * 206}
+            y={12}
+            width={196}
+            height={168}
+            rx={14}
+            fill="hsl(var(--primary) / 0.06)"
+            stroke="hsl(var(--border))"
+          />
+          <text
+            x={110 + i * 206}
+            y={36}
+            textAnchor="middle"
+            fontSize="12"
+            fontWeight="600"
+            fill="hsl(var(--primary))"
+          >
+            {layer}
+          </text>
+        </g>
+      ))}
+
+      {STEPS.map((step, i) => {
+        const layer = i < 1 ? 0 : i < 2 ? 1 : 2;
+        const within = i < 2 ? 0 : i - 2;
+        const slots = layer === 2 ? 3 : 1;
+        const x = 12 + layer * 206 + (196 / slots) * within + 196 / slots / 2;
+        return (
+          <g key={step.n}>
+            <circle cx={x} cy={78} r={17} fill="hsl(var(--primary))" />
+            <text
+              x={x}
+              y={83}
+              textAnchor="middle"
+              fontSize="14"
+              fontWeight="700"
+              fill="hsl(var(--primary-foreground))"
+            >
+              {step.n}
+            </text>
+            {step.label.split("\n").map((line, li) => (
+              <text
+                key={line}
+                x={x}
+                y={116 + li * 14}
+                textAnchor="middle"
+                fontSize="10.5"
+                fill="hsl(var(--foreground))"
+              >
+                {line}
+              </text>
+            ))}
+          </g>
+        );
+      })}
+
+      <path
+        d="M 22 202 H 618"
+        stroke="hsl(var(--primary))"
+        strokeWidth="1.5"
+        markerEnd="url(#mf3-arrow)"
+      />
+      <defs>
+        <marker id="mf3-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="hsl(var(--primary))" />
+        </marker>
+      </defs>
+      <text x={22} y={222} fontSize="10.5" fill="hsl(var(--muted-foreground))">
+        Autoconhecimento
+      </text>
+      <text x={608} y={222} textAnchor="end" fontSize="10.5" fill="hsl(var(--muted-foreground))">
+        Resolução estruturada
+      </text>
+    </svg>
+  );
+}
+
 
 export const Route = createFileRoute("/mf3/")({
   head: () => ({
@@ -118,9 +217,13 @@ function Mf3Landing() {
         </ol>
       </section>
 
-      <Figure caption="Percurso conceptual do módulo: diagrama pedagógico a construir com o conteúdo definitivo.">
-        <DiagramPlaceholder />
+      <Figure
+        caption="Percurso conceptual do MF3: de dentro para fora — primeiro o formador, depois a relação, depois a ação estruturada sobre o conflito."
+        source="Elaborado para este módulo a partir do Referencial IEFP/CNQF (2024)."
+      >
+        <PercursoMf3Svg />
       </Figure>
+
 
       <section className="mt-12">
         <SectionHeading
