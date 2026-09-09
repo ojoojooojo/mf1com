@@ -6,11 +6,13 @@ import {
   FictionNote,
   RevealPanel,
   TaskField,
+  useChosen,
   useFilled,
 } from "@/components/course/ActivityKit";
 
 export function ActivityMf3_3() {
   const filled = useFilled("mf3-atividade-3-decisao-real");
+  const chose = useChosen("mf3-atividade-3-decisao");
 
   return (
     <>
@@ -127,7 +129,12 @@ export function ActivityMf3_3() {
             },
           ]}
         />
-        <div className="mt-5">
+        <RevealPanel
+          id="mf3-atividade-3-consequencias"
+          buttonLabel="Submeter a escolha e ver as consequências"
+          lockedHint="Escolha uma das duas opções antes de ver as consequências."
+          canReveal={chose}
+        >
           <Commentary
             heading="As duas consequências, lado a lado"
             intro="Ambas são plausíveis e ambas têm um custo. O contexto decide."
@@ -192,7 +199,7 @@ export function ActivityMf3_3() {
             ]}
             closing="Repare que a pausa não elimina a emoção: a formadora continua incomodada. O que muda é que a emoção deixa de ser a única fonte de informação sobre o que se passou."
           />
-        </div>
+        </RevealPanel>
       </section>
 
       {/* Parte 3 — aplicação */}
