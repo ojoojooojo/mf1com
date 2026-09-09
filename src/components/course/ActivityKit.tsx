@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Check, FlaskConical, Lock, Pencil, ShieldCheck } from "lucide-react";
 import { useProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
@@ -196,13 +196,11 @@ export function RevealPanel({
   canReveal: boolean;
   children: ReactNode;
 }) {
-  const { state, saveFlag, hydrated } = useProgress();
-  const stored = state.flags[id] === true;
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (hydrated && stored) setOpen(true);
-  }, [hydrated, stored]);
+  const { saveFlag } = useProgress();
+  // Guardar o id revelado (em vez de um booleano) garante que o painel volta a
+  // fechar quando o componente é reutilizado noutra atividade sem remontar.
+  const [openId, setOpenId] = useState<string | null>(null);
+  const open = openId === id;
 
   if (open) {
     return <div className="mt-5">{children}</div>;
@@ -214,7 +212,7 @@ export function RevealPanel({
         type="button"
         disabled={!canReveal}
         onClick={() => {
-          setOpen(true);
+          setOpenId(id);
           saveFlag(id);
         }}
         className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
@@ -280,4 +278,12 @@ export function useFilled(...ids: string[]) {
   const { state, hydrated } = useProgress();
   if (!hydrated) return false;
   return ids.every((id) => (state.answers[id] ?? "").trim().length >= 3);
+}
+
+/* ---------- Hook utilitário: escolha feita? ---------- */
+
+export function useChosen(...ids: string[]) {
+  const { state, hydrated } = useProgress();
+  if (!hydrated) return false;
+  return ids.every((id) => (state.answers[id] ?? "").trim().length > 0);
 }

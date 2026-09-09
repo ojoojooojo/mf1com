@@ -223,15 +223,15 @@ export function Block2ContentMf3() {
           question="Um formador percebe imediatamente que um participante ficou constrangido com uma pergunta, mas só mais tarde conclui que o constrangimento vinha de ele não ter feito o trabalho prévio. Como se descrevem estes dois momentos?"
           options={[
             {
-              text: "Os dois são empatia emocional: em ambos o formador está a sentir com o participante.",
-              feedback:
-                "Só o primeiro momento é empatia emocional. Perceber de imediato o constrangimento é captação afetiva; concluir a razão do constrangimento é uma reconstrução da perspetiva do outro, ou seja, empatia cognitiva.",
-            },
-            {
               text: "Primeiro empatia emocional (captou o estado afetivo), depois empatia cognitiva (reconstruiu a razão da perspetiva do outro).",
               correct: true,
               feedback:
                 "Exatamente, e esta é a sequência típica em sala: a empatia emocional funciona como alerta rápido de que algo se passa, e a empatia cognitiva faz o trabalho mais lento de formular o quê — só a segunda permite decidir uma intervenção adequada.",
+            },
+            {
+              text: "Os dois são empatia emocional: em ambos o formador está a sentir com o participante.",
+              feedback:
+                "Só o primeiro momento é empatia emocional. Perceber de imediato o constrangimento é captação afetiva; concluir a razão do constrangimento é uma reconstrução da perspetiva do outro, ou seja, empatia cognitiva.",
             },
             {
               text: "Primeiro empatia cognitiva, depois empatia emocional — a compreensão precede sempre o sentir.",
@@ -286,15 +286,15 @@ export function Block2ContentMf3() {
                 "Nas duas versões Marta detetou o silêncio — inclusive o comentou em voz alta na Versão 1. A deteção não era o problema: o problema era o que fez com ela.",
             },
             {
+              text: "Na Versão 2 a formadora resolveu o problema repreendendo o André, o que restabeleceu a justiça no grupo.",
+              feedback:
+                "Marta não repreendeu ninguém. Precisamente por isso a intervenção funciona: alterou a regra de apresentação para todos os grupos, o que corrige o efeito sem obrigar André a defender-se nem colocar Inês em posição de acusadora.",
+            },
+            {
               text: "Na Versão 2 a formadora procurou a causa em privado e agiu sobre o processo de todos os grupos, em vez de presumir a causa e expor a participante.",
               correct: true,
               feedback:
                 "É esse o essencial. A empatia cognitiva substituiu a presunção («perdeu a energia») pela pergunta, e a competência social escolheu o momento privado e uma medida geral, que corrige a dinâmica sem transformar Inês e André num caso público.",
-            },
-            {
-              text: "Na Versão 2 a formadora resolveu o problema repreendendo o André, o que restabeleceu a justiça no grupo.",
-              feedback:
-                "Marta não repreendeu ninguém. Precisamente por isso a intervenção funciona: alterou a regra de apresentação para todos os grupos, o que corrige o efeito sem obrigar André a defender-se nem colocar Inês em posição de acusadora.",
             },
             {
               text: "Na Versão 2 a formadora deixou de cumprir o programa para tratar de uma questão emocional.",

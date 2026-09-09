@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Módulo 1 da formação Gestão de Conflitos na Formação: 8 horas assíncronas sobre comunicação, assertividade, barreiras e escuta ativa para formadores.",
+          "Módulo 1 da formação Gestão de Conflitos na Formação: 6 horas assíncronas sobre comunicação, assertividade, barreiras e escuta ativa para formadores.",
       },
       { property: "og:title", content: "MF1 — Comunicação e Escuta Ativa na Formação" },
       {
@@ -125,13 +125,13 @@ function Landing() {
         <ContentCard title="Carga horária" icon={<Clock className="size-4 text-primary" />}>
           <p className="font-semibold">10h totais do módulo</p>
           <p className="mt-1 text-muted-foreground">
-            8h assíncronas (este MOOC) + 2h síncronas em sessão presencial/online, fora deste
+            6h assíncronas (este MOOC) + 4h síncronas em sessão presencial/online, fora deste
             MOOC.
           </p>
         </ContentCard>
         <ContentCard title="Estrutura" icon={<Target className="size-4 text-primary" />}>
           <p className="text-muted-foreground">
-            ~6h de aprendizagem de conteúdos em 5 blocos + ~2h de aprendizagem ativa com 5
+            ~4h de aprendizagem de conteúdos em 5 blocos + ~2h de aprendizagem ativa com 5
             atividades práticas.
           </p>
         </ContentCard>

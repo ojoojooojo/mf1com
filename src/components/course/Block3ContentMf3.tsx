@@ -287,15 +287,15 @@ export function Block3ContentMf3() {
                 "Acomodar implica ceder ativamente à posição do outro, colocando os interesses dele à frente dos próprios. Aqui não há cedência a nenhuma posição: o formador simplesmente não aborda o assunto, o que o coloca em baixa assertividade e baixa cooperação.",
             },
             {
+              text: "Comprometer — está a procurar uma solução intermédia entre intervir e não intervir.",
+              feedback:
+                "Comprometer é uma solução parcial negociada entre as partes, com cedência mútua sobre um objeto concreto. Não abordar o assunto não é uma solução intermédia: é a ausência de abordagem, ou seja, evitar.",
+            },
+            {
               text: "Evitar — baixa assertividade e baixa cooperação: não aborda os seus interesses nem os dos participantes.",
               correct: true,
               feedback:
                 "Correto. Evitar é a combinação de baixa assertividade com baixa cooperação — adiar, contornar ou retirar-se. Pode ser adequado se o sinal for isolado e a tensão estiver alta demais no momento; torna-se problemático se for o padrão, porque o conflito latente continua a operar.",
-            },
-            {
-              text: "Comprometer — está a procurar uma solução intermédia entre intervir e não intervir.",
-              feedback:
-                "Comprometer é uma solução parcial negociada entre as partes, com cedência mútua sobre um objeto concreto. Não abordar o assunto não é uma solução intermédia: é a ausência de abordagem, ou seja, evitar.",
             },
             {
               text: "Colaborar — está a dar espaço ao grupo para resolver sozinho.",
@@ -311,15 +311,15 @@ export function Block3ContentMf3() {
           question="Faltam quinze minutos para o fim da sessão. Um participante insiste em reabrir uma discussão sobre a ordem dos conteúdos, tema já debatido de manhã, e outros dois mostram sinais de impaciência. Qual o estilo mais adequado NESTA situação?"
           options={[
             {
-              text: "Colaborar: explorar a fundo os interesses de todos até encontrar uma solução que sirva a todos.",
-              feedback:
-                "Colaborar é o estilo mais completo, mas exige tempo — e nesta situação específica não há. Abrir agora uma exploração aprofundada de um tema já debatido penaliza os participantes impacientes e deixa a sessão sem fecho. Em outra situação, com tempo, esta seria a melhor escolha.",
-            },
-            {
               text: "Comprometer: reconhecer a questão, propor uma solução parcial rápida (registá-la para a sessão seguinte) e fechar a sessão como previsto.",
               correct: true,
               feedback:
                 "É a melhor escolha aqui, e a razão é a restrição de tempo combinada com objetivos legítimos de ambos os lados: o participante quer ser ouvido, o grupo quer terminar. Uma solução parcial e imediata atende parcialmente aos dois e preserva a relação sem sacrificar o fecho.",
+            },
+            {
+              text: "Colaborar: explorar a fundo os interesses de todos até encontrar uma solução que sirva a todos.",
+              feedback:
+                "Colaborar é o estilo mais completo, mas exige tempo — e nesta situação específica não há. Abrir agora uma exploração aprofundada de um tema já debatido penaliza os participantes impacientes e deixa a sessão sem fecho. Em outra situação, com tempo, esta seria a melhor escolha.",
             },
             {
               text: "Competir: lembrar que o assunto já foi decidido de manhã e encerrá-lo por autoridade.",
@@ -345,12 +345,6 @@ export function Block3ContentMf3() {
                 "Isto não é sinal de conflito: é participação exigente, e habitualmente boa notícia. Ler pedidos de rigor como hostilidade é um erro frequente — e leva a intervenções que criam o conflito que se pretendia prevenir.",
             },
             {
-              text: "Um subgrupo que antes participava passou a sentar-se à parte, responde por monossílabos e faz comentários irónicos breves que ninguém comenta.",
-              correct: true,
-              feedback:
-                "É o sinal mais claro: há mudança de padrão, retirada de participação e ironia não endereçada — conflito ainda não manifesto, mas já a operar. É exatamente o momento em que todos os estilos continuam disponíveis e uma medida discreta (recompor grupos, uma conversa breve no intervalo) resolve com custo baixo.",
-            },
-            {
               text: "Dois participantes discordaram abertamente sobre um exercício, discutiram cinco minutos e chegaram a uma solução comum.",
               feedback:
                 "Um desacordo explícito, discutido e resolvido pelas próprias pessoas é sinal de um grupo saudável, não de conflito em incubação. Note a diferença face à opção correta: aqui o desacordo esteve visível e fechou; lá está invisível e continua ativo.",
@@ -359,6 +353,12 @@ export function Block3ContentMf3() {
               text: "O grupo pediu para antecipar o intervalo em dez minutos.",
               feedback:
                 "É um pedido de organização, não um sinal de conflito. Tratá-lo como sintoma de tensão é sobre-interpretar — e a prevenção ativa perde utilidade quando se aplica a tudo, porque deixa de distinguir o que merece atenção.",
+            },
+            {
+              text: "Um subgrupo que antes participava passou a sentar-se à parte, responde por monossílabos e faz comentários irónicos breves que ninguém comenta.",
+              correct: true,
+              feedback:
+                "É o sinal mais claro: há mudança de padrão, retirada de participação e ironia não endereçada — conflito ainda não manifesto, mas já a operar. É exatamente o momento em que todos os estilos continuam disponíveis e uma medida discreta (recompor grupos, uma conversa breve no intervalo) resolve com custo baixo.",
             },
           ]}
         />

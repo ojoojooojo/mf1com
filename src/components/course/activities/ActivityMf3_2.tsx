@@ -2,6 +2,7 @@ import { ContentCard, Scenario, SectionHeading } from "@/components/course/Lesso
 import {
   ChoiceGroup,
   Commentary,
+  useChosen,
   FictionNote,
   RevealPanel,
   TaskField,
@@ -38,6 +39,8 @@ const STYLE_OPTIONS = [
 
 export function ActivityMf3_2() {
   const filled = useFilled("mf3-atividade-2-comparacao");
+  const chose1 = useChosen("mf3-atividade-2-estilo-1");
+  const chose2 = useChosen("mf3-atividade-2-estilo-2");
 
 
   return (
@@ -82,7 +85,12 @@ export function ActivityMf3_2() {
           instruction="Escolha a que realmente usaria e depois veja a consequência plausível dessa escolha."
           options={STYLE_OPTIONS}
         />
-        <div className="mt-5">
+        <RevealPanel
+          id="mf3-atividade-2-consequencias-1"
+          buttonLabel="Submeter a escolha e ver as consequências"
+          lockedHint="Escolha uma estratégia antes de ver as consequências."
+          canReveal={chose1}
+        >
           <Commentary
             heading="Consequências plausíveis de cada escolha"
             intro="Cada estratégia produziria um resultado diferente — e todas têm um custo. Localize a sua."
@@ -155,7 +163,7 @@ export function ActivityMf3_2() {
             ]}
             closing="Nenhuma destas cinco leituras é a resposta certa: são cinco custos diferentes. A competência está em saber qual está a comprar."
           />
-        </div>
+        </RevealPanel>
       </section>
 
       {/* Situação 2 — variante */}
@@ -194,7 +202,12 @@ export function ActivityMf3_2() {
           instruction="Repare que a sua escolha anterior pode ter deixado de ser viável."
           options={STYLE_OPTIONS}
         />
-        <div className="mt-5">
+        <RevealPanel
+          id="mf3-atividade-2-consequencias-2"
+          buttonLabel="Submeter a escolha e ver as consequências"
+          lockedHint="Escolha uma estratégia antes de ver as consequências."
+          canReveal={chose2}
+        >
           <Commentary
             heading="O que mudou nas consequências"
             intro="As mesmas cinco estratégias, com custos redistribuídos pelo novo contexto."
@@ -264,7 +277,7 @@ export function ActivityMf3_2() {
             ]}
             closing="A lição operacional não é «comprometer é melhor». É que o tempo disponível, a composição da sala e o histórico entre as partes alteram qual estratégia é viável — e que quanto mais tarde se trata um assunto, menos estratégias restam."
           />
-        </div>
+        </RevealPanel>
       </section>
 
       {/* Fecho escrito */}
