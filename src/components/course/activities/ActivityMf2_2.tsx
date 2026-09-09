@@ -1,4 +1,4 @@
-import { Scenario, SectionHeading, ContentCard } from "@/components/course/LessonKit";
+import { Scenario, SectionHeading, ContentCard, Figure } from "@/components/course/LessonKit";
 import {
   CheckboxGroup,
   Commentary,
@@ -7,6 +7,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf2_2Image from "@/assets/mf2-atividade-2-sala-configurada.jpg";
 
 const FATORES_CONTEXTUAIS = [
   "Pressão de tempo entre sessões consecutivas",
@@ -61,6 +62,19 @@ export function ActivityMf2_2() {
           ]}
           note="Identifique as causas em jogo antes de ver a análise de referência."
         />
+        <Figure
+          caption="A sala tal como foi encontrada, antes do início da sessão."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf2_2Image}
+            alt="Sala de formação vazia com as mesas dispostas em filas, e um formador de pé junto à porta, com uma mala a tiracolo, a observar o espaço antes do início da sessão."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">

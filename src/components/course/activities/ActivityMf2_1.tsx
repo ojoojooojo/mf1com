@@ -1,4 +1,4 @@
-import { Scenario, SectionHeading, ContentCard } from "@/components/course/LessonKit";
+import { Scenario, SectionHeading, ContentCard, Figure } from "@/components/course/LessonKit";
 import {
   ChoiceGroup,
   Commentary,
@@ -7,6 +7,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf2_1Image from "@/assets/mf2-atividade-1-subgrupos.jpg";
 
 export function ActivityMf2_1() {
   const filled = useFilled(
@@ -53,6 +54,19 @@ export function ActivityMf2_1() {
           ]}
           note="Preencha os quatro campos abaixo com o seu próprio raciocínio antes de ver a análise de referência."
         />
+        <Figure
+          caption="O estado dos dois subgrupos no final da quarta sessão."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf2_1Image}
+            alt="Sala de formação com dois subgrupos de adultos sentados em mesas distintas, um grupo já recostado e conversando entre si, o outro ainda debruçado sobre documentos; os dois grupos estão de costas voltadas um para o outro."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">

@@ -1,4 +1,4 @@
-import { Scenario, SectionHeading, ContentCard } from "@/components/course/LessonKit";
+import { Scenario, SectionHeading, ContentCard, Figure } from "@/components/course/LessonKit";
 import {
   ChoiceGroup,
   Commentary,
@@ -7,6 +7,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf2_3Image from "@/assets/mf2-atividade-3-distancia-residual.jpg";
 
 export function ActivityMf2_3() {
   const filled = useFilled(
@@ -48,6 +49,19 @@ export function ActivityMf2_3() {
           ]}
           note="Preencha os campos antes de ver a análise de referência."
         />
+        <Figure
+          caption="A mesma mesa de trabalho, depois de o desacordo ter sido resolvido."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf2_3Image}
+            alt="Dois formandos sentados em extremos opostos da mesma mesa de trabalho, ambos com documentos à frente, sem contacto visual entre si, enquanto os restantes colegas conversam à volta."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">
