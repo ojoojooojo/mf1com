@@ -455,15 +455,15 @@ export function Block4ContentMf3() {
           question="Um formador ouve um participante dizer em voz alta que «este exercício é uma perda de tempo». Pensa imediatamente: «isto vai desautorizar-me diante do grupo». Que passo do modelo transacional acabou de ocorrer?"
           options={[
             {
+              text: "Avaliação secundária: está a julgar se consegue lidar com a situação.",
+              feedback:
+                "A avaliação secundária tem outro objeto: os recursos próprios («tenho competências, tempo, apoio para isto?»). O pensamento descrito ainda incide sobre o que a situação significa, não sobre o que o formador tem para lhe responder — essa etapa vem imediatamente depois.",
+            },
+            {
               text: "Avaliação primária: classificou a situação como ameaça, ou seja, como significativa e com risco de dano para si.",
               correct: true,
               feedback:
                 "Correto. A avaliação primária responde à pergunta «o que significa isto para mim?» e classifica a situação como irrelevante, benigna ou significativa — e, neste último caso, como ameaça, desafio ou dano. «Vai desautorizar-me» é precisamente uma leitura de ameaça.",
-            },
-            {
-              text: "Avaliação secundária: está a julgar se consegue lidar com a situação.",
-              feedback:
-                "A avaliação secundária tem outro objeto: os recursos próprios («tenho competências, tempo, apoio para isto?»). O pensamento descrito ainda incide sobre o que a situação significa, não sobre o que o formador tem para lhe responder — essa etapa vem imediatamente depois.",
             },
             {
               text: "Reavaliação: está a corrigir uma leitura anterior à luz de nova informação.",
@@ -489,12 +489,6 @@ export function Block4ContentMf3() {
                 "O modelo transacional foi proposto precisamente contra explicações puramente disposicionais. O stress não é uma característica fixa da pessoa nem uma propriedade da situação: emerge da relação entre exigências percebidas e recursos percebidos, que variam de situação para situação na mesma pessoa.",
             },
             {
-              text: "A avaliação secundária diverge: o segundo reconhece recursos suficientes (experiência, tempo, relação com o grupo) para responder à exigência.",
-              correct: true,
-              feedback:
-                "Correto. Com a mesma avaliação primária de significância, é a avaliação secundária que decide o resultado: recursos percebidos como suficientes produzem uma leitura de desafio e ativação; recursos percebidos como insuficientes produzem ameaça e stress intenso.",
-            },
-            {
               text: "O primeiro formador fez uma avaliação primária errada e o segundo fez a correta.",
               feedback:
                 "O modelo não trata as avaliações como certas ou erradas em abstrato — e, no caso descrito, ambos classificaram a situação como significativa. A divergência tem de estar no segundo momento, o dos recursos, não no primeiro.",
@@ -503,6 +497,12 @@ export function Block4ContentMf3() {
               text: "O incidente é objetivamente mais grave para o primeiro formador, dado o seu contexto profissional.",
               feedback:
                 "É uma hipótese plausível na vida real, mas não explica o caso enunciado: o incidente é o mesmo e ambos o avaliaram como significativo. Dentro do modelo, a diferença de intensidade com igual avaliação primária remete para os recursos percebidos.",
+            },
+            {
+              text: "A avaliação secundária diverge: o segundo reconhece recursos suficientes (experiência, tempo, relação com o grupo) para responder à exigência.",
+              correct: true,
+              feedback:
+                "Correto. Com a mesma avaliação primária de significância, é a avaliação secundária que decide o resultado: recursos percebidos como suficientes produzem uma leitura de desafio e ativação; recursos percebidos como insuficientes produzem ameaça e stress intenso.",
             },
           ]}
           takeaway="Igual avaliação primária, stress diferente: a variável em jogo é o balanço de recursos."

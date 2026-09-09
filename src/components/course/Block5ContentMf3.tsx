@@ -353,15 +353,15 @@ export function Block5ContentMf3() {
           question="Um formador quer mapear o quadrante «As Pessoas» num conflito entre dois participantes. Qual destas perguntas de diagnóstico serve melhor esse objetivo?"
           options={[
             {
-              text: "«Que recurso escasso está realmente em disputa entre os dois?»",
-              feedback:
-                "É uma boa pergunta de diagnóstico — mas do quadrante Problema. Identifica o objeto substantivo da disputa, não o que cada pessoa sente que está a defender.",
-            },
-            {
               text: "«A reação de cada um é proporcional ao problema declarado? Se não, o que a explica?»",
               correct: true,
               feedback:
                 "Correto. É uma pergunta central do quadrante Pessoas, porque a desproporção entre problema declarado e intensidade da reação aponta quase sempre para emoções acumuladas, história anterior ou necessidades identitárias em jogo.",
+            },
+            {
+              text: "«Que recurso escasso está realmente em disputa entre os dois?»",
+              feedback:
+                "É uma boa pergunta de diagnóstico — mas do quadrante Problema. Identifica o objeto substantivo da disputa, não o que cada pessoa sente que está a defender.",
             },
             {
               text: "«Quem foi ouvido antes de esta decisão ser tomada?»",
@@ -387,15 +387,15 @@ export function Block5ContentMf3() {
                 "O reconhecimento de que o Contexto não é modificável pelo formador é correto, mas a inferência não é. A Roda serve para localizar onde há margem de atuação: normalmente no Processo e nas Pessoas. Não intervir deixa o conflito a operar com todos os seus efeitos sobre a aprendizagem do grupo.",
             },
             {
+              text: "Levar o caso à coordenação da entidade formadora, uma vez que a causa é organizacional.",
+              feedback:
+                "Pode ser um passo legítimo em situações graves, e não está errado em absoluto. Mas transfere a questão em vez de usar o mapeamento: a Roda tinha acabado de mostrar dimensões — Processo e Pessoas — onde o formador podia agir de imediato e dentro das suas competências.",
+            },
+            {
               text: "Atuar nos quadrantes onde tem margem — sobretudo o Processo — desenhando procedimentos que reduzam o efeito da assimetria, e tomar o Contexto como condição a ter em conta.",
               correct: true,
               feedback:
                 "Correto. Mapear o Contexto não serve para o alterar, mas para não desenhar intervenções que ele condena ao fracasso — por exemplo, esperar que a parte em posição hierárquica inferior discorde abertamente em plenário. O formador atua onde tem margem, informado por aquilo que não controla.",
-            },
-            {
-              text: "Levar o caso à coordenação da entidade formadora, uma vez que a causa é organizacional.",
-              feedback:
-                "Pode ser um passo legítimo em situações graves, e não está errado em absoluto. Mas transfere a questão em vez de usar o mapeamento: a Roda tinha acabado de mostrar dimensões — Processo e Pessoas — onde o formador podia agir de imediato e dentro das suas competências.",
             },
             {
               text: "Explicitar ao grupo que a hierarquia externa é a causa do conflito, para que todos compreendam a situação.",

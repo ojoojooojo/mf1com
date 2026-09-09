@@ -371,12 +371,6 @@ export function Block1ContentMf3() {
                 "Não são a mesma dimensão nem estão nessa relação. Salovey e Mayer descreveram a IE como uma capacidade distinta de processar informação emocional, e Goleman insistiu precisamente no contrário desta afirmação: há pessoas de QI muito elevado que gerem mal situações emocionalmente exigentes.",
             },
             {
-              text: "O QI mede sobretudo capacidade de raciocínio abstrato e é relativamente estável no adulto; a inteligência emocional refere-se ao reconhecimento e gestão de emoções e é largamente treinável.",
-              correct: true,
-              feedback:
-                "Exatamente. É esta a distinção operacional que interessa a um formador: a competência que permite conduzir uma sala tensa não é a mesma que permite domínio técnico do conteúdo — e, ao contrário do QI, pode ser desenvolvida com treino deliberado.",
-            },
-            {
               text: "Ter inteligência emocional significa manter-se calmo e não sentir emoções negativas em situações de tensão.",
               feedback:
                 "Esta é a confusão mais comum. A IE não elimina a emoção: pressupõe sentir e reconhecer com clareza o que se está a sentir. Um formador que não notasse a sua própria irritação teria menos autoconsciência, não mais — e ficaria sem informação para se regular.",
@@ -385,6 +379,12 @@ export function Block1ContentMf3() {
               text: "A inteligência emocional é um traço de personalidade fixo: ou alguém nasce empático, ou não há nada a fazer.",
               feedback:
                 "É justamente o oposto do argumento central de Goleman (1995), e a razão pela qual estas competências fazem parte de um referencial de formação: são aprendíveis. Se fossem fixas, este módulo não teria objeto.",
+            },
+            {
+              text: "O QI mede sobretudo capacidade de raciocínio abstrato e é relativamente estável no adulto; a inteligência emocional refere-se ao reconhecimento e gestão de emoções e é largamente treinável.",
+              correct: true,
+              feedback:
+                "Exatamente. É esta a distinção operacional que interessa a um formador: a competência que permite conduzir uma sala tensa não é a mesma que permite domínio técnico do conteúdo — e, ao contrário do QI, pode ser desenvolvida com treino deliberado.",
             },
           ]}
           takeaway="A IE é uma competência distinta do QI e treinável — o que a torna objeto legítimo de formação."

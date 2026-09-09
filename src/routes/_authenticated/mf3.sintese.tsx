@@ -213,15 +213,15 @@ function Mf3SynthesisPage() {
                 "A empatia surge no fim, quando pergunta o que está por trás da objeção, mas o que acontece primeiro — reparar no próprio tom e travar a resposta — não é empatia, e nada indica que tenha havido concessões mútuas de compromisso.",
             },
             {
+              text: "Avaliação primária (Bloco 4) e prevenção ativa (Bloco 3)",
+              feedback:
+                "A avaliação primária está presente de forma implícita, mas a prevenção ativa atua antes de o conflito surgir — aqui a discussão já está em curso, pelo que se trata de intervenção, não de prevenção.",
+            },
+            {
               text: "Autoconsciência e autorregulação (Bloco 1), aplicadas como pausa antes de intervir (Bloco 4), seguidas de empatia cognitiva (Bloco 2)",
               correct: true,
               feedback:
                 "Correto. Reconhecer o próprio estado é autoconsciência; travar a resposta imediata é autorregulação, usada exatamente no momento que o Bloco 4 descreve — antes de intervir, para reavaliar. Perguntar o que está por trás da objeção é empatia cognitiva a procurar a perspetiva do outro.",
-            },
-            {
-              text: "Avaliação primária (Bloco 4) e prevenção ativa (Bloco 3)",
-              feedback:
-                "A avaliação primária está presente de forma implícita, mas a prevenção ativa atua antes de o conflito surgir — aqui a discussão já está em curso, pelo que se trata de intervenção, não de prevenção.",
             },
           ]}
           takeaway="Reparar, travar, reavaliar, perguntar: as competências dos blocos raramente se usam isoladas — encadeiam-se numa sequência de segundos."
