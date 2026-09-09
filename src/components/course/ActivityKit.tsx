@@ -279,3 +279,11 @@ export function useFilled(...ids: string[]) {
   if (!hydrated) return false;
   return ids.every((id) => (state.answers[id] ?? "").trim().length >= 3);
 }
+
+/* ---------- Hook utilitário: escolha feita? ---------- */
+
+export function useChosen(...ids: string[]) {
+  const { state, hydrated } = useProgress();
+  if (!hydrated) return false;
+  return ids.every((id) => (state.answers[id] ?? "").trim().length > 0);
+}
