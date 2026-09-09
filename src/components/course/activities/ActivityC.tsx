@@ -1,4 +1,4 @@
-import { ContentCard, Scenario, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, Scenario, SectionHeading } from "@/components/course/LessonKit";
 import {
   ChoiceGroup,
   Commentary,
@@ -8,6 +8,7 @@ import {
   useFilled,
 } from "@/components/course/ActivityKit";
 import { useProgress } from "@/lib/progress";
+import atividadeCImage from "@/assets/mf1-atividade-c-desafio-publico.jpg";
 
 const OPCOES = [
   {
@@ -66,6 +67,19 @@ export function ActivityC() {
           ]}
           note="Escolha a resposta que daria e justifique brevemente. Só depois verá o comentário a cada uma das quatro — nenhuma é «a única certa»."
         />
+        <Figure
+          caption="O momento imediatamente a seguir ao desafio em público."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeCImage}
+            alt="Grupo de formandos numa sala, todos com o olhar virado para um colega que acabou de falar, sentado numa postura direita e com os braços apoiados na mesa; ao fundo, de costas, veem-se os ombros do formador."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">

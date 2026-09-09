@@ -1,4 +1,4 @@
-import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonKit";
 import {
   Commentary,
   FictionNote,
@@ -8,6 +8,7 @@ import {
 import { useProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 import { AlertTriangle, Check } from "lucide-react";
+import atividadeDImage from "@/assets/mf1-atividade-d-dialogo.jpg";
 
 type Fala = {
   id: string;
@@ -145,6 +146,19 @@ export function ActivityD() {
             <li>Só depois compare com o comentário de referência, fala a fala.</li>
           </ol>
         </ContentCard>
+        <Figure
+          caption="Um momento do diálogo — o que observa antes de ler as falas?"
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeDImage}
+            alt="Formador de pé, virado para um formando sentado; o formando tem os braços cruzados e o olhar dirigido para a mesa, numa postura ligeiramente afastada do formador."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">

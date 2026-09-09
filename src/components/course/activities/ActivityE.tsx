@@ -1,6 +1,7 @@
-import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonKit";
 import { PrivacyNote, RevealPanel, TaskField, useFilled } from "@/components/course/ActivityKit";
 import { Heart } from "lucide-react";
+import atividadeEImage from "@/assets/mf1-atividade-e-reflexao.jpg";
 
 const APOIOS = [
   "Que emoção sentiu nesse momento — e conseguiu nomeá-la na altura?",
@@ -42,6 +43,20 @@ export function ActivityE() {
             se o tivesse aplicado nesse momento? Como o aplicaria da próxima vez?
           </p>
         </ContentCard>
+
+        <Figure
+          caption="Um momento de pausa para reflexão, no final de uma sessão."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeEImage}
+            alt="Uma pessoa adulta sentada sozinha numa sala de formação vazia, com um caderno aberto à sua frente, numa postura pensativa, à luz natural do fim do dia."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
 
         <div className="my-6 rounded-xl border border-border bg-surface p-5">
           <p className="eyebrow">Se não souber por onde começar</p>
