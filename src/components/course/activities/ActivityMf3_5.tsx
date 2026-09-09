@@ -1,4 +1,4 @@
-import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonKit";
 import {
   CheckboxGroup,
   ChoiceGroup,
@@ -8,6 +8,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf3_5Image from "@/assets/mf3-atividade-5-planeamento.jpg";
 
 export function ActivityMf3_5() {
   const filled = useFilled(
@@ -60,6 +61,19 @@ export function ActivityMf3_5() {
           Ao descrever o seu contexto, não inclua nomes de formandos, colegas ou entidades. As suas
           respostas ficam guardadas na sua conta e são visíveis para o formador do curso.
         </PrivacyNote>
+        <Figure
+          caption="Um momento de planeamento, fora da sala de formação."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf3_5Image}
+            alt="Vista superior de uma secretária com uma agenda de planeamento aberta, uma caneta pousada sobre a página, um portátil parcialmente visível e uma chávena de café, com luz natural lateral."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       {/* Seleção de categorias */}

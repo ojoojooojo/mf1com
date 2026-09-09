@@ -1,4 +1,4 @@
-import { ContentCard, Scenario, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, Scenario, SectionHeading } from "@/components/course/LessonKit";
 import {
   ChoiceGroup,
   Commentary,
@@ -8,6 +8,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf3_4Image from "@/assets/mf3-atividade-4-recusa.jpg";
 
 export function ActivityMf3_4() {
   const filled = useFilled(
@@ -94,6 +95,19 @@ export function ActivityMf3_4() {
           ]}
           note="Antes de decidir o que fazer, mapeie. Os quatro campos abaixo correspondem aos quatro quadrantes da Roda."
         />
+        <Figure
+          caption="O subgrupo no momento da recusa, tal como descrito no caso."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf3_4Image}
+            alt="Sala de formação com um grupo de quatro adultos sentados juntos; um deles fala com gesto explicativo enquanto os outros três mostram posturas diferentes entre si — braços cruzados, olhar em baixo, atenção dividida; numa mesa próxima, outros formandos observam com os braços cruzados."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       {/* Os quatro quadrantes */}

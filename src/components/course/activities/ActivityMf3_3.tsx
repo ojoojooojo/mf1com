@@ -1,4 +1,4 @@
-import { ContentCard, Scenario, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, Scenario, SectionHeading } from "@/components/course/LessonKit";
 import {
   CheckboxGroup,
   ChoiceGroup,
@@ -9,6 +9,7 @@ import {
   useChosen,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf3_3Image from "@/assets/mf3-atividade-3-incidente-efa.jpg";
 
 export function ActivityMf3_3() {
   const filled = useFilled("mf3-atividade-3-decisao-real");
@@ -112,6 +113,19 @@ export function ActivityMf3_3() {
           ]}
           note="Faltam 50 minutos de sessão. Rita nunca tinha sido hostil antes. Não há regra de segurança nem dignidade de terceiros em causa neste momento."
         />
+        <Figure
+          caption="O incidente crítico, no momento em que acontece."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf3_3Image}
+            alt="Sala de formação EFA; uma participante de meia-idade fala com postura confiante e braços apoiados na mesa, dois colegas próximos sorriem discretamente, o resto do grupo observa em silêncio, e a formadora, parcialmente de costas junto ao quadro, permanece imóvel."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
         <ChoiceGroup
           id="mf3-atividade-3-decisao"
           label="O que faz nos próximos cinco segundos?"
