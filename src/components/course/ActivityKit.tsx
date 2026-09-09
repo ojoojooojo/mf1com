@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Check, FlaskConical, Lock, Pencil, ShieldCheck } from "lucide-react";
 import { useProgress } from "@/lib/progress";
 import { cn } from "@/lib/utils";

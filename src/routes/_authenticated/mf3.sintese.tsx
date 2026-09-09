@@ -54,7 +54,7 @@ const FINAL_QUIZ_IDS = [
   "mf3-sintese-quiz-4",
 ];
 const FINAL_CORRECT: Record<string, number> = {
-  "mf3-sintese-quiz-1": 1,
+  "mf3-sintese-quiz-1": 2,
   "mf3-sintese-quiz-2": 0,
   "mf3-sintese-quiz-3": 1,
   "mf3-sintese-quiz-4": 2,
