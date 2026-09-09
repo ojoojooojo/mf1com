@@ -179,7 +179,7 @@ function Mf3Landing() {
         <ContentCard title="Carga horária" icon={<Clock className="size-4 text-primary" />}>
           <p className="font-semibold">10h totais do módulo</p>
           <p className="mt-1 text-muted-foreground">
-            ~8h assíncronas (este MOOC) + 2h síncronas em sessão presencial/online, fora deste
+            ~6h assíncronas (este MOOC) + 4h síncronas em sessão presencial/online, fora deste
             MOOC.
           </p>
         </ContentCard>
