@@ -1,4 +1,4 @@
-import { Scenario, SectionHeading, ContentCard } from "@/components/course/LessonKit";
+import { Scenario, SectionHeading, ContentCard, Figure } from "@/components/course/LessonKit";
 import {
   CheckboxGroup,
   Commentary,
@@ -7,6 +7,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf2_5Image from "@/assets/mf2-atividade-5-sinais-precoces.jpg";
 
 export function ActivityMf2_5() {
   const filled = useFilled(
@@ -47,6 +48,19 @@ export function ActivityMf2_5() {
           ]}
           note="Identifique sinais e proponha medidas preventivas antes de ver a análise de referência."
         />
+        <Figure
+          caption="Um momento comum de acompanhamento em sala — antes de qualquer sinal óbvio."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf2_5Image}
+            alt="Formador debruçado sobre a mesa de um pequeno grupo de formandos a dar feedback, enquanto, numa mesa próxima, outro subgrupo aguarda e alguns dos seus elementos olham na direção do formador."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">

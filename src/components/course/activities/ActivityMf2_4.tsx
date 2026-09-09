@@ -1,4 +1,4 @@
-import { Scenario, SectionHeading, ContentCard } from "@/components/course/LessonKit";
+import { Scenario, SectionHeading, ContentCard, Figure } from "@/components/course/LessonKit";
 import {
   Commentary,
   FictionNote,
@@ -6,6 +6,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf2_4Image from "@/assets/mf2-atividade-4-formacao-online.jpg";
 
 export function ActivityMf2_4() {
   const filled = useFilled(
@@ -52,6 +53,19 @@ export function ActivityMf2_4() {
           ]}
           note="Preencha os campos antes de ver a análise de referência."
         />
+        <Figure
+          caption="A sessão tal como decorre do lado do formando, em teletrabalho."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf2_4Image}
+            alt="Vista sobre o ombro de uma pessoa em teletrabalho, sentada a uma secretária em casa, a participar numa sessão de formação online; no ecrã do portátil veem-se vários participantes em vídeo e um painel de conversação lateral."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">
