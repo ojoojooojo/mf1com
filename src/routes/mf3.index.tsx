@@ -118,9 +118,13 @@ function Mf3Landing() {
         </ol>
       </section>
 
-      <Figure caption="Percurso conceptual do módulo: diagrama pedagógico a construir com o conteúdo definitivo.">
-        <DiagramPlaceholder />
+      <Figure
+        caption="Percurso conceptual do MF3: de dentro para fora — primeiro o formador, depois a relação, depois a ação estruturada sobre o conflito."
+        source="Elaborado para este módulo a partir do Referencial IEFP/CNQF (2024)."
+      >
+        <PercursoMf3Svg />
       </Figure>
+
 
       <section className="mt-12">
         <SectionHeading
