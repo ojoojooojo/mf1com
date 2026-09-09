@@ -167,5 +167,12 @@ export const MF3_BLOCK_QUIZ_IDS = [
   "mf3-bloco-3-quiz-identificar-estilo",
   "mf3-bloco-3-quiz-quando-usar",
   "mf3-bloco-3-quiz-prevencao",
+  "mf3-bloco-4-quiz-avaliacao-primaria",
+  "mf3-bloco-4-quiz-avaliacao-secundaria",
+  "mf3-bloco-4-quiz-distorcao",
+  "mf3-bloco-5-quiz-quadrante",
+  "mf3-bloco-5-quiz-diagnostico",
+  "mf3-bloco-5-quiz-aplicacao",
 ] as const;
+
 
