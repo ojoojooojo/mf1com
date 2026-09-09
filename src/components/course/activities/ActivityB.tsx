@@ -1,4 +1,4 @@
-import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonKit";
 import {
   Commentary,
   FictionNote,
@@ -6,6 +6,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeBImage from "@/assets/mf1-atividade-b-telemoveis.jpg";
 
 type Item = {
   n: number;
@@ -119,6 +120,19 @@ export function ActivityB() {
             </li>
           </ul>
         </ContentCard>
+        <Figure
+          caption="Uma pausa comum numa sessão de formação — nem sempre significa o que parece."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeBImage}
+            alt="Formador em pé, com uma pausa breve a meio de uma explicação, enquanto vários formandos têm o telemóvel na mão; um deles está a escrever uma mensagem."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       {ITENS.map((item) => {

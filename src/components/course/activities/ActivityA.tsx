@@ -1,4 +1,4 @@
-import { Scenario, SectionHeading, ContentCard } from "@/components/course/LessonKit";
+import { Scenario, SectionHeading, ContentCard, Figure } from "@/components/course/LessonKit";
 import {
   CheckboxGroup,
   Commentary,
@@ -7,6 +7,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeAImage from "@/assets/mf1-atividade-a-sala-formacao.jpg";
 
 const BARREIRAS = [
   "Físicas / mecânicas",
@@ -56,6 +57,19 @@ export function ActivityA() {
           ]}
           note="Preencha as quatro partes abaixo com o seu próprio raciocínio. Só depois verá a análise de referência — o objetivo é comparar raciocínios, não acertar numa resposta única."
         />
+        <Figure
+          caption="A sala momentos antes do incidente descrito."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeAImage}
+            alt="Sala de formação com adultos sentados em mesas em U, formador de pé junto a um ecrã a meio de uma explicação; um formando ao fundo está com os braços cruzados e olha para a janela aberta, dois formandos trocam um breve comentário entre si."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
       </section>
 
       <section className="mt-10">
