@@ -196,13 +196,11 @@ export function RevealPanel({
   canReveal: boolean;
   children: ReactNode;
 }) {
-  const { state, saveFlag, hydrated } = useProgress();
-  const stored = state.flags[id] === true;
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (hydrated && stored) setOpen(true);
-  }, [hydrated, stored]);
+  const { saveFlag } = useProgress();
+  // Guardar o id revelado (em vez de um booleano) garante que o painel volta a
+  // fechar quando o componente é reutilizado noutra atividade sem remontar.
+  const [openId, setOpenId] = useState<string | null>(null);
+  const open = openId === id;
 
   if (open) {
     return <div className="mt-5">{children}</div>;
