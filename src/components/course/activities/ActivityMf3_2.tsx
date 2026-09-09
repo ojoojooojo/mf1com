@@ -38,8 +38,7 @@ const STYLE_OPTIONS = [
 
 export function ActivityMf3_2() {
   const filled = useFilled("mf3-atividade-2-comparacao");
-  const chosenFirst = useFilled();
-  void chosenFirst;
+
 
   return (
     <>
