@@ -114,9 +114,10 @@ function Mf2Landing() {
         </ol>
       </section>
 
-      <Figure caption="Percurso conceptual do módulo: diagrama pedagógico a construir com o conteúdo definitivo.">
-        <DiagramPlaceholder />
+      <Figure caption="Percurso conceptual do módulo: da natureza do conflito às suas causas, custos e ao papel de cada pessoa.">
+        <PercursoMf2Svg />
       </Figure>
+
 
       <section className="mt-12">
         <SectionHeading
