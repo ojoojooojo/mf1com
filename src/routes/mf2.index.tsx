@@ -58,7 +58,6 @@ function PercursoMf2Svg() {
       ))}
 
       {MF2_STEPS.map((step, i) => {
-        const x = i < 2 ? 110 + i * 206 : i === 2 ? 522 - 0 : 522;
         const cx = i === 0 ? 110 : i === 1 ? 316 : i === 2 ? 480 : 564;
         return (
           <g key={step.n}>
@@ -85,7 +84,6 @@ function PercursoMf2Svg() {
                 {line}
               </text>
             ))}
-            <title>{`Bloco ${step.n} — ${step.label.replace("\n", " ")} (x=${x})`}</title>
           </g>
         );
       })}
