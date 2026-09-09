@@ -161,4 +161,11 @@ export const MF3_BLOCK_QUIZ_IDS = [
   "mf3-bloco-1-quiz-conceito",
   "mf3-bloco-1-quiz-dimensao",
   "mf3-bloco-1-quiz-autorregulacao",
+  "mf3-bloco-2-quiz-tipos-empatia",
+  "mf3-bloco-2-quiz-competencia-social",
+  "mf3-bloco-2-quiz-cenario",
+  "mf3-bloco-3-quiz-identificar-estilo",
+  "mf3-bloco-3-quiz-quando-usar",
+  "mf3-bloco-3-quiz-prevencao",
 ] as const;
+
