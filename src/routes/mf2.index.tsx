@@ -9,11 +9,117 @@ import {
 } from "@/lib/course-data-mf2";
 import {
   ContentCard,
-  DiagramPlaceholder,
   Figure,
   SectionHeading,
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+
+/* ---------- Infográfico: percurso conceptual do módulo ---------- */
+
+const MF2_STEPS = [
+  { n: "1", label: "Definição\ne tipos" },
+  { n: "2", label: "Estratégias\nfundamentais" },
+  { n: "3", label: "Causas, custos\ne consequências" },
+  { n: "4", label: "Impacto e papel\ndo indivíduo" },
+];
+
+const MF2_LAYERS = ["O que é", "Como se gere", "O que custa e a quem"];
+
+function PercursoMf2Svg() {
+  return (
+    <svg
+      viewBox="0 0 640 230"
+      role="img"
+      aria-label="Percurso conceptual do MF2: do que é o conflito, para as estratégias de gestão, até às suas causas, custos e ao papel do indivíduo"
+      className="w-full"
+    >
+      {MF2_LAYERS.map((layer, i) => (
+        <g key={layer}>
+          <rect
+            x={12 + i * 206}
+            y={12}
+            width={196}
+            height={168}
+            rx={14}
+            fill="var(--primary-soft)"
+            stroke="var(--border)"
+          />
+          <text
+            x={110 + i * 206}
+            y={36}
+            textAnchor="middle"
+            fontSize="12"
+            fontWeight="600"
+            fill="var(--primary)"
+          >
+            {layer}
+          </text>
+        </g>
+      ))}
+
+      {MF2_STEPS.map((step, i) => {
+        const x = i < 2 ? 110 + i * 206 : i === 2 ? 522 - 0 : 522;
+        const cx = i === 0 ? 110 : i === 1 ? 316 : i === 2 ? 480 : 564;
+        return (
+          <g key={step.n}>
+            <circle cx={cx} cy={78} r={17} fill="var(--primary)" />
+            <text
+              x={cx}
+              y={83}
+              textAnchor="middle"
+              fontSize="14"
+              fontWeight="700"
+              fill="var(--primary-foreground)"
+            >
+              {step.n}
+            </text>
+            {step.label.split("\n").map((line, j) => (
+              <text
+                key={line}
+                x={cx}
+                y={116 + j * 15}
+                textAnchor="middle"
+                fontSize="11.5"
+                fill="var(--foreground)"
+              >
+                {line}
+              </text>
+            ))}
+            <title>{`Bloco ${step.n} — ${step.label.replace("\n", " ")} (x=${x})`}</title>
+          </g>
+        );
+      })}
+
+      <path
+        d="M 22 202 H 618"
+        stroke="var(--primary)"
+        strokeWidth={1.5}
+        markerEnd="url(#mf2-arrow)"
+        fill="none"
+      />
+      <defs>
+        <marker
+          id="mf2-arrow"
+          viewBox="0 0 6 6"
+          refX="5"
+          refY="3"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto"
+        >
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--primary)" />
+        </marker>
+      </defs>
+      <text x={22} y={222} fontSize="10.5" fill="var(--muted-foreground)">
+        Compreender o conflito
+      </text>
+      <text x={608} y={222} textAnchor="end" fontSize="10.5" fill="var(--muted-foreground)">
+        Assumir o próprio papel nele
+      </text>
+    </svg>
+  );
+}
+
 
 export const Route = createFileRoute("/mf2/")({
   head: () => ({
