@@ -42,8 +42,8 @@ function PercursoMf3Svg() {
             width={196}
             height={168}
             rx={14}
-            fill="hsl(var(--primary) / 0.06)"
-            stroke="hsl(var(--border))"
+            fill="var(--primary-soft)"
+            stroke="var(--border)"
           />
           <text
             x={110 + i * 206}
@@ -51,7 +51,7 @@ function PercursoMf3Svg() {
             textAnchor="middle"
             fontSize="12"
             fontWeight="600"
-            fill="hsl(var(--primary))"
+            fill="var(--primary)"
           >
             {layer}
           </text>
@@ -65,14 +65,14 @@ function PercursoMf3Svg() {
         const x = 12 + layer * 206 + (196 / slots) * within + 196 / slots / 2;
         return (
           <g key={step.n}>
-            <circle cx={x} cy={78} r={17} fill="hsl(var(--primary))" />
+            <circle cx={x} cy={78} r={17} fill="var(--primary)" />
             <text
               x={x}
               y={83}
               textAnchor="middle"
               fontSize="14"
               fontWeight="700"
-              fill="hsl(var(--primary-foreground))"
+              fill="var(--primary-foreground)"
             >
               {step.n}
             </text>
@@ -83,7 +83,7 @@ function PercursoMf3Svg() {
                 y={116 + li * 14}
                 textAnchor="middle"
                 fontSize="10.5"
-                fill="hsl(var(--foreground))"
+                fill="var(--foreground)"
               >
                 {line}
               </text>
@@ -94,19 +94,19 @@ function PercursoMf3Svg() {
 
       <path
         d="M 22 202 H 618"
-        stroke="hsl(var(--primary))"
+        stroke="var(--primary)"
         strokeWidth="1.5"
         markerEnd="url(#mf3-arrow)"
       />
       <defs>
         <marker id="mf3-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill="hsl(var(--primary))" />
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--primary)" />
         </marker>
       </defs>
-      <text x={22} y={222} fontSize="10.5" fill="hsl(var(--muted-foreground))">
+      <text x={22} y={222} fontSize="10.5" fill="var(--muted-foreground)">
         Autoconhecimento
       </text>
-      <text x={608} y={222} textAnchor="end" fontSize="10.5" fill="hsl(var(--muted-foreground))">
+      <text x={608} y={222} textAnchor="end" fontSize="10.5" fill="var(--muted-foreground)">
         Resolução estruturada
       </text>
     </svg>
