@@ -1,4 +1,4 @@
-import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonKit";
 import {
   ChoiceGroup,
   Commentary,
@@ -6,6 +6,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf3_1Image from "@/assets/mf3-atividade-1-auto-registo.jpg";
 
 export function ActivityMf3_1() {
   const filled = useFilled("mf3-atividade-1-compromisso");
@@ -26,6 +27,19 @@ export function ActivityMf3_1() {
             seria desejável.
           </p>
         </ContentCard>
+        <Figure
+          caption="Um momento de auto-registo, num intervalo entre sessões."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf3_1Image}
+            alt="Close-up das mãos de uma pessoa adulta a escrever num caderno pessoal, com uma chávena de café e materiais de formação impressos sobre a mesa, num espaço de pausa entre sessões."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
 
         <div className="mt-4 space-y-4">
           <ChoiceGroup

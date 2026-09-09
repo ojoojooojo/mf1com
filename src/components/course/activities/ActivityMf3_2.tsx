@@ -1,4 +1,4 @@
-import { ContentCard, Scenario, SectionHeading } from "@/components/course/LessonKit";
+import { ContentCard, Figure, Scenario, SectionHeading } from "@/components/course/LessonKit";
 import {
   ChoiceGroup,
   Commentary,
@@ -8,6 +8,7 @@ import {
   TaskField,
   useFilled,
 } from "@/components/course/ActivityKit";
+import atividadeMf3_2Image from "@/assets/mf3-atividade-2-objecao.jpg";
 
 const STYLE_OPTIONS = [
   {
@@ -79,6 +80,19 @@ export function ActivityMf3_2() {
           ]}
           note="Hélder não está a ser desrespeitoso e o argumento dele é tecnicamente defensável. Nenhuma das cinco estratégias abaixo é absurda nesta situação."
         />
+        <Figure
+          caption="O momento da objeção, tal como é vivido pelo grupo."
+          source="Reconstrução visual gerada por IA para fins pedagógicos."
+        >
+          <img
+            src={atividadeMf3_2Image}
+            alt="Sala de formação técnica com adultos sentados em torno de mesas com material de trabalho; um participante fala com o corpo inclinado para a frente e gesto afirmativo, dois colegas próximos acenam com a cabeça, os restantes observam em silêncio."
+            loading="lazy"
+            width={1536}
+            height={1024}
+            className="h-auto w-full max-w-full rounded-lg object-cover"
+          />
+        </Figure>
         <ChoiceGroup
           id="mf3-atividade-2-estilo-1"
           label="Que estratégia escolhe nesta primeira situação?"
