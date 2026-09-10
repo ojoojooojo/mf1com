@@ -151,7 +151,7 @@ function GlobalLanding() {
             <p className="max-w-md text-center text-xs text-muted-foreground sm:text-left">
               IEFP — Instituto do Emprego e Formação Profissional, I.P.
               <br />
-              Centro Nacional de Qualificação de Formadores · Delegação de Portalegre
+              Centro Nacional de Qualificação de Formadores · Centro de Formação de Portalegre
             </p>
           </div>
           <img
