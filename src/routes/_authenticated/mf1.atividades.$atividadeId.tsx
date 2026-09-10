@@ -45,7 +45,7 @@ function ActivityNotFound() {
     <div className="rounded-xl border border-border bg-card p-8">
       <h1 className="font-display text-2xl">Atividade não encontrada</h1>
       <Link
-        to="/atividades"
+        to="/mf1/atividades"
         className="mt-3 inline-flex items-center gap-2 font-medium text-primary hover:underline"
       >
         <ArrowLeft className="size-4" /> Voltar às atividades
@@ -65,7 +65,7 @@ function ActivityPage() {
   return (
     <article key={activity.id}>
       <Link
-        to="/atividades"
+        to="/mf1/atividades"
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" /> Aprendizagem Ativa
@@ -112,7 +112,7 @@ function ActivityPage() {
           <div>
             <ContentCard title="A seguir">
               <Link
-                to="/atividades/$atividadeId"
+                to="/mf1/atividades/$atividadeId"
                 params={{ atividadeId: next.id }}
                 className="font-medium text-primary underline-offset-4 hover:underline"
               >
@@ -123,7 +123,7 @@ function ActivityPage() {
         ) : (
           <ContentCard tone="primary" title="Concluiu as cinco atividades?">
             <Link
-              to="/sintese"
+              to="/mf1/sintese"
               className="font-medium text-primary underline-offset-4 hover:underline"
             >
               Avançar para a Síntese Final

@@ -34,10 +34,10 @@ function useModule() {
     code: isMf3 ? MF3_MODULE_CODE : isMf2 ? MF2_MODULE_CODE : MODULE_CODE,
     title: isMf3 ? MF3_MODULE_TITLE : isMf2 ? MF2_MODULE_TITLE : MODULE_TITLE,
     home: (isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/") as "/mf3" | "/mf2" | "/",
-    sources: (isMf3 ? "/mf3/fontes" : isMf2 ? "/mf2/fontes" : "/fontes") as
+    sources: (isMf3 ? "/mf3/fontes" : isMf2 ? "/mf2/fontes" : "/mf1/fontes") as
       | "/mf3/fontes"
       | "/mf2/fontes"
-      | "/fontes",
+      | "/mf1/fontes",
   };
 }
 
@@ -49,7 +49,7 @@ function TrailList({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <nav aria-label="Mapa do módulo" className="space-y-1">
       {stops.map((stop, i) => {
-        const blocosBase = isMf3 ? "/mf3/blocos" : isMf2 ? "/mf2/blocos" : "/blocos";
+        const blocosBase = isMf3 ? "/mf3/blocos" : isMf2 ? "/mf2/blocos" : "/mf1/blocos";
         const root = isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/";
         const active =
           stop.params
@@ -180,7 +180,7 @@ function SessionMenu() {
   if (!user) {
     return (
       <Link
-        to="/auth"
+        to="/mf1/auth"
         className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
       >
         <LogIn className="size-3.5" /> Entrar
@@ -207,7 +207,7 @@ function SessionMenu() {
           await queryClient.cancelQueries();
           queryClient.clear();
           await signOut();
-          navigate({ to: "/auth", replace: true });
+          navigate({ to: "/mf1/auth", replace: true });
         }}
         className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
       >

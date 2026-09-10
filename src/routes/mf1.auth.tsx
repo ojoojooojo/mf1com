@@ -35,8 +35,8 @@ export const Route = createFileRoute("/mf1/auth")({
 type Mode = "entrar" | "criar" | "recuperar";
 
 function safePath(value: string | undefined): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/blocos/1";
-  if (value.startsWith("/auth")) return "/blocos/1";
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/mf1/blocos/1";
+  if (value.startsWith("/mf1/auth")) return "/mf1/blocos/1";
   return value;
 }
 

@@ -143,7 +143,7 @@ function SynthesisPage() {
                 {RECAP[block.id]}
               </p>
               <Link
-                to="/blocos/$blocoId"
+                to="/mf1/blocos/$blocoId"
                 params={{ blocoId: block.id }}
                 className="mt-3 inline-block text-sm font-medium text-primary underline-offset-4 hover:underline"
               >
@@ -331,7 +331,7 @@ function SynthesisPage() {
           </Link>
           <p className="mt-3">
             <Link
-              to="/atividades"
+              to="/mf1/atividades"
               className="text-sm font-medium text-primary underline-offset-4 hover:underline"
             >
               Rever a Aprendizagem Ativa

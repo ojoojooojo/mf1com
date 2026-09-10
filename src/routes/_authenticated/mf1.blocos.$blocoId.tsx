@@ -59,7 +59,7 @@ function BlockNotFound() {
         {BLOCKS.map((b) => (
           <li key={b.id}>
             <Link
-              to="/blocos/$blocoId"
+              to="/mf1/blocos/$blocoId"
               params={{ blocoId: b.id }}
               className="font-medium text-primary underline-offset-4 hover:underline"
             >

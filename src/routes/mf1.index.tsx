@@ -106,14 +106,14 @@ function Landing() {
 
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            to="/blocos/$blocoId"
+            to="/mf1/blocos/$blocoId"
             params={{ blocoId: "1" }}
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Começar <ArrowRight className="size-4" />
           </Link>
           <Link
-            to="/atividades"
+            to="/mf1/atividades"
             className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-sm font-semibold hover:bg-muted"
           >
             Ver aprendizagem ativa
@@ -178,7 +178,7 @@ function Landing() {
           {BLOCKS.map((block) => (
             <li key={block.id}>
               <Link
-                to="/blocos/$blocoId"
+                to="/mf1/blocos/$blocoId"
                 params={{ blocoId: block.id }}
                 className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:bg-secondary"
               >
