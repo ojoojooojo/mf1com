@@ -102,7 +102,7 @@ function ActivitiesHub() {
         <ContentCard tone="primary" title="Como será avaliado">
           <p>
             A avaliação é formativa: não há classificação automática. As suas produções servem de
-            base à sessão síncrona online de 2 horas e à autoavaliação da Síntese Final.
+            base à sessão síncrona online de 4 horas e à autoavaliação da Síntese Final.
           </p>
         </ContentCard>
       </div>
