@@ -428,10 +428,6 @@ export async function exportClassWorkbook(
     { header: "Participante", width: 34 },
     ...WRITTEN_COLUMNS,
   ];
-  const writtenDetailRows = writtenRowsFor(
-    modules,
-    data.responses.filter((r) => ids.has(r.user_id)),
-  );
   const writtenWithEmail = data.responses
     .filter((r) => ids.has(r.user_id) && r.response_text.trim().length > 0)
     .sort(
@@ -449,7 +445,6 @@ export async function exportClassWorkbook(
           toDate(r.submitted_at),
         ] as (string | number | Date | null)[],
     );
-  void writtenDetailRows;
   addSheet(workbook, "ACTIVIDADES (DETALHE)", writtenDetailColumns, writtenWithEmail, {
     autofilter: true,
   });
