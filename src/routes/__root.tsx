@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -80,11 +81,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MF1 — Comunicação e Escuta Ativa na Formação" },
+      { title: "Gestão de Conflitos na Formação | IEFP" },
       {
         name: "description",
         content:
-          "MOOC assíncrono para formadores: comunicação, assertividade, barreiras e escuta ativa.",
+          "Formação Pedagógica Contínua de Formadores: três módulos (MF1, MF2, MF3) sobre comunicação, dinâmicas de conflito e estratégias de resolução.",
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "pt_PT" },
@@ -124,6 +125,8 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
@@ -136,10 +139,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CourseLayout>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      {isHome ? (
         <Outlet />
-      </CourseLayout>
+      ) : (
+        <CourseLayout>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </CourseLayout>
+      )}
     </QueryClientProvider>
   );
 }

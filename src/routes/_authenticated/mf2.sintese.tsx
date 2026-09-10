@@ -296,10 +296,10 @@ function Mf2SynthesisPage() {
       <div className="mt-8 space-y-4">
         <ContentCard tone="primary" title="Módulo concluído — o que falta">
           <p>
-            As <strong>~6 horas assíncronas</strong> do MF2 —{" "}
+            As <strong>8 horas assíncronas</strong> do MF2 —{" "}
             <em>Dinâmicas e Causas do Conflito na Formação</em> estão concluídas. Faltam as{" "}
-            <strong>4 horas síncronas</strong>, realizadas em sessão presencial ou online fora deste
-            MOOC, para completar as <strong>10 horas totais</strong> do módulo.
+            <strong>2 horas síncronas</strong>, realizadas online fora deste MOOC, para completar as{" "}
+            <strong>10 horas totais</strong> do módulo.
           </p>
         </ContentCard>
 
