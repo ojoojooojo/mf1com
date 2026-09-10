@@ -42,13 +42,27 @@ function ClosedModule({ moduleKey }: { moduleKey: ModuleKey }) {
 export function ModuleGate({ children }: { children: React.ReactNode }) {
   const pathname = useLocation({ select: (l) => l.pathname });
   const moduleKey = moduleKeyFromPathname(pathname);
-  const isFormador = useIsFormador();
+  const roleQuery = useQuery({
+    queryKey: ["module-gate", "role"],
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      const userId = auth.user?.id;
+      if (!userId) return null;
+      const { data } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", userId)
+        .maybeSingle();
+      return data?.role ?? null;
+    },
+  });
   const statuses = useModuleStatuses();
 
-  if (!moduleKey || isFormador) return <>{children}</>;
-  if (statuses.isLoading) {
+  if (!moduleKey) return <>{children}</>;
+  if (roleQuery.isLoading || statuses.isLoading) {
     return <p className="text-sm text-muted-foreground">A verificar a disponibilidade do módulo…</p>;
   }
+  if (roleQuery.data === "formador") return <>{children}</>;
   if (statuses.data && !statuses.data[moduleKey].is_open) {
     return <ClosedModule moduleKey={moduleKey} />;
   }
