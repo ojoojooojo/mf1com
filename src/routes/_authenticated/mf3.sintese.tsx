@@ -335,11 +335,11 @@ function Mf3SynthesisPage() {
       <div className="mt-8 space-y-4">
         <ContentCard tone="primary" title="Módulo concluído — o que falta">
           <p>
-            As <strong>~6 horas assíncronas</strong> do MF3 —{" "}
+            As <strong>8 horas assíncronas</strong> do MF3 —{" "}
             <em>Estratégias de Resolução de Conflitos na Formação</em> estão concluídas. Faltam as{" "}
-            <strong>4 horas síncronas</strong>, realizadas em sessão presencial ou online fora deste
-            MOOC, para completar as <strong>10 horas totais</strong> do módulo — e, com o MF1 e o
-            MF2, o percurso completo de Gestão de Conflitos na Formação.
+            <strong>2 horas síncronas</strong>, realizadas online fora deste MOOC, para completar as{" "}
+            <strong>10 horas totais</strong> do módulo — e, com o MF1 e o MF2, o percurso completo de
+            Gestão de Conflitos na Formação.
           </p>
         </ContentCard>
 
