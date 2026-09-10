@@ -38,7 +38,7 @@ export const Route = createFileRoute("/_authenticated/mf3/sintese")({
   component: Mf3SynthesisPage,
 });
 
-/** Recapitulação por bloco — uma ideia central cada, para reler antes da sessão síncrona. */
+/** Recapitulação por bloco — uma ideia central cada, para reler antes da sessão síncrona online. */
 const RECAP: Record<string, string> = {
   "1": "A inteligência emocional é uma competência aprendível, não um traço fixo (Salovey & Mayer, 1990; Goleman, 1995). Autoconsciência é reconhecer o que se está a sentir enquanto se sente; autorregulação é decidir o que fazer com isso. É a diferença entre reagir por impulso e responder com intenção.",
   "2": "A empatia cognitiva compreende a perspetiva do outro; a emocional sintoniza-se com o que ele sente. Nenhuma delas exige concordar. Traduzidas em competências sociais — escuta ativa, feedback, gestão do grupo —, é isto que sustenta a relação enquanto o conflito é tratado.",
@@ -174,7 +174,7 @@ function Mf3SynthesisPage() {
         <SectionHeading
           eyebrow="Recapitulação"
           title="Os cinco conteúdos, em síntese"
-          lead="Uma ideia central por conteúdo — para reler antes da sessão síncrona."
+          lead="Uma ideia central por conteúdo — para reler antes da sessão síncrona online."
         />
         <ul className="grid gap-3 sm:grid-cols-2">
           {MF3_BLOCKS.map((block) => (

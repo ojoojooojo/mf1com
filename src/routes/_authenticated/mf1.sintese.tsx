@@ -132,7 +132,7 @@ function SynthesisPage() {
         <SectionHeading
           eyebrow="Recapitulação"
           title="Os cinco conteúdos, em síntese"
-          lead="Uma ideia central por conteúdo — para reler antes da sessão síncrona."
+          lead="Uma ideia central por conteúdo — para reler antes da sessão síncrona online."
         />
         <ul className="grid gap-3 sm:grid-cols-2">
           {BLOCKS.map((block) => (

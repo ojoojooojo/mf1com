@@ -127,7 +127,7 @@ export function ActivityA() {
                       recetores.
                     </p>
                     <p>
-                      O <strong>canal</strong> é oral e presencial, degradado por{" "}
+                      O <strong>canal</strong> é oral e cara a cara na sala, degradado por{" "}
                       <strong>ruído</strong> em dois sentidos: ruído físico (as obras) e ruído
                       semântico (os termos não descodificados). O <strong>contexto</strong> é uma
                       primeira sessão — ainda não há relação estabelecida nem normas de grupo.
