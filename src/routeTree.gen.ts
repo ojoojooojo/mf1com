@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
@@ -32,6 +33,11 @@ import { Route as AuthenticatedMf3AtividadesIndexRouteImport } from './routes/_a
 import { Route as AuthenticatedMf3AtividadesAtividadeIdRouteImport } from './routes/_authenticated/mf3.atividades.$atividadeId'
 import { Route as AuthenticatedMf3BlocosBlocoIdRouteImport } from './routes/_authenticated/mf3.blocos.$blocoId'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -152,7 +158,7 @@ const AuthenticatedMf3BlocosBlocoIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRouteRouteWithChildren
+  '/': typeof IndexRoute
   '/reset-password': typeof ResetPasswordRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
@@ -176,7 +182,7 @@ export interface FileRoutesByFullPath {
   '/mf3/atividades/': typeof AuthenticatedMf3AtividadesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRouteRouteWithChildren
+  '/': typeof IndexRoute
   '/reset-password': typeof ResetPasswordRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
@@ -201,6 +207,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/formador': typeof AuthenticatedFormadorRoute
@@ -275,6 +282,7 @@ export interface FileRouteTypes {
     | '/mf3/atividades'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
     | '/reset-password'
     | '/_authenticated/formador'
@@ -300,6 +308,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   Mf1AuthRoute: typeof Mf1AuthRoute
@@ -313,6 +322,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -509,6 +525,7 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   Mf1AuthRoute: Mf1AuthRoute,

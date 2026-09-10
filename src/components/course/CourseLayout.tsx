@@ -33,7 +33,7 @@ function useModule() {
     stops: isMf3 ? MF3_STOPS : isMf2 ? MF2_STOPS : STOPS,
     code: isMf3 ? MF3_MODULE_CODE : isMf2 ? MF2_MODULE_CODE : MODULE_CODE,
     title: isMf3 ? MF3_MODULE_TITLE : isMf2 ? MF2_MODULE_TITLE : MODULE_TITLE,
-    home: (isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/") as "/mf3" | "/mf2" | "/",
+    home: (isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/mf1") as "/mf3" | "/mf2" | "/mf1",
     sources: (isMf3 ? "/mf3/fontes" : isMf2 ? "/mf2/fontes" : "/mf1/fontes") as
       | "/mf3/fontes"
       | "/mf2/fontes"
@@ -50,7 +50,7 @@ function TrailList({ onNavigate }: { onNavigate?: () => void }) {
     <nav aria-label="Mapa do módulo" className="space-y-1">
       {stops.map((stop, i) => {
         const blocosBase = isMf3 ? "/mf3/blocos" : isMf2 ? "/mf2/blocos" : "/mf1/blocos";
-        const root = isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/";
+        const root = isMf3 ? "/mf3" : isMf2 ? "/mf2" : "/mf1";
         const active =
           stop.params
             ? pathname === `${blocosBase}/${stop.params["blocoId"]}`
@@ -232,7 +232,7 @@ function ModuleSwitch({ isMf2, isMf3 }: { isMf2: boolean; isMf3: boolean }) {
       aria-label="Módulos do curso"
       className="hidden shrink-0 items-center gap-1 rounded-lg border border-border p-0.5 sm:flex"
     >
-      <Link to="/" className={item(!isMf2 && !isMf3)}>
+      <Link to="/mf1" className={item(!isMf2 && !isMf3)}>
         MF1
       </Link>
       <Link to="/mf2" className={item(isMf2)}>
