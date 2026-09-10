@@ -121,7 +121,7 @@ export const Route = createFileRoute("/mf3/")({
       {
         name: "description",
         content:
-          "Módulo 3 da formação Gestão de Conflitos na Formação: inteligência emocional, empatia, estilos de gestão de conflito, stress e a Roda de Mapeamento do Conflito.",
+          "MF3 — Estratégias de Resolução de Conflitos na Formação: inteligência emocional, empatia, estilos de gestão de conflito, stress e a Roda de Mapeamento do Conflito.",
       },
       {
         property: "og:title",
