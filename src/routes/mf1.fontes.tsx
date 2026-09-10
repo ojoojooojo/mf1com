@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SectionHeading } from "@/components/course/LessonKit";
 
-export const Route = createFileRoute("/fontes")({
+export const Route = createFileRoute("/mf1/fontes")({
   head: () => ({
     meta: [
       { title: "Fontes e referências | MF1 Comunicação e Escuta Ativa" },

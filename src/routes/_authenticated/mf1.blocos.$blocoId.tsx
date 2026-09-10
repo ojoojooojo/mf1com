@@ -21,7 +21,7 @@ import { Block3Content } from "@/components/course/Block3Content";
 import { Block4Content } from "@/components/course/Block4Content";
 import { Block5Content } from "@/components/course/Block5Content";
 
-export const Route = createFileRoute("/_authenticated/blocos/$blocoId")({
+export const Route = createFileRoute("/_authenticated/mf1/blocos/$blocoId")({
   loader: ({ params }) => {
     const block = getBlock(params.blocoId);
     if (!block) throw notFound();

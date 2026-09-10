@@ -10,7 +10,7 @@ import {
 import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/mf1/")({
   head: () => ({
     meta: [
       { title: "MF1 — Comunicação e Escuta Ativa na Formação | MOOC" },

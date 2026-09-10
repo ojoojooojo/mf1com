@@ -6,7 +6,7 @@ import { authErrorMessage, ensureProfile, useAuth } from "@/lib/auth";
 import { MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/mf1/auth")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
     const value = search["redirect"];

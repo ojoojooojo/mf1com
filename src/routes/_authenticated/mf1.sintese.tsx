@@ -7,7 +7,7 @@ import { useProgress } from "@/lib/progress";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/_authenticated/sintese")({
+export const Route = createFileRoute("/_authenticated/mf1/sintese")({
   head: () => ({
     meta: [
       { title: "Síntese Final e autoavaliação | MF1 Comunicação e Escuta Ativa" },
