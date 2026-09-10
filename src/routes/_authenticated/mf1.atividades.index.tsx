@@ -5,7 +5,7 @@ import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useProgress } from "@/lib/progress";
 
-export const Route = createFileRoute("/_authenticated/atividades/")({
+export const Route = createFileRoute("/_authenticated/mf1/atividades/")({
   head: () => ({
     meta: [
       { title: "Aprendizagem Ativa — 5 atividades práticas | MF1" },
@@ -54,7 +54,7 @@ function ActivitiesHub() {
             return (
               <li key={activity.id}>
                 <Link
-                  to="/atividades/$atividadeId"
+                  to="/mf1/atividades/$atividadeId"
                   params={{ atividadeId: activity.id }}
                   className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent/50 hover:bg-secondary"
                 >

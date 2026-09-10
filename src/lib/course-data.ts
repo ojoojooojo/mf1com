@@ -158,7 +158,7 @@ export const STOPS: Stop[] = [
     title: "Abertura do módulo",
     subtitle: "Enquadramento, objetivos e percurso.",
     minutes: 15,
-    to: "/",
+    to: "/mf1",
   },
   ...BLOCKS.map<Stop>((b) => ({
     id: `bloco-${b.id}`,
@@ -167,7 +167,7 @@ export const STOPS: Stop[] = [
     title: b.title,
     subtitle: b.subtitle,
     minutes: b.minutes,
-    to: "/blocos/$blocoId",
+    to: "/mf1/blocos/$blocoId",
     params: { blocoId: b.id },
   })),
   {
@@ -177,7 +177,7 @@ export const STOPS: Stop[] = [
     title: "Aprendizagem Ativa",
     subtitle: "5 atividades práticas de aplicação (~2h).",
     minutes: 120,
-    to: "/atividades",
+    to: "/mf1/atividades",
   },
   {
     id: "sintese",
@@ -186,7 +186,7 @@ export const STOPS: Stop[] = [
     title: "Síntese Final",
     subtitle: "Recapitulação, autoavaliação e encerramento.",
     minutes: 25,
-    to: "/sintese",
+    to: "/mf1/sintese",
   },
 ];
 

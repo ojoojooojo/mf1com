@@ -21,7 +21,7 @@ import { Block3Content } from "@/components/course/Block3Content";
 import { Block4Content } from "@/components/course/Block4Content";
 import { Block5Content } from "@/components/course/Block5Content";
 
-export const Route = createFileRoute("/_authenticated/blocos/$blocoId")({
+export const Route = createFileRoute("/_authenticated/mf1/blocos/$blocoId")({
   loader: ({ params }) => {
     const block = getBlock(params.blocoId);
     if (!block) throw notFound();
@@ -59,7 +59,7 @@ function BlockNotFound() {
         {BLOCKS.map((b) => (
           <li key={b.id}>
             <Link
-              to="/blocos/$blocoId"
+              to="/mf1/blocos/$blocoId"
               params={{ blocoId: b.id }}
               className="font-medium text-primary underline-offset-4 hover:underline"
             >

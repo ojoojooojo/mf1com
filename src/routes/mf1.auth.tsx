@@ -6,7 +6,7 @@ import { authErrorMessage, ensureProfile, useAuth } from "@/lib/auth";
 import { MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/mf1/auth")({
   ssr: false,
   validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
     const value = search["redirect"];
@@ -35,8 +35,8 @@ export const Route = createFileRoute("/auth")({
 type Mode = "entrar" | "criar" | "recuperar";
 
 function safePath(value: string | undefined): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/blocos/1";
-  if (value.startsWith("/auth")) return "/blocos/1";
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/mf1/blocos/1";
+  if (value.startsWith("/mf1/auth")) return "/mf1/blocos/1";
   return value;
 }
 
@@ -259,7 +259,7 @@ function AuthPage() {
       </div>
 
       <p className="mt-4 text-sm text-muted-foreground">
-        <Link to="/" className="font-medium text-primary underline-offset-4 hover:underline">
+        <Link to="/mf1" className="font-medium text-primary underline-offset-4 hover:underline">
           Voltar à apresentação do módulo
         </Link>
       </p>

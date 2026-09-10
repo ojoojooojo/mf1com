@@ -59,7 +59,7 @@ function ResetPasswordPage() {
   useEffect(() => {
     if (!done) return;
     const timer = setTimeout(() => {
-      navigate({ to: "/blocos/$blocoId", params: { blocoId: "1" }, replace: true });
+      navigate({ to: "/mf1/blocos/$blocoId", params: { blocoId: "1" }, replace: true });
     }, 1600);
     return () => clearTimeout(timer);
   }, [done, navigate]);
@@ -102,7 +102,7 @@ function ResetPasswordPage() {
               Este link de recuperação é inválido ou já expirou ({urlError}).
             </p>
             <p className="mt-4 text-sm text-muted-foreground">
-              <Link to="/auth" className="font-medium text-primary underline-offset-4 hover:underline">
+              <Link to="/mf1/auth" className="font-medium text-primary underline-offset-4 hover:underline">
                 Voltar e pedir um novo link de recuperação
               </Link>
             </p>
@@ -166,7 +166,7 @@ function ResetPasswordPage() {
 
       {!urlError && !done ? (
         <p className="mt-4 text-sm text-muted-foreground">
-          <Link to="/auth" className="font-medium text-primary underline-offset-4 hover:underline">
+          <Link to="/mf1/auth" className="font-medium text-primary underline-offset-4 hover:underline">
             Voltar ao início de sessão
           </Link>
         </p>
