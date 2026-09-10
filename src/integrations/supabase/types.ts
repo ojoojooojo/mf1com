@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      module_status: {
+        Row: {
+          created_at: string
+          is_open: boolean
+          module_key: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          is_open?: boolean
+          module_key: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          is_open?: boolean
+          module_key?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -133,6 +157,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_write_module: { Args: { _id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -140,6 +165,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      module_key_of: { Args: { _id: string }; Returns: string }
     }
     Enums: {
       app_role: "formando" | "formador"
