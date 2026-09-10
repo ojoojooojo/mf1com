@@ -93,7 +93,7 @@ function GlobalLanding() {
           <SectionHeading
             eyebrow="Estrutura modular"
             title="Três módulos de 10 horas"
-            lead="Escolha o módulo que pretende percorrer. A sequência recomendada é MF1, MF2 e MF3."
+            lead="Percorra os módulos na sequência recomendada: MF1 → MF2 → MF3."
             className="text-center"
           />
 
