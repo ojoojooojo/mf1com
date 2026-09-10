@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Três módulos (MF1, MF2, MF3) de 10h cada, promovidos pelo IEFP — Delegação de Portalegre.",
+          "Três módulos (MF1, MF2, MF3) de 10h cada, a percorrer na sequência recomendada, promovidos pelo IEFP — Centro de Formação de Portalegre.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
