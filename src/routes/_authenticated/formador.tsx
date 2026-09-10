@@ -255,6 +255,7 @@ function TrainerPage() {
         <ParticipantsTable
           key={tab}
           ownId={roleQuery.data?.userId ?? null}
+          isFormador={isFormador}
           module={MODULES[tab]}
           data={dataQuery.data}
         />
@@ -269,19 +270,52 @@ function TrainerPage() {
 
 type SortKey = "email" | "created_at" | "percent" | "score";
 
+const ALL_MODULES: ExportModule[] = [MODULES.mf1, MODULES.mf2, MODULES.mf3];
+
+/** Botão de exportação. Só é renderizado a formadores; a query subjacente já está
+ * restringida pelo papel (RLS + verificação em TrainerPage). */
+function ExportButton({
+  isFormador,
+  label,
+  onExport,
+}: {
+  isFormador: boolean;
+  label: string;
+  onExport: () => Promise<void>;
+}) {
+  const [busy, setBusy] = useState(false);
+  if (!isFormador) return null;
+  return (
+    <button
+      type="button"
+      disabled={busy}
+      onClick={async (event) => {
+        event.stopPropagation();
+        setBusy(true);
+        try {
+          await onExport();
+        } finally {
+          setBusy(false);
+        }
+      }}
+      className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-60 sm:text-sm"
+    >
+      <Download className="size-4" aria-hidden />
+      {busy ? "A gerar ficheiro…" : label}
+    </button>
+  );
+}
+
 function ParticipantsTable({
   ownId,
+  isFormador,
   module,
   data,
 }: {
   ownId: string | null;
+  isFormador: boolean;
   module: ModuleConfig;
-  data: {
-    profiles: ProfileRow[];
-    progress: ProgressRow[];
-    quiz: QuizRow[];
-    responses: ResponseRow[];
-  };
+  data: Dataset;
 }) {
   const [sort, setSort] = useState<{ key: SortKey; asc: boolean }>({
     key: "email",
@@ -359,6 +393,22 @@ function ParticipantsTable({
 
   return (
     <section className="mt-8">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          {rows.length} participante{rows.length === 1 ? "" : "s"} (formadores excluídos)
+        </p>
+        <ExportButton
+          isFormador={isFormador}
+          label="Exportar resultados da turma"
+          onExport={() =>
+            exportClassWorkbook(
+              rows.map((r) => r.profile),
+              ALL_MODULES,
+              data,
+            )
+          }
+        />
+      </div>
       <div className="overflow-x-auto rounded-xl border border-border bg-card">
         <table className="w-full min-w-[38rem] border-collapse text-[0.95rem]">
           <thead className="border-b border-border bg-surface">
@@ -422,6 +472,9 @@ function ParticipantsTable({
                       <td colSpan={5} className="border-b border-border bg-surface px-4 py-6">
                         <ParticipantDetail
                           module={module}
+                          isFormador={isFormador}
+                          profile={row.profile}
+                          dataset={data}
                           email={row.profile.email}
                           progress={row.progress}
                           quiz={row.quiz}
@@ -444,12 +497,18 @@ function ParticipantsTable({
 
 function ParticipantDetail({
   module,
+  isFormador,
+  profile,
+  dataset,
   email,
   progress,
   quiz,
   responses,
 }: {
   module: ModuleConfig;
+  isFormador: boolean;
+  profile: ProfileRow;
+  dataset: Dataset;
   email: string;
   progress: ProgressRow[];
   quiz: QuizRow[];
@@ -469,9 +528,16 @@ function ParticipantDetail({
 
   return (
     <div className="space-y-8">
-      <p className="text-sm text-muted-foreground">
-        Detalhe de <span className="font-medium text-foreground">{email}</span>
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Detalhe de <span className="font-medium text-foreground">{email}</span>
+        </p>
+        <ExportButton
+          isFormador={isFormador}
+          label="Exportar resultados"
+          onExport={() => exportParticipantWorkbook(profile, ALL_MODULES, dataset)}
+        />
+      </div>
 
       <section>
         <h3 className="font-display text-lg">Estado das secções</h3>
