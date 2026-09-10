@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, Users } from "lucide-react";
+import { ArrowDown, ArrowRight, Clock, Users } from "lucide-react";
 import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
 import logoIefp from "@/assets/logo-iefp-oficial.png";
 import logosCofinanciamento from "@/assets/logos-cofinanciamento.jpg";
