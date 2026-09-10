@@ -125,6 +125,8 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
@@ -137,10 +139,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CourseLayout>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      {isHome ? (
         <Outlet />
-      </CourseLayout>
+      ) : (
+        <CourseLayout>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </CourseLayout>
+      )}
     </QueryClientProvider>
   );
 }
