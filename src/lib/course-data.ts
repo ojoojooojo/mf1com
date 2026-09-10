@@ -158,7 +158,7 @@ export const STOPS: Stop[] = [
     title: "Abertura do módulo",
     subtitle: "Enquadramento, objetivos e percurso.",
     minutes: 15,
-    to: "/",
+    to: "/mf1",
   },
   ...BLOCKS.map<Stop>((b) => ({
     id: `bloco-${b.id}`,

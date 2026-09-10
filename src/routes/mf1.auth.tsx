@@ -259,7 +259,7 @@ function AuthPage() {
       </div>
 
       <p className="mt-4 text-sm text-muted-foreground">
-        <Link to="/" className="font-medium text-primary underline-offset-4 hover:underline">
+        <Link to="/mf1" className="font-medium text-primary underline-offset-4 hover:underline">
           Voltar à apresentação do módulo
         </Link>
       </p>
