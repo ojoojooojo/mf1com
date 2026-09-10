@@ -179,12 +179,12 @@ function Mf3Landing() {
         <ContentCard title="Carga horária" icon={<Clock className="size-4 text-primary" />}>
           <p className="font-semibold">10h totais do módulo</p>
           <p className="mt-1 text-muted-foreground">
-            8h assíncronas (este MOOC/plataforma) + 2h síncronas online, fora deste MOOC.
+            6h assíncronas (este MOOC/plataforma) + 4h síncronas online, fora deste MOOC.
           </p>
         </ContentCard>
         <ContentCard title="Estrutura" icon={<Target className="size-4 text-primary" />}>
           <p className="text-muted-foreground">
-            Cerca de 6h de aprendizagem de conteúdos em 5 blocos + 2h de aprendizagem ativa com 5
+            Cerca de 4h de aprendizagem de conteúdos em 5 blocos + 2h de aprendizagem ativa com 5
             atividades práticas.
           </p>
         </ContentCard>

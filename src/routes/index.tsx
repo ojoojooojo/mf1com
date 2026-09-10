@@ -81,8 +81,9 @@ function GlobalLanding() {
                 São três módulos independentes de <strong>10 horas</strong> cada, perfazendo uma
                 duração total de <strong>30 horas</strong>. O percurso recomendado é MF1 → MF2 →
                 MF3, mas cada módulo pode ser frequentado de forma autónoma. Cada módulo combina
-                uma componente assíncrona de <strong>8 horas</strong> (este MOOC) com uma sessão
-                síncrona online própria de <strong>2 horas</strong>.
+                uma componente assíncrona de <strong>6 horas</strong> (este MOOC) com uma sessão
+                síncrona online própria de <strong>4 horas</strong>, realizada fora do MOOC — no
+                total, <strong>18 horas assíncronas</strong> e <strong>12 horas síncronas online</strong>.
               </p>
             </div>
           </div>
@@ -119,7 +120,7 @@ function GlobalLanding() {
                     <Clock className="size-4" /> 10 horas
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <Users className="size-4" /> 8h assíncronas + 2h síncronas
+                    <Users className="size-4" /> 6h assíncronas + 4h síncronas online
                   </span>
                 </div>
               </Link>

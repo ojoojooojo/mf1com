@@ -23,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/mf2/sintese")({
       {
         name: "description",
         content:
-          "Recapitulação dos quatro conteúdos do módulo, autoavaliação formativa e encerramento das 8 horas assíncronas do MF2.",
+          "Recapitulação dos quatro conteúdos do módulo, autoavaliação formativa e encerramento das 6 horas assíncronas do MF2.",
       },
       { property: "og:title", content: "Síntese Final — MF2" },
       {
@@ -296,9 +296,9 @@ function Mf2SynthesisPage() {
       <div className="mt-8 space-y-4">
         <ContentCard tone="primary" title="Módulo concluído — o que falta">
           <p>
-            As <strong>8 horas assíncronas</strong> do MF2 —{" "}
+            As <strong>6 horas assíncronas</strong> do MF2 —{" "}
             <em>Dinâmicas e Causas do Conflito na Formação</em> estão concluídas. Faltam as{" "}
-            <strong>2 horas síncronas</strong>, realizadas online fora deste MOOC, para completar as{" "}
+            <strong>4 horas síncronas</strong>, realizadas online fora deste MOOC, para completar as{" "}
             <strong>10 horas totais</strong> do módulo.
           </p>
         </ContentCard>
