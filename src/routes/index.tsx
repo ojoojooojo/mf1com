@@ -71,20 +71,19 @@ function GlobalLanding() {
               Formação Pedagógica Contínua de Formadores
             </p>
             <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 text-left shadow-soft sm:p-8">
-              <p className="text-[1.025rem] leading-relaxed text-foreground">
-                Esta formação insere-se no{" "}
-                <strong>Referencial de Formação Pedagógica Contínua de Formadores Gestão de Conflitos na Formação</strong>
-                , do IEFP — Instituto do Emprego e Formação Profissional, I.P. (Centro Nacional de
-                Qualificação de Formadores), promovida pelo IEFP — Delegação de Portalegre.
-              </p>
-              <p className="mt-4 text-[1.025rem] leading-relaxed text-muted-foreground">
-                São três módulos independentes de <strong>10 horas</strong> cada, perfazendo uma
-                duração total de <strong>30 horas</strong>. O percurso recomendado é MF1 → MF2 →
-                MF3, mas cada módulo pode ser frequentado de forma autónoma. Cada módulo combina
-                uma componente assíncrona de <strong>6 horas</strong> (este MOOC) com uma sessão
-                síncrona online própria de <strong>4 horas</strong>, realizada fora do MOOC — no
-                total, <strong>18 horas assíncronas</strong> e <strong>12 horas síncronas online</strong>.
-              </p>
+            <p className="text-[1.025rem] leading-relaxed text-foreground">
+              Esta formação insere-se no{" "}
+              <strong>Referencial de Formação Pedagógica Contínua de Formadores Gestão de Conflitos na Formação</strong>
+              , do IEFP — Instituto do Emprego e Formação Profissional, I.P. (Centro Nacional de
+              Qualificação de Formadores), promovida pelo IEFP — Centro de Formação de Portalegre.
+            </p>
+            <p className="mt-4 text-[1.025rem] leading-relaxed text-muted-foreground">
+              São três módulos de <strong>10 horas</strong> cada, num total de <strong>30 horas</strong>,
+              a percorrer na sequência recomendada <strong>MF1 → MF2 → MF3</strong>. Cada módulo
+              combina <strong>6 horas</strong> de aprendizagem assíncrona neste MOOC com{" "}
+              <strong>4 horas</strong> de sessão síncrona online, realizada fora do MOOC — perfazendo{" "}
+              <strong>18 horas assíncronas</strong> e <strong>12 horas síncronas online</strong>.
+            </p>
             </div>
           </div>
         </section>
