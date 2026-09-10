@@ -43,22 +43,6 @@ export const Route = createFileRoute("/_authenticated/formador")({
 
 /* ---------- Tipos e utilitários ---------- */
 
-type ProfileRow = { id: string; email: string; role: string; created_at: string };
-type ProgressRow = { user_id: string; section_id: string; status: string; updated_at: string };
-type QuizRow = {
-  user_id: string;
-  quiz_id: string;
-  selected_option: string;
-  is_correct: boolean;
-  answered_at: string;
-};
-type ResponseRow = {
-  user_id: string;
-  activity_id: string;
-  response_text: string;
-  submitted_at: string;
-};
-
 type ModuleTab = "mf1" | "mf2" | "mf3";
 
 type ModuleConfig = {
@@ -67,9 +51,26 @@ type ModuleConfig = {
   sectionOrder: { id: string; label: string }[];
   stopIds: string[];
   quizIds: readonly string[];
+  /** Quizzes da avaliação final da formação (síntese) — sempre uma categoria separada. */
+  finalQuizIds: readonly string[];
   /** Filtro de pertença de um id de secção/quiz/atividade a este módulo. */
   owns: (id: string) => boolean;
 };
+
+/** Quizzes de autoavaliação final de cada módulo — NUNCA contam como micro-quizzes avaliados. */
+const MF1_FINAL_QUIZ_IDS = ["final-1", "final-2", "final-3", "final-4", "final-5"] as const;
+const MF2_FINAL_QUIZ_IDS = [
+  "mf2-sintese-quiz-1",
+  "mf2-sintese-quiz-2",
+  "mf2-sintese-quiz-3",
+  "mf2-sintese-quiz-4",
+] as const;
+const MF3_FINAL_QUIZ_IDS = [
+  "mf3-sintese-quiz-1",
+  "mf3-sintese-quiz-2",
+  "mf3-sintese-quiz-3",
+  "mf3-sintese-quiz-4",
+] as const;
 
 /** Ordem canónica das secções, igual ao mapa do módulo (com as atividades aninhadas). */
 function buildSectionOrder(
@@ -98,6 +99,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     sectionOrder: buildSectionOrder(STOPS, "aprendizagem-ativa", ACTIVITIES, "atividade-"),
     stopIds: STOPS.map((s) => s.id),
     quizIds: BLOCK_QUIZ_IDS,
+    finalQuizIds: MF1_FINAL_QUIZ_IDS,
     owns: (id) => !id.startsWith("mf2-") && !id.startsWith("mf3-"),
   },
   mf2: {
@@ -111,6 +113,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     ),
     stopIds: MF2_STOPS.map((s) => s.id),
     quizIds: MF2_BLOCK_QUIZ_IDS,
+    finalQuizIds: MF2_FINAL_QUIZ_IDS,
     owns: (id) => id.startsWith("mf2-"),
   },
   mf3: {
@@ -124,6 +127,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     ),
     stopIds: MF3_STOPS.map((s) => s.id),
     quizIds: MF3_BLOCK_QUIZ_IDS,
+    finalQuizIds: MF3_FINAL_QUIZ_IDS,
     owns: (id) => id.startsWith("mf3-"),
   },
 };
@@ -137,15 +141,6 @@ function formatDate(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   });
-}
-
-/** `selected_option` é guardado como "índice|texto da opção" (ou apenas o índice em linhas antigas). */
-function readOption(value: string) {
-  const [rawIndex, ...rest] = value.split("|");
-  const index = Number.parseInt(rawIndex ?? "", 10);
-  const letter = Number.isNaN(index) ? "?" : String.fromCharCode(97 + index);
-  const text = rest.join("|");
-  return { letter, text };
 }
 
 /* ---------- Página ---------- */
@@ -179,7 +174,14 @@ function TrainerPage() {
         supabase
           .from("quiz_answers")
           .select("user_id, quiz_id, selected_option, is_correct, answered_at")
-          .in("quiz_id", [...BLOCK_QUIZ_IDS, ...MF2_BLOCK_QUIZ_IDS, ...MF3_BLOCK_QUIZ_IDS]),
+          .in("quiz_id", [
+            ...BLOCK_QUIZ_IDS,
+            ...MF2_BLOCK_QUIZ_IDS,
+            ...MF3_BLOCK_QUIZ_IDS,
+            ...MF1_FINAL_QUIZ_IDS,
+            ...MF2_FINAL_QUIZ_IDS,
+            ...MF3_FINAL_QUIZ_IDS,
+          ]),
         supabase
           .from("written_responses")
           .select("user_id, activity_id, response_text, submitted_at"),
