@@ -1,12 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown, ChevronRight, ShieldAlert, Users } from "lucide-react";
+import { ChevronDown, ChevronRight, Download, ShieldAlert, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ACTIVITIES, BLOCK_QUIZ_IDS, STOPS } from "@/lib/course-data";
 import { MF2_ACTIVITIES, MF2_BLOCK_QUIZ_IDS, MF2_STOPS } from "@/lib/course-data-mf2";
 import { MF3_ACTIVITIES, MF3_BLOCK_QUIZ_IDS, MF3_STOPS } from "@/lib/course-data-mf3";
+import {
+  exportClassWorkbook,
+  exportParticipantWorkbook,
+  readOption,
+  type Dataset,
+  type ExportModule,
+  type ProfileRow,
+  type ProgressRow,
+  type QuizRow,
+  type ResponseRow,
+} from "@/lib/export-xlsx";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/_authenticated/formador")({
   head: () => ({
