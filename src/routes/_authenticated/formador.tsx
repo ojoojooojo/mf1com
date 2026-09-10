@@ -1,12 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown, ChevronRight, ShieldAlert, Users } from "lucide-react";
+import { ChevronDown, ChevronRight, Download, ShieldAlert, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ACTIVITIES, BLOCK_QUIZ_IDS, STOPS } from "@/lib/course-data";
 import { MF2_ACTIVITIES, MF2_BLOCK_QUIZ_IDS, MF2_STOPS } from "@/lib/course-data-mf2";
 import { MF3_ACTIVITIES, MF3_BLOCK_QUIZ_IDS, MF3_STOPS } from "@/lib/course-data-mf3";
+import {
+  exportClassWorkbook,
+  exportParticipantWorkbook,
+  readOption,
+  type Dataset,
+  type ExportModule,
+  type ProfileRow,
+  type ProgressRow,
+  type QuizRow,
+  type ResponseRow,
+} from "@/lib/export-xlsx";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/_authenticated/formador")({
   head: () => ({
@@ -31,22 +43,6 @@ export const Route = createFileRoute("/_authenticated/formador")({
 
 /* ---------- Tipos e utilitários ---------- */
 
-type ProfileRow = { id: string; email: string; role: string; created_at: string };
-type ProgressRow = { user_id: string; section_id: string; status: string; updated_at: string };
-type QuizRow = {
-  user_id: string;
-  quiz_id: string;
-  selected_option: string;
-  is_correct: boolean;
-  answered_at: string;
-};
-type ResponseRow = {
-  user_id: string;
-  activity_id: string;
-  response_text: string;
-  submitted_at: string;
-};
-
 type ModuleTab = "mf1" | "mf2" | "mf3";
 
 type ModuleConfig = {
@@ -55,9 +51,26 @@ type ModuleConfig = {
   sectionOrder: { id: string; label: string }[];
   stopIds: string[];
   quizIds: readonly string[];
+  /** Quizzes da avaliação final da formação (síntese) — sempre uma categoria separada. */
+  finalQuizIds: readonly string[];
   /** Filtro de pertença de um id de secção/quiz/atividade a este módulo. */
   owns: (id: string) => boolean;
 };
+
+/** Quizzes de autoavaliação final de cada módulo — NUNCA contam como micro-quizzes avaliados. */
+const MF1_FINAL_QUIZ_IDS = ["final-1", "final-2", "final-3", "final-4", "final-5"] as const;
+const MF2_FINAL_QUIZ_IDS = [
+  "mf2-sintese-quiz-1",
+  "mf2-sintese-quiz-2",
+  "mf2-sintese-quiz-3",
+  "mf2-sintese-quiz-4",
+] as const;
+const MF3_FINAL_QUIZ_IDS = [
+  "mf3-sintese-quiz-1",
+  "mf3-sintese-quiz-2",
+  "mf3-sintese-quiz-3",
+  "mf3-sintese-quiz-4",
+] as const;
 
 /** Ordem canónica das secções, igual ao mapa do módulo (com as atividades aninhadas). */
 function buildSectionOrder(
@@ -86,6 +99,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     sectionOrder: buildSectionOrder(STOPS, "aprendizagem-ativa", ACTIVITIES, "atividade-"),
     stopIds: STOPS.map((s) => s.id),
     quizIds: BLOCK_QUIZ_IDS,
+    finalQuizIds: MF1_FINAL_QUIZ_IDS,
     owns: (id) => !id.startsWith("mf2-") && !id.startsWith("mf3-"),
   },
   mf2: {
@@ -99,6 +113,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     ),
     stopIds: MF2_STOPS.map((s) => s.id),
     quizIds: MF2_BLOCK_QUIZ_IDS,
+    finalQuizIds: MF2_FINAL_QUIZ_IDS,
     owns: (id) => id.startsWith("mf2-"),
   },
   mf3: {
@@ -112,6 +127,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     ),
     stopIds: MF3_STOPS.map((s) => s.id),
     quizIds: MF3_BLOCK_QUIZ_IDS,
+    finalQuizIds: MF3_FINAL_QUIZ_IDS,
     owns: (id) => id.startsWith("mf3-"),
   },
 };
@@ -125,15 +141,6 @@ function formatDate(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   });
-}
-
-/** `selected_option` é guardado como "índice|texto da opção" (ou apenas o índice em linhas antigas). */
-function readOption(value: string) {
-  const [rawIndex, ...rest] = value.split("|");
-  const index = Number.parseInt(rawIndex ?? "", 10);
-  const letter = Number.isNaN(index) ? "?" : String.fromCharCode(97 + index);
-  const text = rest.join("|");
-  return { letter, text };
 }
 
 /* ---------- Página ---------- */
@@ -167,7 +174,14 @@ function TrainerPage() {
         supabase
           .from("quiz_answers")
           .select("user_id, quiz_id, selected_option, is_correct, answered_at")
-          .in("quiz_id", [...BLOCK_QUIZ_IDS, ...MF2_BLOCK_QUIZ_IDS, ...MF3_BLOCK_QUIZ_IDS]),
+          .in("quiz_id", [
+            ...BLOCK_QUIZ_IDS,
+            ...MF2_BLOCK_QUIZ_IDS,
+            ...MF3_BLOCK_QUIZ_IDS,
+            ...MF1_FINAL_QUIZ_IDS,
+            ...MF2_FINAL_QUIZ_IDS,
+            ...MF3_FINAL_QUIZ_IDS,
+          ]),
         supabase
           .from("written_responses")
           .select("user_id, activity_id, response_text, submitted_at"),
@@ -241,6 +255,7 @@ function TrainerPage() {
         <ParticipantsTable
           key={tab}
           ownId={roleQuery.data?.userId ?? null}
+          isFormador={isFormador}
           module={MODULES[tab]}
           data={dataQuery.data}
         />
@@ -255,19 +270,52 @@ function TrainerPage() {
 
 type SortKey = "email" | "created_at" | "percent" | "score";
 
+const ALL_MODULES: ExportModule[] = [MODULES.mf1, MODULES.mf2, MODULES.mf3];
+
+/** Botão de exportação. Só é renderizado a formadores; a query subjacente já está
+ * restringida pelo papel (RLS + verificação em TrainerPage). */
+function ExportButton({
+  isFormador,
+  label,
+  onExport,
+}: {
+  isFormador: boolean;
+  label: string;
+  onExport: () => Promise<void>;
+}) {
+  const [busy, setBusy] = useState(false);
+  if (!isFormador) return null;
+  return (
+    <button
+      type="button"
+      disabled={busy}
+      onClick={async (event) => {
+        event.stopPropagation();
+        setBusy(true);
+        try {
+          await onExport();
+        } finally {
+          setBusy(false);
+        }
+      }}
+      className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-60 sm:text-sm"
+    >
+      <Download className="size-4" aria-hidden />
+      {busy ? "A gerar ficheiro…" : label}
+    </button>
+  );
+}
+
 function ParticipantsTable({
   ownId,
+  isFormador,
   module,
   data,
 }: {
   ownId: string | null;
+  isFormador: boolean;
   module: ModuleConfig;
-  data: {
-    profiles: ProfileRow[];
-    progress: ProgressRow[];
-    quiz: QuizRow[];
-    responses: ResponseRow[];
-  };
+  data: Dataset;
 }) {
   const [sort, setSort] = useState<{ key: SortKey; asc: boolean }>({
     key: "email",
@@ -345,6 +393,22 @@ function ParticipantsTable({
 
   return (
     <section className="mt-8">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          {rows.length} participante{rows.length === 1 ? "" : "s"} (formadores excluídos)
+        </p>
+        <ExportButton
+          isFormador={isFormador}
+          label="Exportar resultados da turma"
+          onExport={() =>
+            exportClassWorkbook(
+              rows.map((r) => r.profile),
+              ALL_MODULES,
+              data,
+            )
+          }
+        />
+      </div>
       <div className="overflow-x-auto rounded-xl border border-border bg-card">
         <table className="w-full min-w-[38rem] border-collapse text-[0.95rem]">
           <thead className="border-b border-border bg-surface">
@@ -408,6 +472,9 @@ function ParticipantsTable({
                       <td colSpan={5} className="border-b border-border bg-surface px-4 py-6">
                         <ParticipantDetail
                           module={module}
+                          isFormador={isFormador}
+                          profile={row.profile}
+                          dataset={data}
                           email={row.profile.email}
                           progress={row.progress}
                           quiz={row.quiz}
@@ -430,12 +497,18 @@ function ParticipantsTable({
 
 function ParticipantDetail({
   module,
+  isFormador,
+  profile,
+  dataset,
   email,
   progress,
   quiz,
   responses,
 }: {
   module: ModuleConfig;
+  isFormador: boolean;
+  profile: ProfileRow;
+  dataset: Dataset;
   email: string;
   progress: ProgressRow[];
   quiz: QuizRow[];
@@ -455,9 +528,16 @@ function ParticipantDetail({
 
   return (
     <div className="space-y-8">
-      <p className="text-sm text-muted-foreground">
-        Detalhe de <span className="font-medium text-foreground">{email}</span>
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Detalhe de <span className="font-medium text-foreground">{email}</span>
+        </p>
+        <ExportButton
+          isFormador={isFormador}
+          label="Exportar resultados"
+          onExport={() => exportParticipantWorkbook(profile, ALL_MODULES, dataset)}
+        />
+      </div>
 
       <section>
         <h3 className="font-display text-lg">Estado das secções</h3>
