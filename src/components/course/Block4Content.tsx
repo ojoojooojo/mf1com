@@ -278,7 +278,7 @@ const CENARIO_OPCOES: MultiOption[] = [
   {
     text: "Administrativas / burocráticas",
     feedback:
-      "Não se aplica: nada indica que a organização tenha processado, atrasado ou intermediado esta informação. A comunicação é direta, presencial e em tempo real.",
+      "Não se aplica: nada indica que a organização tenha processado, atrasado ou intermediado esta informação. A comunicação é direta, cara a cara e em tempo real.",
   },
   {
     text: "Filtragem",

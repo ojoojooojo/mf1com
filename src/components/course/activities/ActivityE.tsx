@@ -94,7 +94,7 @@ export function ActivityE() {
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
               A sua reflexão continua guardada na sua conta e pode ser retomada ou reescrita
-              sempre que quiser. Se lhe fizer sentido, leve-a para a sessão síncrona: é material de
+              sempre que quiser. Se lhe fizer sentido, leve-a para a sessão síncrona online: é material de
               trabalho, não um exercício de arquivo.
             </p>
           </div>

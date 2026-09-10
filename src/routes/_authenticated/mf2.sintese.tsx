@@ -23,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/mf2/sintese")({
       {
         name: "description",
         content:
-          "Recapitulação dos quatro conteúdos do módulo, autoavaliação formativa e encerramento das horas assíncronas do MF2.",
+          "Recapitulação dos quatro conteúdos do módulo, autoavaliação formativa e encerramento das 8 horas assíncronas do MF2.",
       },
       { property: "og:title", content: "Síntese Final — MF2" },
       {
@@ -143,7 +143,7 @@ function Mf2SynthesisPage() {
         <SectionHeading
           eyebrow="Recapitulação"
           title="Os quatro conteúdos, em síntese"
-          lead="Uma ideia central por conteúdo — para reler antes da sessão síncrona."
+          lead="Uma ideia central por conteúdo — para reler antes da sessão síncrona online."
         />
         <ul className="grid gap-3 sm:grid-cols-2">
           {MF2_BLOCKS.map((block) => (
