@@ -17,7 +17,7 @@ export const Route = createFileRoute("/mf1/")({
       {
         name: "description",
         content:
-          "Módulo 1 da formação Gestão de Conflitos na Formação: 6 horas assíncronas sobre comunicação, assertividade, barreiras e escuta ativa para formadores.",
+          "Módulo 1 da formação Gestão de Conflitos na Formação: 8 horas assíncronas sobre comunicação, assertividade, barreiras e escuta ativa para formadores.",
       },
       { property: "og:title", content: "MF1 — Comunicação e Escuta Ativa na Formação" },
       {
