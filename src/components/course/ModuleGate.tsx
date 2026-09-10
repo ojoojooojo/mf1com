@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Lock } from "lucide-react";
-import { useIsFormador } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import {
   MODULE_SHORT_LABELS,
   moduleKeyFromPathname,
