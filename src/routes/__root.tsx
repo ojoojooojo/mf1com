@@ -81,11 +81,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MF1 — Comunicação e Escuta Ativa na Formação" },
+      { title: "Gestão de Conflitos na Formação | IEFP" },
       {
         name: "description",
         content:
-          "MOOC assíncrono para formadores: comunicação, assertividade, barreiras e escuta ativa.",
+          "Formação Pedagógica Contínua de Formadores: três módulos (MF1, MF2, MF3) sobre comunicação, dinâmicas de conflito e estratégias de resolução.",
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "pt_PT" },
