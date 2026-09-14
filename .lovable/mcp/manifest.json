@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "sdk_version": "2.0.4",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://jnvpyfhxiwymbgvlapdz.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "gest-o-de-conflitos-na-forma-o",
+      "version": "0.1.0",
+      "title": "Gestão de Conflitos na Formação"
+    },
+    "tools": [
+      {
+        "name": "list_modules",
+        "title": "Listar módulos e estado",
+        "description": "Lista os três módulos da formação (MF1, MF2, MF3) e indica se cada um está aberto ou fechado aos participantes.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "my_progress",
+        "title": "O meu progresso",
+        "description": "Devolve as secções concluídas pelo participante autenticado, por módulo (mf1, mf2, mf3).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "module_key": {
+              "description": "Filtrar por módulo.",
+              "type": "string",
+              "enum": [
+                "mf1",
+                "mf2",
+                "mf3"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "my_quiz_results",
+        "title": "As minhas respostas aos quizzes",
+        "description": "Devolve as respostas aos quizzes do participante autenticado, com o total de respostas certas por módulo.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "module_key": {
+              "description": "Filtrar por módulo.",
+              "type": "string",
+              "enum": [
+                "mf1",
+                "mf2",
+                "mf3"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "my_written_responses",
+        "title": "As minhas produções escritas",
+        "description": "Devolve as respostas escritas do participante autenticado às atividades e reflexões, por módulo.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "module_key": {
+              "description": "Filtrar por módulo.",
+              "type": "string",
+              "enum": [
+                "mf1",
+                "mf2",
+                "mf3"
+              ]
+            },
+            "activity_id": {
+              "description": "Filtrar por um id de atividade.",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "set_module_open",
+        "title": "Abrir ou fechar um módulo",
+        "description": "Abre ou fecha um módulo (mf1, mf2 ou mf3) aos participantes. Apenas formadores têm permissão.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "module_key": {
+              "type": "string",
+              "enum": [
+                "mf1",
+                "mf2",
+                "mf3"
+              ],
+              "description": "Módulo a alterar."
+            },
+            "is_open": {
+              "type": "boolean",
+              "description": "true abre o módulo, false fecha-o."
+            }
+          },
+          "required": [
+            "module_key",
+            "is_open"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
