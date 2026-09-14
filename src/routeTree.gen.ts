@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
 import { Route as Mf1IndexRouteImport } from './routes/mf1.index'
 import { Route as Mf1AuthRouteImport } from './routes/mf1.auth'
@@ -20,6 +22,7 @@ import { Route as Mf2IndexRouteImport } from './routes/mf2.index'
 import { Route as Mf2FontesRouteImport } from './routes/mf2.fontes'
 import { Route as Mf3IndexRouteImport } from './routes/mf3.index'
 import { Route as Mf3FontesRouteImport } from './routes/mf3.fontes'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedMf1SinteseRouteImport } from './routes/_authenticated/mf1.sintese'
 import { Route as AuthenticatedMf2SinteseRouteImport } from './routes/_authenticated/mf2.sintese'
 import { Route as AuthenticatedMf3SinteseRouteImport } from './routes/_authenticated/mf3.sintese'
@@ -42,11 +45,22 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedFormadorRoute = AuthenticatedFormadorRouteImport.update({
   id: '/formador',
   path: '/formador',
@@ -85,6 +99,11 @@ const Mf3IndexRoute = Mf3IndexRouteImport.update({
 const Mf3FontesRoute = Mf3FontesRouteImport.update({
   id: '/mf3/fontes',
   path: '/mf3/fontes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedMf1SinteseRoute = AuthenticatedMf1SinteseRouteImport.update({
@@ -159,7 +178,9 @@ const AuthenticatedMf3BlocosBlocoIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/mcp': typeof McpRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
   '/mf1/fontes': typeof Mf1FontesRoute
@@ -168,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/mf1/': typeof Mf1IndexRoute
   '/mf2/': typeof Mf2IndexRoute
   '/mf3/': typeof Mf3IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/mf1/sintese': typeof AuthenticatedMf1SinteseRoute
   '/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/mf3/sintese': typeof AuthenticatedMf3SinteseRoute
@@ -183,7 +205,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/mcp': typeof McpRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
   '/mf1/fontes': typeof Mf1FontesRoute
@@ -192,6 +216,7 @@ export interface FileRoutesByTo {
   '/mf1': typeof Mf1IndexRoute
   '/mf2': typeof Mf2IndexRoute
   '/mf3': typeof Mf3IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/mf1/sintese': typeof AuthenticatedMf1SinteseRoute
   '/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/mf3/sintese': typeof AuthenticatedMf3SinteseRoute
@@ -209,7 +234,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/mcp': typeof McpRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
   '/mf1/fontes': typeof Mf1FontesRoute
@@ -218,6 +245,7 @@ export interface FileRoutesById {
   '/mf1/': typeof Mf1IndexRoute
   '/mf2/': typeof Mf2IndexRoute
   '/mf3/': typeof Mf3IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/mf1/sintese': typeof AuthenticatedMf1SinteseRoute
   '/_authenticated/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/_authenticated/mf3/sintese': typeof AuthenticatedMf3SinteseRoute
@@ -235,7 +263,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/mcp'
     | '/reset-password'
+    | '/.well-known/oauth-protected-resource'
     | '/formador'
     | '/mf1/auth'
     | '/mf1/fontes'
@@ -244,6 +274,7 @@ export interface FileRouteTypes {
     | '/mf1/'
     | '/mf2/'
     | '/mf3/'
+    | '/.lovable/oauth/consent'
     | '/mf1/sintese'
     | '/mf2/sintese'
     | '/mf3/sintese'
@@ -259,7 +290,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/mcp'
     | '/reset-password'
+    | '/.well-known/oauth-protected-resource'
     | '/formador'
     | '/mf1/auth'
     | '/mf1/fontes'
@@ -268,6 +301,7 @@ export interface FileRouteTypes {
     | '/mf1'
     | '/mf2'
     | '/mf3'
+    | '/.lovable/oauth/consent'
     | '/mf1/sintese'
     | '/mf2/sintese'
     | '/mf3/sintese'
@@ -284,7 +318,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/mcp'
     | '/reset-password'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/formador'
     | '/mf1/auth'
     | '/mf1/fontes'
@@ -293,6 +329,7 @@ export interface FileRouteTypes {
     | '/mf1/'
     | '/mf2/'
     | '/mf3/'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/mf1/sintese'
     | '/_authenticated/mf2/sintese'
     | '/_authenticated/mf3/sintese'
@@ -310,7 +347,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  McpRoute: typeof McpRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   Mf1AuthRoute: typeof Mf1AuthRoute
   Mf1FontesRoute: typeof Mf1FontesRoute
   Mf2FontesRoute: typeof Mf2FontesRoute
@@ -318,6 +357,7 @@ export interface RootRouteChildren {
   Mf1IndexRoute: typeof Mf1IndexRoute
   Mf2IndexRoute: typeof Mf2IndexRoute
   Mf3IndexRoute: typeof Mf3IndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -336,11 +376,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/formador': {
@@ -397,6 +451,13 @@ declare module '@tanstack/react-router' {
       path: '/mf3/fontes'
       fullPath: '/mf3/fontes'
       preLoaderRoute: typeof Mf3FontesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/mf1/sintese': {
@@ -527,7 +588,10 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  McpRoute: McpRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   Mf1AuthRoute: Mf1AuthRoute,
   Mf1FontesRoute: Mf1FontesRoute,
   Mf2FontesRoute: Mf2FontesRoute,
@@ -535,6 +599,7 @@ const rootRouteChildren: RootRouteChildren = {
   Mf1IndexRoute: Mf1IndexRoute,
   Mf2IndexRoute: Mf2IndexRoute,
   Mf3IndexRoute: Mf3IndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

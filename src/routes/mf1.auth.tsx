@@ -54,8 +54,15 @@ function AuthPage() {
   const destination = safePath(redirect);
 
   useEffect(() => {
-    if (user) navigate({ to: destination, replace: true });
+    if (!user) return;
+    // Destinos com query string (ex.: pedido de autorização externo) não são navegáveis pelo router.
+    if (destination.includes("?")) {
+      window.location.replace(destination);
+      return;
+    }
+    navigate({ to: destination, replace: true });
   }, [user, destination, navigate]);
+
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
