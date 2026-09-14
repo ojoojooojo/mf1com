@@ -22,6 +22,7 @@ import { Route as Mf2IndexRouteImport } from './routes/mf2.index'
 import { Route as Mf2FontesRouteImport } from './routes/mf2.fontes'
 import { Route as Mf3IndexRouteImport } from './routes/mf3.index'
 import { Route as Mf3FontesRouteImport } from './routes/mf3.fontes'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedMf1SinteseRouteImport } from './routes/_authenticated/mf1.sintese'
 import { Route as AuthenticatedMf2SinteseRouteImport } from './routes/_authenticated/mf2.sintese'
 import { Route as AuthenticatedMf3SinteseRouteImport } from './routes/_authenticated/mf3.sintese'
@@ -98,6 +99,11 @@ const Mf3IndexRoute = Mf3IndexRouteImport.update({
 const Mf3FontesRoute = Mf3FontesRouteImport.update({
   id: '/mf3/fontes',
   path: '/mf3/fontes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedMf1SinteseRoute = AuthenticatedMf1SinteseRouteImport.update({
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/mf1/': typeof Mf1IndexRoute
   '/mf2/': typeof Mf2IndexRoute
   '/mf3/': typeof Mf3IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/mf1/sintese': typeof AuthenticatedMf1SinteseRoute
   '/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/mf3/sintese': typeof AuthenticatedMf3SinteseRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/mf1': typeof Mf1IndexRoute
   '/mf2': typeof Mf2IndexRoute
   '/mf3': typeof Mf3IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/mf1/sintese': typeof AuthenticatedMf1SinteseRoute
   '/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/mf3/sintese': typeof AuthenticatedMf3SinteseRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/mf1/': typeof Mf1IndexRoute
   '/mf2/': typeof Mf2IndexRoute
   '/mf3/': typeof Mf3IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/mf1/sintese': typeof AuthenticatedMf1SinteseRoute
   '/_authenticated/mf2/sintese': typeof AuthenticatedMf2SinteseRoute
   '/_authenticated/mf3/sintese': typeof AuthenticatedMf3SinteseRoute
@@ -265,6 +274,7 @@ export interface FileRouteTypes {
     | '/mf1/'
     | '/mf2/'
     | '/mf3/'
+    | '/.lovable/oauth/consent'
     | '/mf1/sintese'
     | '/mf2/sintese'
     | '/mf3/sintese'
@@ -291,6 +301,7 @@ export interface FileRouteTypes {
     | '/mf1'
     | '/mf2'
     | '/mf3'
+    | '/.lovable/oauth/consent'
     | '/mf1/sintese'
     | '/mf2/sintese'
     | '/mf3/sintese'
@@ -318,6 +329,7 @@ export interface FileRouteTypes {
     | '/mf1/'
     | '/mf2/'
     | '/mf3/'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/mf1/sintese'
     | '/_authenticated/mf2/sintese'
     | '/_authenticated/mf3/sintese'
@@ -345,6 +357,7 @@ export interface RootRouteChildren {
   Mf1IndexRoute: typeof Mf1IndexRoute
   Mf2IndexRoute: typeof Mf2IndexRoute
   Mf3IndexRoute: typeof Mf3IndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -438,6 +451,13 @@ declare module '@tanstack/react-router' {
       path: '/mf3/fontes'
       fullPath: '/mf3/fontes'
       preLoaderRoute: typeof Mf3FontesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/mf1/sintese': {
@@ -579,6 +599,7 @@ const rootRouteChildren: RootRouteChildren = {
   Mf1IndexRoute: Mf1IndexRoute,
   Mf2IndexRoute: Mf2IndexRoute,
   Mf3IndexRoute: Mf3IndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
