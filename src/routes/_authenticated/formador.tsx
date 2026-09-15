@@ -296,6 +296,9 @@ function TrainerPage() {
         </p>
       </header>
 
+      <ModuleAvailabilityPanel />
+
+
       <nav
         aria-label="Módulos"
         className="mt-6 inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1"
