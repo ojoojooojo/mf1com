@@ -18,6 +18,74 @@ import {
   type ResponseRow,
 } from "@/lib/export-xlsx";
 import { cn } from "@/lib/utils";
+import {
+  MODULE_KEYS,
+  MODULE_SHORT_LABELS,
+  useModuleStatuses,
+  useSetModuleOpen,
+} from "@/lib/module-status";
+import { Lock, LockOpen } from "lucide-react";
+
+/* ---------- Estado de abertura dos módulos ---------- */
+
+function ModuleAvailabilityPanel() {
+  const statuses = useModuleStatuses();
+  const setOpen = useSetModuleOpen();
+
+  return (
+    <section className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-8">
+      <h2 className="font-display text-xl leading-tight">Módulos do curso</h2>
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        Controle que módulos estão disponíveis aos participantes. Fechar um módulo não apaga nem
+        altera qualquer progresso, resposta a quizzes ou produção escrita.
+      </p>
+
+      {statuses.isLoading ? (
+        <p className="mt-4 text-sm text-muted-foreground">A carregar estado dos módulos…</p>
+      ) : (
+        <ul className="mt-5 space-y-3">
+          {MODULE_KEYS.map((key) => {
+            const isOpen = statuses.data?.[key].is_open ?? true;
+            const busy = setOpen.isPending && setOpen.variables?.moduleKey === key;
+            return (
+              <li
+                key={key}
+                className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold">{MODULE_SHORT_LABELS[key]}</p>
+                  <p
+                    className={cn(
+                      "mt-1 inline-flex items-center gap-1.5 text-xs font-semibold",
+                      isOpen ? "text-success" : "text-destructive",
+                    )}
+                  >
+                    {isOpen ? <LockOpen className="size-3.5" /> : <Lock className="size-3.5" />}
+                    {isOpen ? "Aberto" : "Fechado"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => setOpen.mutate({ moduleKey: key, isOpen: !isOpen })}
+                  aria-label={`${isOpen ? "Fechar" : "Abrir"} ${MODULE_SHORT_LABELS[key]}`}
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold transition-colors hover:bg-muted disabled:opacity-60 sm:text-sm"
+                >
+                  {busy ? "A guardar…" : isOpen ? "Fechar módulo" : "Abrir módulo"}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {setOpen.isError && (
+        <p className="mt-3 text-sm text-destructive">
+          Não foi possível alterar o estado do módulo. Tente novamente.
+        </p>
+      )}
+    </section>
+  );
+}
 
 
 export const Route = createFileRoute("/_authenticated/formador")({
