@@ -59,6 +59,7 @@ const MODULES = [
 ];
 
 function GlobalLanding() {
+  const statuses = useModuleStatuses();
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <main className="flex-1">
@@ -161,7 +162,8 @@ function GlobalLanding() {
                   </div>
                 )}
               </Fragment>
-            ))}
+              );
+            })}
           </div>
         </section>
       </main>
