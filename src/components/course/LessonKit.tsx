@@ -22,11 +22,16 @@ export function SectionHeading({
   lead?: string;
   className?: string;
 }) {
+  const centered = className?.includes("text-center");
   return (
     <header className={cn("mb-6", className)}>
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
       <h2 className="mt-1 font-display text-2xl leading-tight sm:text-3xl">{title}</h2>
-      {lead ? <p className="mt-3 max-w-2xl text-muted-foreground">{lead}</p> : null}
+      {lead ? (
+        <p className={cn("mt-3 max-w-2xl text-muted-foreground", centered && "mx-auto")}>
+          {lead}
+        </p>
+      ) : null}
     </header>
   );
 }
