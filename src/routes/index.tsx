@@ -76,7 +76,7 @@ function GlobalLanding() {
           <div className="mx-auto max-w-5xl text-center">
             <p className="eyebrow">Referencial de Formação Pedagógica Contínua de Formadores</p>
             <h1 className="mx-auto mt-4 max-w-4xl whitespace-pre-line font-display text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              {"GESTÃO DE CONFLITOS\nna Formação"}
+              {"GESTÃO DE CONFLITOS\nNA FORMAÇÃO"}
             </h1>
             <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 text-left shadow-soft sm:p-8">
             <p className="text-[1.025rem] leading-relaxed text-foreground">
