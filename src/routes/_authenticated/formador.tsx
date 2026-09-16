@@ -301,10 +301,10 @@ function TrainerPage() {
 
 
       <nav
-        aria-label="Módulos"
-        className="mt-6 inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1"
+        aria-label="Módulos e avaliação"
+        className="mt-6 flex flex-wrap items-center gap-1 rounded-xl border border-border bg-card p-1"
       >
-        {(["mf1", "mf2", "mf3"] as ModuleTab[]).map((key) => (
+        {(["mf1", "mf2", "mf3", "avaliacao"] as PanelTab[]).map((key) => (
           <button
             key={key}
             type="button"
@@ -316,12 +316,14 @@ function TrainerPage() {
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
-            {MODULES[key].label}
+            {key === "avaliacao" ? "Avaliação da Formação" : MODULES[key].label}
           </button>
         ))}
       </nav>
 
-      {dataQuery.isLoading ? (
+      {tab === "avaliacao" ? (
+        <EvaluationSummary isFormador={isFormador} />
+      ) : dataQuery.isLoading ? (
         <p className="mt-8 text-sm text-muted-foreground">A carregar dados…</p>
       ) : dataQuery.data ? (
         <ParticipantsTable
