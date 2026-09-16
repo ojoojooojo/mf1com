@@ -25,6 +25,14 @@ import {
   useSetModuleOpen,
 } from "@/lib/module-status";
 import { Lock, LockOpen } from "lucide-react";
+import { exportEvaluationWorkbook } from "@/lib/export-xlsx";
+import {
+  LIKERT_DIMENSIONS,
+  average,
+  npsOf,
+  useEvaluationResults,
+  type LikertKey,
+} from "@/lib/evaluation";
 
 /* ---------- Estado de abertura dos módulos ---------- */
 
