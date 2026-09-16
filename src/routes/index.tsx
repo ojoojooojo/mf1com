@@ -75,12 +75,9 @@ function GlobalLanding() {
         <section className="border-b border-border bg-surface px-4 pb-12 pt-16 sm:pb-16 sm:pt-24">
           <div className="mx-auto max-w-5xl text-center">
             <p className="eyebrow">Referencial de Formação Pedagógica Contínua de Formadores</p>
-            <h1 className="mx-auto mt-4 max-w-4xl font-display text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              GESTÃO DE CONFLITOS NA FORMAÇÃO
+            <h1 className="mx-auto mt-4 max-w-4xl whitespace-pre-line font-display text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              {"GESTÃO DE CONFLITOS\nna Formação"}
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-              Formação Pedagógica Contínua de Formadores
-            </p>
             <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 text-left shadow-soft sm:p-8">
             <p className="text-[1.025rem] leading-relaxed text-foreground">
               Esta formação insere-se no{" "}
