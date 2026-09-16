@@ -1,6 +1,14 @@
 import { Fragment } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowRight, Clock, Lock, Users } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowRight,
+  ClipboardList,
+  Clock,
+  Lock,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
 import { useModuleStatuses, type ModuleKey } from "@/lib/module-status";
 import logoIefp from "@/assets/logo-iefp-oficial.png";
