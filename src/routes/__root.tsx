@@ -126,7 +126,8 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const pathname = useLocation({ select: (l) => l.pathname });
-  const isHome = pathname === "/";
+  // A capa institucional e a avaliação final vivem fora do layout de módulo.
+  const isStandalone = pathname === "/" || pathname === "/avaliacao";
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
@@ -139,7 +140,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isHome ? (
+      {isStandalone ? (
         <Outlet />
       ) : (
         <CourseLayout>

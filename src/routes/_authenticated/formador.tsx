@@ -25,6 +25,14 @@ import {
   useSetModuleOpen,
 } from "@/lib/module-status";
 import { Lock, LockOpen } from "lucide-react";
+import { exportEvaluationWorkbook } from "@/lib/export-xlsx";
+import {
+  LIKERT_DIMENSIONS,
+  average,
+  npsOf,
+  useEvaluationResults,
+  type LikertKey,
+} from "@/lib/evaluation";
 
 /* ---------- Estado de abertura dos módulos ---------- */
 
@@ -87,6 +95,163 @@ function ModuleAvailabilityPanel() {
   );
 }
 
+/* ---------- Avaliação da formação (dados anónimos) ---------- */
+
+function Bar({ count, total }: { count: number; total: number }) {
+  const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+  return (
+    <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+      <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
+    </div>
+  );
+}
+
+function EvaluationSummary({ isFormador }: { isFormador: boolean }) {
+  const results = useEvaluationResults(isFormador);
+  const rows = results.data ?? [];
+  const total = rows.length;
+  const nps = npsOf(rows);
+
+  if (results.isLoading) {
+    return <p className="mt-8 text-sm text-muted-foreground">A carregar respostas da avaliação…</p>;
+  }
+
+  return (
+    <section className="mt-8 space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-sm text-muted-foreground">
+            {total} resposta{total === 1 ? "" : "s"} recebida{total === 1 ? "" : "s"} — sem qualquer
+            identificação do participante.
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            As respostas são guardadas numa tabela sem coluna de utilizador; o controlo de
+            «já respondeu» é privado de cada conta e não é consultável nesta página.
+          </p>
+        </div>
+        <ExportButton
+          isFormador={isFormador}
+          label="Exportar avaliação da formação"
+          onExport={() => exportEvaluationWorkbook(rows, LIKERT_DIMENSIONS)}
+        />
+      </div>
+
+      {total === 0 ? (
+        <p className="rounded-xl border border-border bg-surface p-5 text-sm text-muted-foreground">
+          Ainda não há respostas à avaliação da formação. A página fica disponível aos participantes
+          depois de concluírem a Síntese Final do MF3.
+        </p>
+      ) : (
+        <>
+          <div className="overflow-hidden rounded-xl border border-border bg-card">
+            <table className="w-full min-w-[34rem] border-collapse text-[0.95rem]">
+              <thead className="border-b border-border bg-surface">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Dimensão
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Média (1–5)
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Distribuição (1 → 5)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ...LIKERT_DIMENSIONS,
+                  { key: "satisfacao_global" as const, label: "Satisfação global" },
+                ].map((dim) => {
+                  const values = rows.map((r) =>
+                    dim.key === "satisfacao_global"
+                      ? r.satisfacao_global
+                      : r[dim.key as LikertKey],
+                  );
+                  const counts = [1, 2, 3, 4, 5].map((n) => values.filter((v) => v === n).length);
+                  return (
+                    <tr key={dim.key} className="border-b border-border last:border-0">
+                      <td className="px-4 py-3">{dim.label}</td>
+                      <td className="px-4 py-3 font-semibold tabular-nums">
+                        {average(values).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="space-y-1">
+                          {counts.map((count, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <span className="w-3 text-xs tabular-nums text-muted-foreground">
+                                {i + 1}
+                              </span>
+                              <Bar count={count} total={total} />
+                              <span className="w-8 text-right text-xs tabular-nums text-muted-foreground">
+                                {count}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-5">
+            <p className="eyebrow">Recomendação a outro formador (0–10)</p>
+            <p className="mt-1 font-display text-xl">
+              Média {nps.average.toFixed(1)} · NPS {nps.nps}
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Promotores (9–10): {nps.promoters} · Passivos (7–8): {nps.passives} · Detratores
+              (0–6): {nps.detractors}
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="font-display text-xl">Comentários (anónimos)</h2>
+            {rows.every(
+              (r) =>
+                !r.pontos_fortes.trim() && !r.pontos_melhorar.trim() && !r.sugestoes.trim(),
+            ) ? (
+              <p className="rounded-xl border border-border bg-surface p-5 text-sm text-muted-foreground">
+                Nenhuma resposta aberta preenchida até agora.
+              </p>
+            ) : (
+              rows.map((row, i) => {
+                if (!row.pontos_fortes.trim() && !row.pontos_melhorar.trim() && !row.sugestoes.trim())
+                  return null;
+                return (
+                  <article key={row.id} className="rounded-xl border border-border bg-card p-5">
+                    <p className="eyebrow">
+                      Resposta {i + 1} · {row.perfil ?? "perfil não indicado"}
+                    </p>
+                    {row.pontos_fortes.trim() && (
+                      <p className="mt-2 text-[0.95rem] leading-relaxed">
+                        <strong>Pontos fortes:</strong> {row.pontos_fortes}
+                      </p>
+                    )}
+                    {row.pontos_melhorar.trim() && (
+                      <p className="mt-2 text-[0.95rem] leading-relaxed">
+                        <strong>Pontos a melhorar:</strong> {row.pontos_melhorar}
+                      </p>
+                    )}
+                    {row.sugestoes.trim() && (
+                      <p className="mt-2 text-[0.95rem] leading-relaxed">
+                        <strong>Sugestões:</strong> {row.sugestoes}
+                      </p>
+                    )}
+                  </article>
+                );
+              })
+            )}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 
 export const Route = createFileRoute("/_authenticated/formador")({
   head: () => ({
@@ -112,6 +277,7 @@ export const Route = createFileRoute("/_authenticated/formador")({
 /* ---------- Tipos e utilitários ---------- */
 
 type ModuleTab = "mf1" | "mf2" | "mf3";
+type PanelTab = ModuleTab | "avaliacao";
 
 type ModuleConfig = {
   key: ModuleTab;
@@ -214,7 +380,7 @@ function formatDate(value: string) {
 /* ---------- Página ---------- */
 
 function TrainerPage() {
-  const [tab, setTab] = useState<ModuleTab>("mf1");
+  const [tab, setTab] = useState<PanelTab>("mf1");
   const roleQuery = useQuery({
     queryKey: ["formador", "role"],
     queryFn: async () => {
@@ -300,10 +466,10 @@ function TrainerPage() {
 
 
       <nav
-        aria-label="Módulos"
-        className="mt-6 inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1"
+        aria-label="Módulos e avaliação"
+        className="mt-6 flex flex-wrap items-center gap-1 rounded-xl border border-border bg-card p-1"
       >
-        {(["mf1", "mf2", "mf3"] as ModuleTab[]).map((key) => (
+        {(["mf1", "mf2", "mf3", "avaliacao"] as PanelTab[]).map((key) => (
           <button
             key={key}
             type="button"
@@ -315,12 +481,14 @@ function TrainerPage() {
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
-            {MODULES[key].label}
+            {key === "avaliacao" ? "Avaliação da Formação" : MODULES[key].label}
           </button>
         ))}
       </nav>
 
-      {dataQuery.isLoading ? (
+      {tab === "avaliacao" ? (
+        <EvaluationSummary isFormador={isFormador} />
+      ) : dataQuery.isLoading ? (
         <p className="mt-8 text-sm text-muted-foreground">A carregar dados…</p>
       ) : dataQuery.data ? (
         <ParticipantsTable

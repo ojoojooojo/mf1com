@@ -1,4 +1,5 @@
 import ExcelJS from "exceljs";
+import { average, npsOf, type EvaluationRow, type LikertKey } from "./evaluation";
 
 /* ---------- Tipos partilhados com o painel do formador ---------- */
 
@@ -450,4 +451,107 @@ export async function exportClassWorkbook(
   });
 
   await download(workbook, `resultados-turma-${fileStamp()}.xlsx`);
+}
+
+/* ---------- Exportação da avaliação da formação (anónima) ---------- */
+
+/** Nunca recebe identidades: a tabela de respostas não tem coluna de utilizador. */
+export async function exportEvaluationWorkbook(
+  rows: EvaluationRow[],
+  dimensions: { key: LikertKey; label: string }[],
+) {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = "Gestão de Conflitos na Formação";
+  workbook.created = new Date();
+
+  const mediasColumns: ColumnDef[] = [
+    { header: "Dimensão", width: 40 },
+    { header: "Respostas", width: 12, kind: "number" },
+    { header: "Média (1-5)", width: 14, kind: "number" },
+    { header: "1", width: 8, kind: "number" },
+    { header: "2", width: 8, kind: "number" },
+    { header: "3", width: 8, kind: "number" },
+    { header: "4", width: 8, kind: "number" },
+    { header: "5", width: 8, kind: "number" },
+  ];
+  const mediasRows = dimensions.map((d) => {
+    const values = rows.map((r) => r[d.key]);
+    const dist = [1, 2, 3, 4, 5].map((n) => values.filter((v) => v === n).length);
+    return [
+      d.label,
+      values.length,
+      values.length ? Math.round((average(values) + Number.EPSILON) * 100) / 100 : 0,
+      ...dist,
+    ] as (string | number | Date | null)[];
+  });
+  const satisfacao = rows.map((r) => r.satisfacao_global);
+  mediasRows.push([
+    "Satisfação global",
+    satisfacao.length,
+    satisfacao.length ? Math.round((average(satisfacao) + Number.EPSILON) * 100) / 100 : 0,
+    ...[1, 2, 3, 4, 5].map((n) => satisfacao.filter((v) => v === n).length),
+  ]);
+
+  const medias = addSheet(workbook, "AVALIACAO (MEDIAS)", mediasColumns, mediasRows);
+  const nps = npsOf(rows);
+  medias.addRow([]);
+  medias.addRow(["Recomendação (0-10) — média", rows.length, Math.round((nps.average + Number.EPSILON) * 100) / 100]);
+  medias.addRow(["Promotores (9-10)", nps.promoters]);
+  medias.addRow(["Passivos (7-8)", nps.passives]);
+  medias.addRow(["Detratores (0-6)", nps.detractors]);
+  medias.addRow(["NPS", nps.nps]);
+  medias.spliceRows(1, 0, [`Total de respostas anónimas: ${rows.length}`], [
+    `Exportado em: ${new Date().toLocaleString("pt-PT")}`,
+  ]);
+  medias.getRow(1).font = { bold: true, name: "Arial", size: 12 };
+  medias.getRow(2).font = { name: "Arial", size: 10 };
+  medias.views = [{ state: "frozen", ySplit: 3 }];
+
+  const detailColumns: ColumnDef[] = [
+    { header: "Resposta n.º", width: 13, kind: "number" },
+    { header: "Data", width: 20, kind: "date" },
+    { header: "Perfil (opcional)", width: 34 },
+    ...dimensions.map((d) => ({ header: d.label, width: 26, kind: "number" as ColumnKind })),
+    { header: "Recomendação (0-10)", width: 20, kind: "number" },
+    { header: "Satisfação global (1-5)", width: 22, kind: "number" },
+  ];
+  const detailRows = rows.map(
+    (r, i) =>
+      [
+        i + 1,
+        toDate(r.created_at),
+        r.perfil ?? "(não indicado)",
+        ...dimensions.map((d) => r[d.key]),
+        r.recomendacao,
+        r.satisfacao_global,
+      ] as (string | number | Date | null)[],
+  );
+  addSheet(workbook, "AVALIACAO (RESPOSTAS)", detailColumns, detailRows, { autofilter: true });
+
+  const commentColumns: ColumnDef[] = [
+    { header: "Resposta n.º", width: 13, kind: "number" },
+    { header: "Data", width: 20, kind: "date" },
+    { header: "Pontos fortes", width: 60, kind: "long" },
+    { header: "Pontos a melhorar", width: 60, kind: "long" },
+    { header: "Sugestões", width: 60, kind: "long" },
+  ];
+  const commentRows = rows
+    .map((r, i) => ({ r, i }))
+    .filter(
+      ({ r }) =>
+        r.pontos_fortes.trim() || r.pontos_melhorar.trim() || r.sugestoes.trim(),
+    )
+    .map(
+      ({ r, i }) =>
+        [
+          i + 1,
+          toDate(r.created_at),
+          r.pontos_fortes,
+          r.pontos_melhorar,
+          r.sugestoes,
+        ] as (string | number | Date | null)[],
+    );
+  addSheet(workbook, "COMENTARIOS", commentColumns, commentRows, { autofilter: true });
+
+  await download(workbook, `avaliacao-formacao-${fileStamp()}.xlsx`);
 }
