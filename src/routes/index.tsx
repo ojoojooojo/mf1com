@@ -1,7 +1,8 @@
 import { Fragment } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowRight, Clock, Users } from "lucide-react";
+import { ArrowDown, ArrowRight, Clock, Lock, Users } from "lucide-react";
 import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
+import { useModuleStatuses, type ModuleKey } from "@/lib/module-status";
 import logoIefp from "@/assets/logo-iefp-oficial.png";
 import logosCofinanciamento from "@/assets/logos-cofinanciamento.jpg";
 
@@ -58,6 +59,7 @@ const MODULES = [
 ];
 
 function GlobalLanding() {
+  const statuses = useModuleStatuses();
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <main className="flex-1">
@@ -99,17 +101,22 @@ function GlobalLanding() {
           />
 
           <div className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:items-stretch sm:justify-center">
-            {MODULES.map((mod, idx) => (
-              <Fragment key={mod.code}>
-                <Link
-                  to={mod.to}
-                  className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-80"
-                >
+            {MODULES.map((mod, idx) => {
+              const moduleKey = mod.to.slice(1) as ModuleKey;
+              const isClosed = statuses.data ? !statuses.data[moduleKey].is_open : false;
+              const cardBody = (
+                <>
                   <div className="flex items-start justify-between gap-3">
                     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground">
                       {mod.code}
                     </span>
-                    <ArrowRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    {isClosed ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+                        <Lock className="size-3.5" aria-hidden /> Indisponível
+                      </span>
+                    ) : (
+                      <ArrowRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    )}
                   </div>
                   <h3 className="mt-5 font-display text-xl leading-tight">{mod.title}</h3>
                   <p className="mt-2 flex-1 text-[0.975rem] leading-relaxed text-muted-foreground">
@@ -123,7 +130,31 @@ function GlobalLanding() {
                       <Users className="size-4" /> 6h assíncronas + 4h síncronas online
                     </span>
                   </div>
+                  {isClosed && (
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      Este módulo está temporariamente fechado pelo formador. Todo o percurso já
+                      realizado fica guardado.
+                    </p>
+                  )}
+                </>
+              );
+              return (
+              <Fragment key={mod.code}>
+                {isClosed ? (
+                  <div
+                    aria-disabled="true"
+                    className="flex flex-col rounded-2xl border border-dashed border-border bg-card p-6 opacity-70 shadow-soft sm:w-80"
+                  >
+                    {cardBody}
+                  </div>
+                ) : (
+                <Link
+                  to={mod.to}
+                  className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-80"
+                >
+                  {cardBody}
                 </Link>
+                )}
                 {idx < MODULES.length - 1 && (
                   <div className="flex shrink-0 items-center justify-center py-2 text-primary sm:px-2 sm:py-0">
                     <ArrowDown className="size-6 sm:hidden" />
@@ -131,7 +162,8 @@ function GlobalLanding() {
                   </div>
                 )}
               </Fragment>
-            ))}
+              );
+            })}
           </div>
         </section>
       </main>
