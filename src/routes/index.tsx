@@ -164,6 +164,39 @@ function GlobalLanding() {
               </Fragment>
               );
             })}
+
+            <div className="flex shrink-0 items-center justify-center py-2 text-primary sm:px-2 sm:py-0">
+              <ArrowDown className="size-6 sm:hidden" />
+              <ArrowRight className="hidden size-6 sm:block" />
+            </div>
+
+            <Link
+              to="/avaliacao"
+              className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-80"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-sm font-semibold text-accent-foreground">
+                  <ClipboardList className="size-5" aria-hidden />
+                </span>
+                <ArrowRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+              </div>
+              <h3 className="mt-5 font-display text-xl leading-tight">Avaliação da Formação</h3>
+              <p className="mt-2 flex-1 text-[0.975rem] leading-relaxed text-muted-foreground">
+                Último passo do percurso: um questionário anónimo sobre objetivos, conteúdos,
+                metodologia, sessões síncronas online, formador, organização e materiais.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck className="size-4" /> Respostas anónimas
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock className="size-4" /> 5 minutos
+                </span>
+              </div>
+              <p className="mt-4 text-sm text-muted-foreground">
+                Disponível depois de concluir o MF3.
+              </p>
+            </Link>
           </div>
         </section>
       </main>

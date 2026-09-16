@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AuthenticatedAvaliacaoRouteImport } from './routes/_authenticated/avaliacao'
 import { Route as AuthenticatedFormadorRouteImport } from './routes/_authenticated/formador'
 import { Route as Mf1IndexRouteImport } from './routes/mf1.index'
 import { Route as Mf1AuthRouteImport } from './routes/mf1.auth'
@@ -61,6 +62,11 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAvaliacaoRoute = AuthenticatedAvaliacaoRouteImport.update({
+  id: '/avaliacao',
+  path: '/avaliacao',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFormadorRoute = AuthenticatedFormadorRouteImport.update({
   id: '/formador',
   path: '/formador',
@@ -181,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/reset-password': typeof ResetPasswordRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/avaliacao': typeof AuthenticatedAvaliacaoRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
   '/mf1/fontes': typeof Mf1FontesRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/reset-password': typeof ResetPasswordRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/avaliacao': typeof AuthenticatedAvaliacaoRoute
   '/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
   '/mf1/fontes': typeof Mf1FontesRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/reset-password': typeof ResetPasswordRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/_authenticated/avaliacao': typeof AuthenticatedAvaliacaoRoute
   '/_authenticated/formador': typeof AuthenticatedFormadorRoute
   '/mf1/auth': typeof Mf1AuthRoute
   '/mf1/fontes': typeof Mf1FontesRoute
@@ -266,6 +275,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/reset-password'
     | '/.well-known/oauth-protected-resource'
+    | '/avaliacao'
     | '/formador'
     | '/mf1/auth'
     | '/mf1/fontes'
@@ -293,6 +303,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/reset-password'
     | '/.well-known/oauth-protected-resource'
+    | '/avaliacao'
     | '/formador'
     | '/mf1/auth'
     | '/mf1/fontes'
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/reset-password'
     | '/.well-known/oauth-protected-resource'
+    | '/_authenticated/avaliacao'
     | '/_authenticated/formador'
     | '/mf1/auth'
     | '/mf1/fontes'
@@ -396,6 +408,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/.well-known/oauth-protected-resource'
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/avaliacao': {
+      id: '/_authenticated/avaliacao'
+      path: '/avaliacao'
+      fullPath: '/avaliacao'
+      preLoaderRoute: typeof AuthenticatedAvaliacaoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/formador': {
       id: '/_authenticated/formador'
@@ -548,6 +567,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAvaliacaoRoute: typeof AuthenticatedAvaliacaoRoute
   AuthenticatedFormadorRoute: typeof AuthenticatedFormadorRoute
   AuthenticatedMf1SinteseRoute: typeof AuthenticatedMf1SinteseRoute
   AuthenticatedMf2SinteseRoute: typeof AuthenticatedMf2SinteseRoute
@@ -564,6 +584,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAvaliacaoRoute: AuthenticatedAvaliacaoRoute,
   AuthenticatedFormadorRoute: AuthenticatedFormadorRoute,
   AuthenticatedMf1SinteseRoute: AuthenticatedMf1SinteseRoute,
   AuthenticatedMf2SinteseRoute: AuthenticatedMf2SinteseRoute,
