@@ -112,6 +112,7 @@ export const Route = createFileRoute("/_authenticated/formador")({
 /* ---------- Tipos e utilitários ---------- */
 
 type ModuleTab = "mf1" | "mf2" | "mf3";
+type PanelTab = ModuleTab | "avaliacao";
 
 type ModuleConfig = {
   key: ModuleTab;
@@ -214,7 +215,7 @@ function formatDate(value: string) {
 /* ---------- Página ---------- */
 
 function TrainerPage() {
-  const [tab, setTab] = useState<ModuleTab>("mf1");
+  const [tab, setTab] = useState<PanelTab>("mf1");
   const roleQuery = useQuery({
     queryKey: ["formador", "role"],
     queryFn: async () => {
