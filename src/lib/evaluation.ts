@@ -165,7 +165,7 @@ export function useSubmitEvaluation() {
   return useMutation({
     mutationFn: async (draft: EvaluationDraft) => {
       const { error } = await supabase.rpc("submit_course_evaluation", {
-        _perfil: draft.perfil || null,
+        _perfil: draft.perfil,
         _escala_objetivos: draft.escala_objetivos as number,
         _escala_conteudos: draft.escala_conteudos as number,
         _escala_metodologia: draft.escala_metodologia as number,
