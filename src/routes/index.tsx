@@ -96,7 +96,7 @@ function GlobalLanding() {
           <SectionHeading
             eyebrow="Estrutura modular"
             title="Três módulos de 10 horas"
-            lead="Percorra os módulos na sequência recomendada: MF1 → MF2 → MF3."
+            lead="Cada módulo fica disponível no início da calendarização assíncrona do respetivo MF."
             className="text-center"
           />
 
