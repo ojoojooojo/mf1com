@@ -124,8 +124,21 @@ export function useEvaluationAccess() {
     queryFn: async (): Promise<EvaluationAccess> => {
       const { data: auth } = await supabase.auth.getUser();
       const userId = auth.user?.id;
+      const switchRow = await supabase
+        .from("module_status")
+        .select("is_open")
+        .eq("module_key", "avaliacao")
+        .maybeSingle();
+      // Sem registo, a avaliação considera-se aberta (comportamento automático original).
+      const evaluationOpen = switchRow.data?.is_open ?? true;
       if (!userId) {
-        return { signedIn: false, isFormador: false, completedMf3: false, submitted: false };
+        return {
+          signedIn: false,
+          isFormador: false,
+          completedMf3: false,
+          submitted: false,
+          evaluationOpen,
+        };
       }
       const [profile, submission, progress] = await Promise.all([
         supabase.from("profiles").select("role").eq("id", userId).maybeSingle(),
@@ -146,6 +159,7 @@ export function useEvaluationAccess() {
         isFormador: profile.data?.role === "formador",
         completedMf3: progress.data?.status === "concluido",
         submitted: Boolean(submission.data),
+        evaluationOpen,
       };
     },
   });
