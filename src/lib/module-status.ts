@@ -3,16 +3,22 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type ModuleKey = "mf1" | "mf2" | "mf3";
 
+/** Chaves controláveis pelo formador: os três módulos e a Avaliação da Formação. */
+export type ControlKey = ModuleKey | "avaliacao";
+
 export const MODULE_KEYS: ModuleKey[] = ["mf1", "mf2", "mf3"];
 
-export const MODULE_SHORT_LABELS: Record<ModuleKey, string> = {
+export const EVALUATION_KEY = "avaliacao" as const;
+
+export const MODULE_SHORT_LABELS: Record<ControlKey, string> = {
   mf1: "MF1 — Comunicação e Escuta Ativa",
   mf2: "MF2 — Dinâmicas e Causas do Conflito",
   mf3: "MF3 — Estratégias de Resolução de Conflitos",
+  avaliacao: "Avaliação da Formação",
 };
 
 export type ModuleStatusRow = {
-  module_key: ModuleKey;
+  module_key: ControlKey;
   is_open: boolean;
   updated_at: string;
   updated_by: string | null;
