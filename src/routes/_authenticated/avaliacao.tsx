@@ -334,6 +334,13 @@ function EvaluationPage() {
           <p className="mt-3 rounded-xl border border-primary/25 bg-primary-soft p-4 text-[0.925rem] leading-relaxed">
             Pré-visualização de formador: pode percorrer o questionário como o veem os participantes,
             mas a submissão está reservada aos formandos.
+            {data?.evaluationOpen === false && (
+              <>
+                {" "}
+                Neste momento a avaliação está <strong>fechada</strong> aos participantes — só o
+                formador a vê.
+              </>
+            )}
           </p>
         )}
       </section>
