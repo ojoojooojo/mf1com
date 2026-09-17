@@ -193,6 +193,35 @@ function EvaluationPage() {
     );
   }
 
+  if (!isFormador && data?.evaluationOpen === false) {
+    return (
+      <Shell>
+        <Notice
+          icon={<Lock className="size-4" />}
+          eyebrow="Avaliação temporariamente fechada"
+          title="A avaliação da formação está fechada pelo formador"
+        >
+          <p>
+            Não é um erro: o formador fechou temporariamente o preenchimento da avaliação. Voltará a
+            estar disponível quando o indicar.
+          </p>
+          <p>
+            Todo o seu percurso e as respostas já submetidas mantêm-se guardados, sem qualquer
+            alteração.
+          </p>
+          <div className="pt-1">
+            <Link
+              to="/"
+              className="inline-flex items-center rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
+            >
+              Voltar à página inicial
+            </Link>
+          </div>
+        </Notice>
+      </Shell>
+    );
+  }
+
   if (!isFormador && !data?.completedMf3) {
     return (
       <Shell>
