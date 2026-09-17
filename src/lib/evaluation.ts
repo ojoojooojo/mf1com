@@ -113,6 +113,8 @@ export type EvaluationAccess = {
   isFormador: boolean;
   completedMf3: boolean;
   submitted: boolean;
+  /** Interruptor manual do formador (entrada "avaliacao" em module_status). */
+  evaluationOpen: boolean;
 };
 
 /** Elegibilidade e estado de submissão da conta autenticada. */
