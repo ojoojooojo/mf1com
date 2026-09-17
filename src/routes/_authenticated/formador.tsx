@@ -19,10 +19,12 @@ import {
 } from "@/lib/export-xlsx";
 import { cn } from "@/lib/utils";
 import {
+  EVALUATION_KEY,
   MODULE_KEYS,
   MODULE_SHORT_LABELS,
   useModuleStatuses,
   useSetModuleOpen,
+  type ControlKey,
 } from "@/lib/module-status";
 import { Lock, LockOpen } from "lucide-react";
 import { exportEvaluationWorkbook } from "@/lib/export-xlsx";
