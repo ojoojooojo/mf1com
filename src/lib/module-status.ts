@@ -34,37 +34,39 @@ export function moduleKeyFromPathname(pathname: string): ModuleKey | null {
 
 export const moduleStatusQueryKey = ["module-status"] as const;
 
-/** Estado (aberto/fechado) dos três módulos. Leitura pública — funciona sem sessão. */
+/** Estado (aberto/fechado) dos módulos e da avaliação. Leitura pública — funciona sem sessão. */
 export function useModuleStatuses() {
   return useQuery({
     queryKey: moduleStatusQueryKey,
     staleTime: 30_000,
-    queryFn: async (): Promise<Record<ModuleKey, ModuleStatusRow>> => {
+    queryFn: async (): Promise<Record<ControlKey, ModuleStatusRow>> => {
       const { data, error } = await supabase
         .from("module_status")
         .select("module_key, is_open, updated_at, updated_by");
       if (error) throw error;
-      const fallback = (key: ModuleKey): ModuleStatusRow => ({
-        module_key: key,
-        is_open: true,
-        updated_at: new Date(0).toISOString(),
-        updated_by: null,
-      });
       const rows = (data ?? []) as ModuleStatusRow[];
+      const pick = (key: ControlKey): ModuleStatusRow =>
+        rows.find((r) => r.module_key === key) ?? {
+          module_key: key,
+          is_open: true,
+          updated_at: new Date(0).toISOString(),
+          updated_by: null,
+        };
       return {
-        mf1: rows.find((r) => r.module_key === "mf1") ?? fallback("mf1"),
-        mf2: rows.find((r) => r.module_key === "mf2") ?? fallback("mf2"),
-        mf3: rows.find((r) => r.module_key === "mf3") ?? fallback("mf3"),
+        mf1: pick("mf1"),
+        mf2: pick("mf2"),
+        mf3: pick("mf3"),
+        avaliacao: pick("avaliacao"),
       };
     },
   });
 }
 
-/** Abrir/fechar um módulo. A escrita só é aceite a formadores (garantido por RLS). */
+/** Abrir/fechar um módulo ou a avaliação. A escrita só é aceite a formadores (garantido por RLS). */
 export function useSetModuleOpen() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ moduleKey, isOpen }: { moduleKey: ModuleKey; isOpen: boolean }) => {
+    mutationFn: async ({ moduleKey, isOpen }: { moduleKey: ControlKey; isOpen: boolean }) => {
       const { data: auth } = await supabase.auth.getUser();
       const { error } = await supabase
         .from("module_status")
