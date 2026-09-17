@@ -72,7 +72,13 @@ function ModuleAvailabilityPanel() {
                     )}
                   >
                     {isOpen ? <LockOpen className="size-3.5" /> : <Lock className="size-3.5" />}
-                    {isOpen ? "Aberta" : "Fechada"}
+                    {isEvaluation
+                      ? isOpen
+                        ? "Aberta"
+                        : "Fechada"
+                      : isOpen
+                        ? "Aberto"
+                        : "Fechado"}
                   </p>
                   {isEvaluation && (
                     <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
