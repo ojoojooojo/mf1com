@@ -167,6 +167,8 @@ export function useEvaluationAccess() {
 
 export function evaluationErrorMessage(message: string): string {
   if (message.includes("JA_RESPONDEU")) return "Esta conta já submeteu a avaliação da formação.";
+  if (message.includes("AVALIACAO_FECHADA"))
+    return "A avaliação da formação está, neste momento, fechada pelo formador. As respostas já submetidas mantêm-se guardadas.";
   if (message.includes("MF3_INCOMPLETO"))
     return "É necessário concluir a Síntese Final do MF3 antes de avaliar a formação.";
   if (message.includes("SO_FORMANDOS"))
