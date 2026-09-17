@@ -126,6 +126,40 @@ function QuizSummary() {
   );
 }
 
+/** Passo final do percurso: abre automaticamente quando a Síntese Final do MF3 fica concluída. */
+function EvaluationCallout() {
+  const { isCompleted, hydrated } = useProgress();
+  if (!hydrated) return null;
+
+  if (!isCompleted("mf3-sintese")) {
+    return (
+      <ContentCard title="Passo final: Avaliação da Formação">
+        <p>
+          Marque esta Síntese Final como concluída (botão no fim da página) para desbloquear a{" "}
+          <strong>Avaliação da Formação</strong> — o último passo do percurso MF1 → MF2 → MF3 →
+          Avaliação. É anónima e leva cerca de 5 minutos.
+        </p>
+      </ContentCard>
+    );
+  }
+
+  return (
+    <ContentCard tone="success" title="Avaliação da Formação disponível">
+      <p>
+        Concluiu a Síntese Final do MF3. A <strong>Avaliação da Formação</strong> está agora
+        disponível para a sua conta e continua acessível sempre que voltar. É anónima e leva cerca de
+        5 minutos.
+      </p>
+      <Link
+        to="/avaliacao"
+        className="mt-3 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
+      >
+        Avaliar a formação <ArrowRight className="size-4" />
+      </Link>
+    </ContentCard>
+  );
+}
+
 function Mf3SynthesisPage() {
   useVisit("mf3-sintese");
 
