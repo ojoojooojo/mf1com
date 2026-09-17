@@ -54,7 +54,8 @@ function ModuleAvailabilityPanel() {
         <p className="mt-4 text-sm text-muted-foreground">A carregar estado dos módulos…</p>
       ) : (
         <ul className="mt-5 space-y-3">
-          {MODULE_KEYS.map((key) => {
+          {([...MODULE_KEYS, EVALUATION_KEY] as ControlKey[]).map((key) => {
+            const isEvaluation = key === EVALUATION_KEY;
             const isOpen = statuses.data?.[key].is_open ?? true;
             const busy = setOpen.isPending && setOpen.variables?.moduleKey === key;
             return (
