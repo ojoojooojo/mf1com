@@ -244,6 +244,25 @@ function AuthPage() {
             <p className="rounded-lg bg-primary-soft px-3 py-2 text-sm text-foreground">{notice}</p>
           ) : null}
 
+          {mode === "criar" ? (
+            <div className="rounded-lg border border-border bg-surface p-3 text-xs leading-relaxed text-muted-foreground">
+              <p className="font-semibold text-foreground">Proteção de dados</p>
+              <p className="mt-1">
+                Ao criar conta, recolhemos o seu <strong>email</strong> e, ao longo do curso, o{" "}
+                <strong>progresso</strong>, as <strong>respostas às atividades</strong> e os{" "}
+                <strong>resultados dos quizzes</strong>. Estes dados servem apenas para o
+                acompanhamento pedagógico do seu percurso nesta formação, no âmbito do Referencial de
+                Formação Pedagógica Contínua de Formadores do IEFP, I.P. — Centro de Formação de
+                Portalegre, e são consultáveis pelo formador do curso.
+              </p>
+              <p className="mt-1">
+                A <strong>avaliação final da formação é anónima</strong>: as respostas não ficam
+                associadas à sua conta. Pode, em qualquer momento, reiniciar o seu percurso, o que
+                apaga o progresso e as respostas guardadas.
+              </p>
+            </div>
+          ) : null}
+
           <button
             type="submit"
             disabled={busy || sessionLoading}

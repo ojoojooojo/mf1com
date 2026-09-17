@@ -93,6 +93,17 @@ function GlobalLanding() {
               <strong>18 horas assíncronas</strong> e <strong>12 horas síncronas online</strong>.
             </p>
             </div>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/mf1/auth"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                <LogIn className="size-4" aria-hidden /> Entrar / Criar conta
+              </Link>
+              <p className="text-xs text-muted-foreground">
+                O acesso à plataforma está sempre disponível, independentemente dos módulos abertos.
+              </p>
+            </div>
           </div>
         </section>
 
