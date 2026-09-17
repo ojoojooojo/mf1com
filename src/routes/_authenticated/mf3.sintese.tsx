@@ -333,6 +333,8 @@ function Mf3SynthesisPage() {
       </section>
 
       <div className="mt-8 space-y-4">
+        <EvaluationCallout />
+
         <ContentCard tone="primary" title="Módulo concluído — o que falta">
           <p>
             As <strong>6 horas assíncronas</strong> do MF3 —{" "}

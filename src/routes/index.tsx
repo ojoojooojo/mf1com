@@ -6,6 +6,7 @@ import {
   ClipboardList,
   Clock,
   Lock,
+  LogIn,
   ShieldCheck,
   Users,
 } from "lucide-react";
