@@ -227,6 +227,7 @@ export type Database = {
     }
     Functions: {
       can_write_module: { Args: { _id: string }; Returns: boolean }
+      evaluation_is_open: { Args: never; Returns: boolean }
       has_completed_mf3: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {

@@ -19,10 +19,12 @@ import {
 } from "@/lib/export-xlsx";
 import { cn } from "@/lib/utils";
 import {
+  EVALUATION_KEY,
   MODULE_KEYS,
   MODULE_SHORT_LABELS,
   useModuleStatuses,
   useSetModuleOpen,
+  type ControlKey,
 } from "@/lib/module-status";
 import { Lock, LockOpen } from "lucide-react";
 import { exportEvaluationWorkbook } from "@/lib/export-xlsx";
@@ -52,7 +54,8 @@ function ModuleAvailabilityPanel() {
         <p className="mt-4 text-sm text-muted-foreground">A carregar estado dos módulos…</p>
       ) : (
         <ul className="mt-5 space-y-3">
-          {MODULE_KEYS.map((key) => {
+          {([...MODULE_KEYS, EVALUATION_KEY] as ControlKey[]).map((key) => {
+            const isEvaluation = key === EVALUATION_KEY;
             const isOpen = statuses.data?.[key].is_open ?? true;
             const busy = setOpen.isPending && setOpen.variables?.moduleKey === key;
             return (
@@ -69,8 +72,21 @@ function ModuleAvailabilityPanel() {
                     )}
                   >
                     {isOpen ? <LockOpen className="size-3.5" /> : <Lock className="size-3.5" />}
-                    {isOpen ? "Aberto" : "Fechado"}
+                    {isEvaluation
+                      ? isOpen
+                        ? "Aberta"
+                        : "Fechada"
+                      : isOpen
+                        ? "Aberto"
+                        : "Fechado"}
                   </p>
+                  {isEvaluation && (
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                      Fecho manual do 4.º passo. Aberta por omissão: abre automaticamente a cada
+                      participante que conclua o MF3. Fechar impede novas submissões, mas não apaga
+                      respostas já registadas nem o seu acesso aos resultados.
+                    </p>
+                  )}
                 </div>
                 <button
                   type="button"
@@ -79,7 +95,15 @@ function ModuleAvailabilityPanel() {
                   aria-label={`${isOpen ? "Fechar" : "Abrir"} ${MODULE_SHORT_LABELS[key]}`}
                   className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold transition-colors hover:bg-muted disabled:opacity-60 sm:text-sm"
                 >
-                  {busy ? "A guardar…" : isOpen ? "Fechar módulo" : "Abrir módulo"}
+                  {busy
+                    ? "A guardar…"
+                    : isEvaluation
+                      ? isOpen
+                        ? "Fechar avaliação"
+                        : "Abrir avaliação"
+                      : isOpen
+                        ? "Fechar módulo"
+                        : "Abrir módulo"}
                 </button>
               </li>
             );

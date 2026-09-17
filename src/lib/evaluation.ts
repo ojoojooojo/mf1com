@@ -113,6 +113,8 @@ export type EvaluationAccess = {
   isFormador: boolean;
   completedMf3: boolean;
   submitted: boolean;
+  /** Interruptor manual do formador (entrada "avaliacao" em module_status). */
+  evaluationOpen: boolean;
 };
 
 /** Elegibilidade e estado de submissão da conta autenticada. */
@@ -122,8 +124,21 @@ export function useEvaluationAccess() {
     queryFn: async (): Promise<EvaluationAccess> => {
       const { data: auth } = await supabase.auth.getUser();
       const userId = auth.user?.id;
+      const switchRow = await supabase
+        .from("module_status")
+        .select("is_open")
+        .eq("module_key", "avaliacao")
+        .maybeSingle();
+      // Sem registo, a avaliação considera-se aberta (comportamento automático original).
+      const evaluationOpen = switchRow.data?.is_open ?? true;
       if (!userId) {
-        return { signedIn: false, isFormador: false, completedMf3: false, submitted: false };
+        return {
+          signedIn: false,
+          isFormador: false,
+          completedMf3: false,
+          submitted: false,
+          evaluationOpen,
+        };
       }
       const [profile, submission, progress] = await Promise.all([
         supabase.from("profiles").select("role").eq("id", userId).maybeSingle(),
@@ -144,6 +159,7 @@ export function useEvaluationAccess() {
         isFormador: profile.data?.role === "formador",
         completedMf3: progress.data?.status === "concluido",
         submitted: Boolean(submission.data),
+        evaluationOpen,
       };
     },
   });
@@ -151,6 +167,8 @@ export function useEvaluationAccess() {
 
 export function evaluationErrorMessage(message: string): string {
   if (message.includes("JA_RESPONDEU")) return "Esta conta já submeteu a avaliação da formação.";
+  if (message.includes("AVALIACAO_FECHADA"))
+    return "A avaliação da formação está, neste momento, fechada pelo formador. As respostas já submetidas mantêm-se guardadas.";
   if (message.includes("MF3_INCOMPLETO"))
     return "É necessário concluir a Síntese Final do MF3 antes de avaliar a formação.";
   if (message.includes("SO_FORMANDOS"))
