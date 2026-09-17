@@ -72,8 +72,15 @@ function ModuleAvailabilityPanel() {
                     )}
                   >
                     {isOpen ? <LockOpen className="size-3.5" /> : <Lock className="size-3.5" />}
-                    {isOpen ? "Aberto" : "Fechado"}
+                    {isOpen ? "Aberta" : "Fechada"}
                   </p>
+                  {isEvaluation && (
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                      Fecho manual do 4.º passo. Aberta por omissão: abre automaticamente a cada
+                      participante que conclua o MF3. Fechar impede novas submissões, mas não apaga
+                      respostas já registadas nem o seu acesso aos resultados.
+                    </p>
+                  )}
                 </div>
                 <button
                   type="button"
@@ -82,7 +89,15 @@ function ModuleAvailabilityPanel() {
                   aria-label={`${isOpen ? "Fechar" : "Abrir"} ${MODULE_SHORT_LABELS[key]}`}
                   className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold transition-colors hover:bg-muted disabled:opacity-60 sm:text-sm"
                 >
-                  {busy ? "A guardar…" : isOpen ? "Fechar módulo" : "Abrir módulo"}
+                  {busy
+                    ? "A guardar…"
+                    : isEvaluation
+                      ? isOpen
+                        ? "Fechar avaliação"
+                        : "Abrir avaliação"
+                      : isOpen
+                        ? "Fechar módulo"
+                        : "Abrir módulo"}
                 </button>
               </li>
             );
