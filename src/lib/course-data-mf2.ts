@@ -19,7 +19,7 @@ export const MF2_BLOCKS: Block[] = [
     title: "Definição e Tipos de Conflito",
     subtitle:
       "O que é (e o que não é) um conflito, e como distinguir os seus tipos por nível e por conteúdo.",
-    minutes: 85,
+    minutes: 60,
     focus: ["O que é conflito", "Tipos por nível", "Tipos por conteúdo"],
   },
   {
@@ -29,7 +29,7 @@ export const MF2_BLOCKS: Block[] = [
     title: "Estratégias e Abordagens Fundamentais na Gestão de Conflitos",
     subtitle:
       "Como agir antes, durante e depois de um conflito, sem o transformar numa disputa pessoal.",
-    minutes: 85,
+    minutes: 60,
     focus: ["Prevenção", "Intervenção", "Pós-resolução"],
   },
   {
@@ -38,7 +38,7 @@ export const MF2_BLOCKS: Block[] = [
     shortTitle: "Causas, Custos e Consequências",
     title: "Causas, Custos e Consequências dos Conflitos",
     subtitle: "De onde vêm os conflitos, o que custam e o que deixam atrás de si.",
-    minutes: 95,
+    minutes: 65,
     focus: ["Causas", "Custos", "Consequências"],
   },
   {
@@ -48,7 +48,7 @@ export const MF2_BLOCKS: Block[] = [
     title: "O Impacto do Conflito nos Indivíduos e o Papel do Indivíduo no Conflito",
     subtitle:
       "O que o conflito faz a cada pessoa — e o que cada pessoa faz ao conflito, sem sempre o notar.",
-    minutes: 85,
+    minutes: 60,
     focus: ["Impacto psicológico", "Perceção", "Papel individual"],
   },
 ];
@@ -61,7 +61,7 @@ export const MF2_ACTIVITIES: Activity[] = [
     kind: "Análise de situação",
     description:
       "Identificar partes envolvidas, tipo de conflito, objeto do desacordo, interesses/perceções e sinais de conflito num cenário de formação.",
-    minutes: 25,
+    minutes: 20,
   },
   {
     id: "2",
@@ -70,7 +70,7 @@ export const MF2_ACTIVITIES: Activity[] = [
     kind: "Análise causal",
     description:
       "Distinguir causas, fatores precipitantes, fatores de escalada, fatores contextuais e interpretações numa situação complexa.",
-    minutes: 25,
+    minutes: 20,
   },
   {
     id: "3",
@@ -79,7 +79,7 @@ export const MF2_ACTIVITIES: Activity[] = [
     kind: "Análise de impacto",
     description:
       "Identificar consequências de um conflito para os indivíduos, o grupo, a aprendizagem e a relação pedagógica.",
-    minutes: 22,
+    minutes: 15,
   },
   {
     id: "4",
@@ -88,7 +88,7 @@ export const MF2_ACTIVITIES: Activity[] = [
     kind: "Reflexão aplicada",
     description:
       "Analisar como o comportamento de cada interveniente contribui para a origem, manutenção, escalada ou prevenção de um conflito.",
-    minutes: 24,
+    minutes: 20,
   },
   {
     id: "5",
@@ -97,7 +97,7 @@ export const MF2_ACTIVITIES: Activity[] = [
     kind: "Identificação e planeamento",
     description:
       "Reconhecer sinais precoces de conflito numa situação de formação e propor medidas preventivas concretas.",
-    minutes: 24,
+    minutes: 15,
   },
 ];
 
@@ -108,7 +108,7 @@ export const MF2_STOPS: Stop[] = [
     shortTitle: "Abertura",
     title: "Abertura do módulo",
     subtitle: "Enquadramento, objetivos e percurso.",
-    minutes: 15,
+    minutes: 10,
     to: "/mf2",
   },
   ...MF2_BLOCKS.map<Stop>((b) => ({
@@ -126,8 +126,8 @@ export const MF2_STOPS: Stop[] = [
     kind: "atividades",
     shortTitle: "Aprendizagem Ativa",
     title: "Aprendizagem Ativa",
-    subtitle: "5 atividades práticas de aplicação (~2h).",
-    minutes: 120,
+    subtitle: "5 atividades práticas de aplicação (~1h30).",
+    minutes: 90,
     to: "/mf2/atividades",
   },
   {
@@ -136,7 +136,7 @@ export const MF2_STOPS: Stop[] = [
     shortTitle: "Síntese Final",
     title: "Síntese Final",
     subtitle: "Recapitulação, autoavaliação e encerramento.",
-    minutes: 20,
+    minutes: 15,
     to: "/mf2/sintese",
   },
 ];

@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/mf1/atividades/")({
       { property: "og:title", content: "Aprendizagem Ativa — MF1" },
       {
         property: "og:description",
-        content: "5 atividades substanciais (~2h) de aplicação prática das competências do módulo.",
+        content: "5 atividades substanciais (~1h30) de aplicação prática das competências do módulo.",
       },
     ],
   }),
@@ -32,7 +32,7 @@ function ActivitiesHub() {
   return (
     <article>
       <header className="rounded-2xl border border-accent/30 bg-accent-soft p-6 shadow-soft sm:p-8">
-        <p className="eyebrow text-accent">Aprendizagem Ativa · ~2h</p>
+        <p className="eyebrow text-accent">Aprendizagem Ativa · ~1h30</p>
         <h1 className="mt-2 font-display text-3xl leading-tight">
           Cinco atividades para aplicar o que aprendeu
         </h1>
