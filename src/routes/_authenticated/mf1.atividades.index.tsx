@@ -32,7 +32,7 @@ function ActivitiesHub() {
   return (
     <article>
       <header className="rounded-2xl border border-accent/30 bg-accent-soft p-6 shadow-soft sm:p-8">
-        <p className="eyebrow text-accent">Aprendizagem Ativa · ~2h</p>
+        <p className="eyebrow text-accent">Aprendizagem Ativa · ~1h30</p>
         <h1 className="mt-2 font-display text-3xl leading-tight">
           Cinco atividades para aplicar o que aprendeu
         </h1>

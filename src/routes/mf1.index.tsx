@@ -130,7 +130,7 @@ function Landing() {
         </ContentCard>
         <ContentCard title="Estrutura" icon={<Target className="size-4 text-primary" />}>
           <p className="text-muted-foreground">
-            Cerca de 4h de aprendizagem de conteúdos em 5 blocos + 2h de aprendizagem ativa com 5
+            Cerca de 4h de aprendizagem de conteúdos em 5 blocos + 1h30 de aprendizagem ativa com 5
             atividades práticas.
           </p>
         </ContentCard>
