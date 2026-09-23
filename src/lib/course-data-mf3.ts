@@ -20,7 +20,7 @@ export const MF3_BLOCKS: Block[] = [
     title: "Inteligência Emocional e Autoconhecimento",
     subtitle:
       "As cinco dimensões da inteligência emocional e a diferença entre reagir por impulso e responder com intenção.",
-    minutes: 75,
+    minutes: 50,
     focus: ["Conceito de IE", "Autoconsciência", "Autorregulação"],
   },
   {
@@ -30,7 +30,7 @@ export const MF3_BLOCKS: Block[] = [
     title: "Empatia e Competências Sociais",
     subtitle:
       "Compreender a perspetiva do outro e traduzir essa compreensão em competências sociais na sala de formação.",
-    minutes: 70,
+    minutes: 45,
     focus: ["Empatia cognitiva", "Empatia emocional", "Gestão de grupos"],
   },
   {
@@ -40,7 +40,7 @@ export const MF3_BLOCKS: Block[] = [
     title: "Gestão de Conflitos e Prevenção",
     subtitle:
       "Os cinco estilos de gestão de conflito e quando cada um ajuda — ou agrava — a situação.",
-    minutes: 80,
+    minutes: 55,
     focus: ["Thomas-Kilmann", "Adequação do estilo", "Prevenção ativa"],
   },
   {
@@ -50,7 +50,7 @@ export const MF3_BLOCKS: Block[] = [
     title: "Stress e Conflito",
     subtitle:
       "Como o stress deturpa a perceção e a resposta ao conflito, e o que fazer antes de intervir.",
-    minutes: 70,
+    minutes: 45,
     focus: ["Avaliação primária", "Avaliação secundária", "Autorregulação"],
   },
   {
@@ -60,7 +60,7 @@ export const MF3_BLOCKS: Block[] = [
     title: "Ferramentas de Resolução de Conflitos: a Roda de Mapeamento do Conflito",
     subtitle:
       "Quatro quadrantes — Problema, Pessoas, Processo, Contexto — para analisar um conflito de forma estruturada.",
-    minutes: 75,
+    minutes: 50,
     focus: ["Os 4 quadrantes", "Questões de diagnóstico", "Aplicação prática"],
   },
 ];
@@ -73,7 +73,7 @@ export const MF3_ACTIVITIES: Activity[] = [
     kind: "Autoavaliação estruturada",
     description:
       "Avaliar-se nas cinco dimensões da inteligência emocional aplicadas à prática de formador e identificar uma dimensão a desenvolver, com um compromisso concreto.",
-    minutes: 20,
+    minutes: 15,
   },
   {
     id: "2",
@@ -82,7 +82,7 @@ export const MF3_ACTIVITIES: Activity[] = [
     kind: "Decisão e consequência",
     description:
       "Escolher um dos cinco estilos de gestão de conflito num cenário de formação, ver a consequência dessa escolha e enfrentar uma variante em que a mesma estratégia já não serve.",
-    minutes: 25,
+    minutes: 20,
   },
   {
     id: "3",
@@ -91,7 +91,7 @@ export const MF3_ACTIVITIES: Activity[] = [
     kind: "Decisão e consequência",
     description:
       "Reconhecer sinais de stress em si mesmo e comparar as consequências de reagir de imediato ou de aplicar uma técnica de autorregulação antes de intervir.",
-    minutes: 20,
+    minutes: 15,
   },
   {
     id: "4",
@@ -100,7 +100,7 @@ export const MF3_ACTIVITIES: Activity[] = [
     kind: "Aplicação de ferramenta",
     description:
       "Mapear um conflito — fornecido ou da sua própria prática — nos quatro quadrantes da Roda, registando uma análise escrita por quadrante.",
-    minutes: 35,
+    minutes: 25,
   },
   {
     id: "5",
@@ -109,7 +109,7 @@ export const MF3_ACTIVITIES: Activity[] = [
     kind: "Planeamento aplicado",
     description:
       "Construir um plano com 2 a 3 estratégias concretas de prevenção de conflitos para o seu próprio contexto de formação, com justificação.",
-    minutes: 20,
+    minutes: 15,
   },
 ];
 
@@ -120,7 +120,7 @@ export const MF3_STOPS: Stop[] = [
     shortTitle: "Abertura",
     title: "Abertura do módulo",
     subtitle: "Enquadramento, objetivos e percurso.",
-    minutes: 15,
+    minutes: 10,
     to: "/mf3",
   },
   ...MF3_BLOCKS.map<Stop>((b) => ({
@@ -138,8 +138,8 @@ export const MF3_STOPS: Stop[] = [
     kind: "atividades",
     shortTitle: "Aprendizagem Ativa",
     title: "Aprendizagem Ativa",
-    subtitle: "5 atividades práticas de aplicação (~2h).",
-    minutes: 120,
+    subtitle: "5 atividades práticas de aplicação (~1h30).",
+    minutes: 90,
     to: "/mf3/atividades",
   },
   {
@@ -148,7 +148,7 @@ export const MF3_STOPS: Stop[] = [
     shortTitle: "Síntese Final",
     title: "Síntese Final",
     subtitle: "Recapitulação, autoavaliação e encerramento.",
-    minutes: 20,
+    minutes: 15,
     to: "/mf3/sintese",
   },
 ];
