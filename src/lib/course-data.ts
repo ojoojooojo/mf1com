@@ -40,7 +40,7 @@ export const BLOCKS: Block[] = [
     title: "Definição e Funções da Comunicação",
     subtitle:
       "O que é, afinal, comunicar — e que funções cumpre a comunicação numa sala de formação.",
-    minutes: 65,
+    minutes: 45,
     focus: [
       "Conceito de comunicação",
       "Funções da comunicação",
@@ -54,7 +54,7 @@ export const BLOCKS: Block[] = [
     title: "Componentes Psicológicos e Elementos do Processo de Comunicação",
     subtitle:
       "Emissor, mensagem, canal, recetor, ruído, feedback — e o que se passa por dentro de cada pessoa.",
-    minutes: 75,
+    minutes: 50,
     focus: [
       "Elementos do processo comunicacional",
       "Componentes psicológicos",
@@ -68,7 +68,7 @@ export const BLOCKS: Block[] = [
     title: "Comunicação Assertiva",
     subtitle:
       "Dizer o que precisa de ser dito, com clareza e respeito, sem agressividade nem fuga.",
-    minutes: 75,
+    minutes: 50,
     focus: ["Estilos de comunicação", "Técnicas assertivas", "Feedback construtivo"],
   },
   {
@@ -78,7 +78,7 @@ export const BLOCKS: Block[] = [
     title: "Barreiras à Comunicação",
     subtitle:
       "Preconceitos, filtros, ruído e má interpretação: onde a mensagem se perde e como recuperá-la.",
-    minutes: 65,
+    minutes: 45,
     focus: ["Tipos de barreiras", "Preconceitos e juízos", "Estratégias de superação"],
   },
   {
@@ -88,7 +88,7 @@ export const BLOCKS: Block[] = [
     title: "Escuta Ativa e Empatia",
     subtitle:
       "A competência que desarma conflitos: escutar para compreender antes de responder.",
-    minutes: 80,
+    minutes: 55,
     focus: ["Níveis de escuta", "Técnicas de escuta ativa", "Empatia e consciência emocional"],
   },
 ];
@@ -110,7 +110,7 @@ export const ACTIVITIES: Activity[] = [
     kind: "Análise de caso",
     description:
       "Analisar um cenário simulado de sala de formação em quatro partes — elementos do processo, barreiras, sinais não-verbais e primeira ação — e comparar com uma análise de referência comentada.",
-    minutes: 25,
+    minutes: 20,
   },
   {
     id: "b",
@@ -119,7 +119,7 @@ export const ACTIVITIES: Activity[] = [
     kind: "Reescrita assertiva",
     description:
       "Reescrever três frases agressivas ou passivas com a técnica D.E.E. e comparar cada versão com uma reformulação de referência anotada.",
-    minutes: 25,
+    minutes: 20,
   },
   {
     id: "c",
@@ -128,7 +128,7 @@ export const ACTIVITIES: Activity[] = [
     kind: "Decisão fundamentada",
     description:
       "Escolher e justificar uma resposta a um formando que desafia publicamente a competência do formador — e ler o comentário pedagógico às quatro opções.",
-    minutes: 20,
+    minutes: 15,
   },
   {
     id: "d",
@@ -137,7 +137,7 @@ export const ACTIVITIES: Activity[] = [
     kind: "Observação guiada",
     description:
       "Ler um diálogo anotado com tom, postura, olhar e distância, assinalar os momentos de incongruência entre verbal e não-verbal e registar o que observou.",
-    minutes: 25,
+    minutes: 20,
   },
   {
     id: "e",
@@ -157,7 +157,7 @@ export const STOPS: Stop[] = [
     shortTitle: "Abertura",
     title: "Abertura do módulo",
     subtitle: "Enquadramento, objetivos e percurso.",
-    minutes: 15,
+    minutes: 10,
     to: "/mf1",
   },
   ...BLOCKS.map<Stop>((b) => ({
@@ -175,8 +175,8 @@ export const STOPS: Stop[] = [
     kind: "atividades",
     shortTitle: "Aprendizagem Ativa",
     title: "Aprendizagem Ativa",
-    subtitle: "5 atividades práticas de aplicação (~2h).",
-    minutes: 120,
+    subtitle: "5 atividades práticas de aplicação (~1h30).",
+    minutes: 90,
     to: "/mf1/atividades",
   },
   {
@@ -185,7 +185,7 @@ export const STOPS: Stop[] = [
     shortTitle: "Síntese Final",
     title: "Síntese Final",
     subtitle: "Recapitulação, autoavaliação e encerramento.",
-    minutes: 25,
+    minutes: 15,
     to: "/mf1/sintese",
   },
 ];
