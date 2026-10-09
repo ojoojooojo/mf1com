@@ -22,9 +22,14 @@ export function renderErrorPage(): string {
       <p>Something went wrong on our end. You can try refreshing or head back home.</p>
       <div class="actions">
         <button class="primary" onclick="location.reload()">Try again</button>
-        <a class="secondary" href="/">Go home</a>
+        <a class="secondary" id="home-link" href="/">Go home</a>
       </div>
     </div>
+    <script>
+      // Dentro de um módulo, "Go home" aponta para a abertura desse módulo, nunca para "/".
+      var m = location.pathname.match(/^\\/(mf[123])(\\/|$)/);
+      if (m) document.getElementById("home-link").setAttribute("href", "/" + m[1]);
+    </script>
   </body>
 </html>`;
 }

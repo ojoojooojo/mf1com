@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,14 +26,9 @@ function ClosedModule({ moduleKey }: { moduleKey: ModuleKey }) {
         Todo o seu percurso está guardado — progresso, respostas aos quizzes e produções escritas
         mantêm-se intactos e voltam a estar disponíveis quando o módulo reabrir.
       </p>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Link
-          to="/"
-          className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
-        >
-          Voltar à página inicial da formação
-        </Link>
-      </div>
+      <p className="mt-6 text-sm font-medium text-foreground">
+        Volte a esta página quando o formador abrir o módulo.
+      </p>
     </section>
   );
 }

@@ -4,6 +4,9 @@ import { Loader2, LogIn, UserPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { authErrorMessage, ensureProfile, useAuth } from "@/lib/auth";
 import { MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
+import { MF2_MODULE_CODE, MF2_MODULE_TITLE } from "@/lib/course-data-mf2";
+import { MF3_MODULE_CODE, MF3_MODULE_TITLE } from "@/lib/course-data-mf3";
+import { moduleKeyFromPathname, type ModuleKey } from "@/lib/module-status";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/mf1/auth")({
@@ -15,16 +18,16 @@ export const Route = createFileRoute("/mf1/auth")({
 
   head: () => ({
     meta: [
-      { title: "Entrar ou criar conta — MF1 Comunicação e Escuta Ativa" },
+      { title: "Entrar ou criar conta — Gestão de Conflitos na Formação" },
       {
         name: "description",
         content:
-          "Acesso ao MOOC MF1 — Comunicação e Escuta Ativa na Formação: entre na sua conta ou registe-se para guardar o seu progresso.",
+          "Acesso ao MOOC Gestão de Conflitos na Formação: entre na sua conta ou registe-se para guardar o seu progresso no módulo.",
       },
-      { property: "og:title", content: "Entrar no MOOC MF1 — Comunicação e Escuta Ativa" },
+      { property: "og:title", content: "Entrar no MOOC — Gestão de Conflitos na Formação" },
       {
         property: "og:description",
-        content: "Entre ou crie conta para acompanhar o seu percurso no módulo MF1.",
+        content: "Entre ou crie conta para acompanhar o seu percurso no módulo.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -34,9 +37,27 @@ export const Route = createFileRoute("/mf1/auth")({
 
 type Mode = "entrar" | "criar" | "recuperar";
 
-function safePath(value: string | undefined): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/mf1/blocos/1";
-  if (value.startsWith("/mf1/auth")) return "/mf1/blocos/1";
+type ModuleMeta = {
+  code: string;
+  title: string;
+  home: "/mf1" | "/mf2" | "/mf3";
+};
+
+const MODULE_META: Record<ModuleKey, ModuleMeta> = {
+  mf1: { code: MODULE_CODE, title: MODULE_TITLE, home: "/mf1" },
+  mf2: { code: MF2_MODULE_CODE, title: MF2_MODULE_TITLE, home: "/mf2" },
+  mf3: { code: MF3_MODULE_CODE, title: MF3_MODULE_TITLE, home: "/mf3" },
+};
+
+/** Módulo de onde o formando veio, deduzido do redirect; por omissão, MF1. */
+function moduleFromRedirect(redirect: string | undefined): ModuleMeta {
+  const key = (redirect && moduleKeyFromPathname(redirect)) || "mf1";
+  return MODULE_META[key];
+}
+
+function safePath(value: string | undefined, fallback: string): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return fallback;
+  if (value.startsWith("/mf1/auth")) return fallback;
   return value;
 }
 
@@ -51,7 +72,8 @@ function AuthPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const destination = safePath(redirect);
+  const moduleMeta = moduleFromRedirect(redirect);
+  const destination = safePath(redirect, moduleMeta.home);
 
   useEffect(() => {
     if (!user) return;
@@ -101,7 +123,7 @@ function AuthPage() {
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: email.trim(),
           password,
-          options: { emailRedirectTo: window.location.origin },
+          options: { emailRedirectTo: `${window.location.origin}${moduleMeta.home}` },
         });
         if (signUpError) {
           setError(authErrorMessage(signUpError.message));
@@ -135,8 +157,8 @@ function AuthPage() {
 
   return (
     <div className="mx-auto max-w-md">
-      <p className="eyebrow">{MODULE_CODE} · Formação de Formadores</p>
-      <h1 className="mt-2 font-display text-3xl leading-tight">{MODULE_TITLE}</h1>
+      <p className="eyebrow">{moduleMeta.code} · Formação de Formadores</p>
+      <h1 className="mt-2 font-display text-3xl leading-tight">{moduleMeta.title}</h1>
       <p className="mt-3 text-muted-foreground">
         Para percorrer os blocos e as atividades precisa de uma conta — é assim que o seu progresso
         e as suas respostas ficam guardados.
@@ -252,8 +274,8 @@ function AuthPage() {
                 <strong>progresso</strong>, as <strong>respostas às atividades</strong> e os{" "}
                 <strong>resultados dos quizzes</strong>. Estes dados servem apenas para o
                 acompanhamento pedagógico do seu percurso nesta formação, no âmbito do Referencial de
-                Formação Pedagógica Contínua de Formadores do IEFP, I.P. — Centro de Formação de
-                Portalegre, e são consultáveis pelo formador do curso.
+                Formação Pedagógica Contínua de Formadores do IEFP, I.P. — Serviço de Formação
+                Profissional de Portalegre, e são consultáveis pelo formador do curso.
               </p>
               <p className="mt-1">
                 A <strong>avaliação final da formação é anónima</strong>: as respostas não ficam
@@ -285,7 +307,10 @@ function AuthPage() {
       </div>
 
       <p className="mt-4 text-sm text-muted-foreground">
-        <Link to="/mf1" className="font-medium text-primary underline-offset-4 hover:underline">
+        <Link
+          to={moduleMeta.home}
+          className="font-medium text-primary underline-offset-4 hover:underline"
+        >
           Voltar à apresentação do módulo
         </Link>
       </p>

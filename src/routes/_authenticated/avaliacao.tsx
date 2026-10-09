@@ -48,10 +48,10 @@ function Shell({ children }: { children: React.ReactNode }) {
             <p className="truncate font-display text-base font-semibold">Avaliação da Formação</p>
           </div>
           <Link
-            to="/"
+            to="/mf3"
             className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted"
           >
-            <ArrowLeft className="size-3.5" /> Página inicial
+            <ArrowLeft className="size-3.5" /> Voltar ao MF3
           </Link>
         </div>
       </header>
@@ -211,10 +211,10 @@ function EvaluationPage() {
           </p>
           <div className="pt-1">
             <Link
-              to="/"
+              to="/mf3"
               className="inline-flex items-center rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
             >
-              Voltar à página inicial
+              Voltar ao MF3
             </Link>
           </div>
         </Notice>
@@ -247,10 +247,10 @@ function EvaluationPage() {
               Ir para a Síntese Final do MF3 <ArrowRight className="size-4" />
             </Link>
             <Link
-              to="/"
+              to="/mf3"
               className="inline-flex items-center rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
             >
-              Voltar à página inicial
+              Voltar ao MF3
             </Link>
           </div>
         </Notice>
@@ -273,10 +273,10 @@ function EvaluationPage() {
           <p>Com isto, concluiu o percurso completo: MF1 → MF2 → MF3 → Avaliação.</p>
           <div className="pt-1">
             <Link
-              to="/"
+              to="/mf3"
               className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
             >
-              Voltar à página inicial da formação
+              Voltar ao MF3
             </Link>
           </div>
         </Notice>

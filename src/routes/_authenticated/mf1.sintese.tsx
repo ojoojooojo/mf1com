@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { BLOCK_QUIZ_IDS, BLOCKS, LEARNING_OBJECTIVES } from "@/lib/course-data";
 import { ContentCard, Quiz, ReflectionPrompt, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { useIsFormador } from "@/lib/auth";
 import { useProgress } from "@/lib/progress";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -116,6 +117,7 @@ function QuizSummary() {
 
 function SynthesisPage() {
   useVisit("sintese");
+  const isFormador = useIsFormador();
 
   return (
     <article>
@@ -323,12 +325,14 @@ function SynthesisPage() {
             daqui: como as questões de comunicação que agora reconhece se transformam (ou não) em
             conflitos, e como reconhecer os seus sinais precoces.»
           </p>
-          <Link
-            to="/mf2"
-            className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-          >
-            Continuar para o MF2 <ArrowRight className="size-4" />
-          </Link>
+          {isFormador ? (
+            <Link
+              to="/mf2"
+              className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+            >
+              Continuar para o MF2 <ArrowRight className="size-4" />
+            </Link>
+          ) : null}
           <p className="mt-3">
             <Link
               to="/mf1/atividades"

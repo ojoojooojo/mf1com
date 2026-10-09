@@ -21,11 +21,19 @@ import {
 import { cn } from "@/lib/utils";
 
 
-/** Deteta o módulo ativo pelo pathname: /mf3* → MF3, /mf2* → MF2, tudo o resto → MF1. */
+/** Deteta o módulo ativo pelo pathname: /mf3* → MF3, /mf2* → MF2, tudo o resto → MF1.
+ *  Na página de autenticação (/mf1/auth) usa o redirect para refletir o módulo de origem. */
 function useModule() {
   const pathname = useLocation({ select: (l) => l.pathname });
-  const isMf3 = pathname.startsWith("/mf3");
-  const isMf2 = !isMf3 && pathname.startsWith("/mf2");
+  const redirectParam = useLocation({
+    select: (l) => (l.search as Record<string, unknown>)["redirect"],
+  });
+  const effectivePath =
+    pathname.startsWith("/mf1/auth") && typeof redirectParam === "string"
+      ? redirectParam
+      : pathname;
+  const isMf3 = effectivePath.startsWith("/mf3");
+  const isMf2 = !isMf3 && effectivePath.startsWith("/mf2");
   return {
     pathname,
     isMf2,
@@ -174,6 +182,8 @@ function SessionMenu() {
   const isFormador = useIsFormador();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const { home } = useModule();
 
   if (loading) return null;
 
@@ -181,6 +191,7 @@ function SessionMenu() {
     return (
       <Link
         to="/mf1/auth"
+        search={pathname.startsWith("/mf1/auth") ? {} : { redirect: pathname }}
         className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
       >
         <LogIn className="size-3.5" /> Entrar
@@ -207,7 +218,7 @@ function SessionMenu() {
           await queryClient.cancelQueries();
           queryClient.clear();
           await signOut();
-          navigate({ to: "/mf1/auth", replace: true });
+          navigate({ to: "/mf1/auth", search: { redirect: home }, replace: true });
         }}
         className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
       >
@@ -250,6 +261,7 @@ export function CourseLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const { pathname, code, title, home, sources, isMf2, isMf3 } = useModule();
   const { percent, hydrated } = useProgress();
+  const isFormador = useIsFormador();
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -271,7 +283,7 @@ export function CourseLayout({ children }: { children: ReactNode }) {
             </span>
             <span className="block truncate font-display text-base font-semibold">{title}</span>
           </Link>
-          <ModuleSwitch isMf2={isMf2} isMf3={isMf3} />
+          {isFormador ? <ModuleSwitch isMf2={isMf2} isMf3={isMf3} /> : null}
           <div className="ml-auto hidden items-center gap-3 sm:flex">
             <div className="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
               <div
