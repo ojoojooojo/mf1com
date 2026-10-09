@@ -174,6 +174,8 @@ function SessionMenu() {
   const isFormador = useIsFormador();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const { home } = useModule();
 
   if (loading) return null;
 
@@ -181,6 +183,7 @@ function SessionMenu() {
     return (
       <Link
         to="/mf1/auth"
+        search={pathname.startsWith("/mf1/auth") ? {} : { redirect: pathname }}
         className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
       >
         <LogIn className="size-3.5" /> Entrar
@@ -207,7 +210,7 @@ function SessionMenu() {
           await queryClient.cancelQueries();
           queryClient.clear();
           await signOut();
-          navigate({ to: "/mf1/auth", replace: true });
+          navigate({ to: "/mf1/auth", search: { redirect: home }, replace: true });
         }}
         className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted"
       >
