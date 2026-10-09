@@ -37,9 +37,27 @@ export const Route = createFileRoute("/mf1/auth")({
 
 type Mode = "entrar" | "criar" | "recuperar";
 
-function safePath(value: string | undefined): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/mf1/blocos/1";
-  if (value.startsWith("/mf1/auth")) return "/mf1/blocos/1";
+type ModuleMeta = {
+  code: string;
+  title: string;
+  home: "/mf1" | "/mf2" | "/mf3";
+};
+
+const MODULE_META: Record<ModuleKey, ModuleMeta> = {
+  mf1: { code: MODULE_CODE, title: MODULE_TITLE, home: "/mf1" },
+  mf2: { code: MF2_MODULE_CODE, title: MF2_MODULE_TITLE, home: "/mf2" },
+  mf3: { code: MF3_MODULE_CODE, title: MF3_MODULE_TITLE, home: "/mf3" },
+};
+
+/** Módulo de onde o formando veio, deduzido do redirect; por omissão, MF1. */
+function moduleFromRedirect(redirect: string | undefined): ModuleMeta {
+  const key = (redirect && moduleKeyFromPathname(redirect)) || "mf1";
+  return MODULE_META[key];
+}
+
+function safePath(value: string | undefined, fallback: string): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return fallback;
+  if (value.startsWith("/mf1/auth")) return fallback;
   return value;
 }
 
@@ -54,7 +72,8 @@ function AuthPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const destination = safePath(redirect);
+  const moduleMeta = moduleFromRedirect(redirect);
+  const destination = safePath(redirect, moduleMeta.home);
 
   useEffect(() => {
     if (!user) return;
