@@ -13,10 +13,19 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CourseLayout } from "@/components/course/CourseLayout";
+import { moduleKeyFromPathname } from "@/lib/module-status";
 import { supabase } from "@/integrations/supabase/client";
 
 
+/** Página de abertura do módulo deduzido do caminho; "/" apenas fora dos módulos. */
+function moduleHomeOf(pathname: string): "/" | "/mf1" | "/mf2" | "/mf3" {
+  const key = moduleKeyFromPathname(pathname);
+  return key ? `/${key}` : "/";
+}
+
 function NotFoundComponent() {
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const home = moduleHomeOf(pathname);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
