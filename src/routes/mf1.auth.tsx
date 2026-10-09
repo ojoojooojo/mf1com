@@ -4,6 +4,9 @@ import { Loader2, LogIn, UserPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { authErrorMessage, ensureProfile, useAuth } from "@/lib/auth";
 import { MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
+import { MF2_MODULE_CODE, MF2_MODULE_TITLE } from "@/lib/course-data-mf2";
+import { MF3_MODULE_CODE, MF3_MODULE_TITLE } from "@/lib/course-data-mf3";
+import { moduleKeyFromPathname, type ModuleKey } from "@/lib/module-status";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/mf1/auth")({
@@ -15,16 +18,16 @@ export const Route = createFileRoute("/mf1/auth")({
 
   head: () => ({
     meta: [
-      { title: "Entrar ou criar conta — MF1 Comunicação e Escuta Ativa" },
+      { title: "Entrar ou criar conta — Gestão de Conflitos na Formação" },
       {
         name: "description",
         content:
-          "Acesso ao MOOC MF1 — Comunicação e Escuta Ativa na Formação: entre na sua conta ou registe-se para guardar o seu progresso.",
+          "Acesso ao MOOC Gestão de Conflitos na Formação: entre na sua conta ou registe-se para guardar o seu progresso no módulo.",
       },
-      { property: "og:title", content: "Entrar no MOOC MF1 — Comunicação e Escuta Ativa" },
+      { property: "og:title", content: "Entrar no MOOC — Gestão de Conflitos na Formação" },
       {
         property: "og:description",
-        content: "Entre ou crie conta para acompanhar o seu percurso no módulo MF1.",
+        content: "Entre ou crie conta para acompanhar o seu percurso no módulo.",
       },
       { name: "robots", content: "noindex" },
     ],
