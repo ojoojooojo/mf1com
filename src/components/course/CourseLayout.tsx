@@ -21,11 +21,19 @@ import {
 import { cn } from "@/lib/utils";
 
 
-/** Deteta o módulo ativo pelo pathname: /mf3* → MF3, /mf2* → MF2, tudo o resto → MF1. */
+/** Deteta o módulo ativo pelo pathname: /mf3* → MF3, /mf2* → MF2, tudo o resto → MF1.
+ *  Na página de autenticação (/mf1/auth) usa o redirect para refletir o módulo de origem. */
 function useModule() {
   const pathname = useLocation({ select: (l) => l.pathname });
-  const isMf3 = pathname.startsWith("/mf3");
-  const isMf2 = !isMf3 && pathname.startsWith("/mf2");
+  const redirectParam = useLocation({
+    select: (l) => (l.search as Record<string, unknown>)["redirect"],
+  });
+  const effectivePath =
+    pathname.startsWith("/mf1/auth") && typeof redirectParam === "string"
+      ? redirectParam
+      : pathname;
+  const isMf3 = effectivePath.startsWith("/mf3");
+  const isMf2 = !isMf3 && effectivePath.startsWith("/mf2");
   return {
     pathname,
     isMf2,
