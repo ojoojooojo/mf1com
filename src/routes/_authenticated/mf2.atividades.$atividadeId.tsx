@@ -61,6 +61,15 @@ function Mf2ActivityPage() {
   const done = hydrated && isCompleted(key);
   const index = MF2_ACTIVITIES.findIndex((a) => a.id === activity.id);
   const next = MF2_ACTIVITIES[index + 1];
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor(key);
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article key={activity.id}>

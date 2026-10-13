@@ -8,6 +8,7 @@ import { ActivityC } from "@/components/course/activities/ActivityC";
 import { ActivityD } from "@/components/course/activities/ActivityD";
 import { ActivityE } from "@/components/course/activities/ActivityE";
 import { useProgress } from "@/lib/progress";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/mf1/atividades/$atividadeId")({
@@ -61,6 +62,15 @@ function ActivityPage() {
   const done = hydrated && isCompleted(key);
   const index = ACTIVITIES.findIndex((a) => a.id === activity.id);
   const next = ACTIVITIES[index + 1];
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor(key);
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article key={activity.id}>
