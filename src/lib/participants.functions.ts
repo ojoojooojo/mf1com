@@ -32,14 +32,20 @@ export const deleteParticipant = createServerFn({ method: "POST" })
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Estas tabelas guardam o user_id sem chave externa — removem-se explicitamente.
-    for (const table of ["progress", "quiz_answers", "written_responses"] as const) {
+    // Estas tabelas guardam o user_id sem chave externa em cascata — removem-se
+    // explicitamente. evaluation_submissions é apenas o controlo «já respondeu»;
+    // as respostas da avaliação (anónimas, sem utilizador) nunca são tocadas.
+    for (const table of ["progress", "quiz_answers", "written_responses", "evaluation_submissions"] as const) {
       const { error } = await supabaseAdmin.from(table).delete().eq("user_id", data.userId);
       if (error) throw new Error(`Falha ao remover dados (${table}): ${error.message}`);
     }
 
-    // Apagar o utilizador faz cascata para profiles e evaluation_submissions
-    // (chaves externas com ON DELETE CASCADE).
+    const { error: profileError } = await supabaseAdmin
+      .from("profiles")
+      .delete()
+      .eq("id", data.userId);
+    if (profileError) throw new Error(`Falha ao remover o perfil: ${profileError.message}`);
+
     const { error } = await supabaseAdmin.auth.admin.deleteUser(data.userId);
     if (error) throw new Error(`Falha ao remover a conta: ${error.message}`);
     return { ok: true };
