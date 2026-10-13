@@ -170,7 +170,12 @@ export type Database = {
       quiz_answers: {
         Row: {
           answered_at: string
+          attempts: number
           created_at: string
+          first_answered_at: string | null
+          first_is_correct: boolean | null
+          first_is_legacy: boolean
+          first_option: string | null
           id: string
           is_correct: boolean
           quiz_id: string
@@ -180,7 +185,12 @@ export type Database = {
         }
         Insert: {
           answered_at?: string
+          attempts?: number
           created_at?: string
+          first_answered_at?: string | null
+          first_is_correct?: boolean | null
+          first_is_legacy?: boolean
+          first_option?: string | null
           id?: string
           is_correct?: boolean
           quiz_id: string
@@ -190,7 +200,12 @@ export type Database = {
         }
         Update: {
           answered_at?: string
+          attempts?: number
           created_at?: string
+          first_answered_at?: string | null
+          first_is_correct?: boolean | null
+          first_is_legacy?: boolean
+          first_option?: string | null
           id?: string
           is_correct?: boolean
           quiz_id?: string
@@ -206,6 +221,8 @@ export type Database = {
           created_at: string
           id: string
           response_text: string
+          revealed_at: string | null
+          revealed_text: string | null
           submitted_at: string
           updated_at: string
           user_id: string
@@ -215,6 +232,8 @@ export type Database = {
           created_at?: string
           id?: string
           response_text?: string
+          revealed_at?: string | null
+          revealed_text?: string | null
           submitted_at?: string
           updated_at?: string
           user_id: string
@@ -224,6 +243,8 @@ export type Database = {
           created_at?: string
           id?: string
           response_text?: string
+          revealed_at?: string | null
+          revealed_text?: string | null
           submitted_at?: string
           updated_at?: string
           user_id?: string
@@ -251,6 +272,7 @@ export type Database = {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      snapshot_reveal: { Args: { p_prefix: string }; Returns: number }
       submit_course_evaluation: {
         Args: {
           _escala_conteudos: number
