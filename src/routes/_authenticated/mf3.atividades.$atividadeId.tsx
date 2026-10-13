@@ -8,6 +8,7 @@ import { ActivityMf3_3 } from "@/components/course/activities/ActivityMf3_3";
 import { ActivityMf3_4 } from "@/components/course/activities/ActivityMf3_4";
 import { ActivityMf3_5 } from "@/components/course/activities/ActivityMf3_5";
 import { useProgress } from "@/lib/progress";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/mf3/atividades/$atividadeId")({
