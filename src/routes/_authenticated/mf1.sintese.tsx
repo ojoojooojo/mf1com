@@ -4,7 +4,6 @@ import { BLOCK_QUIZ_IDS, BLOCKS, LEARNING_OBJECTIVES } from "@/lib/course-data";
 import { ContentCard, Quiz, ReflectionPrompt, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useIsFormador } from "@/lib/auth";
-import { useProgress } from "@/lib/progress";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -39,13 +38,6 @@ const RECAP: Record<string, string> = {
 };
 
 const FINAL_QUIZ_IDS = ["final-1", "final-2", "final-3", "final-4", "final-5"];
-const FINAL_CORRECT: Record<string, number> = {
-  "final-1": 1,
-  "final-2": 0,
-  "final-3": 1,
-  "final-4": 2,
-  "final-5": 1,
-};
 
 function ScorePanel() {
   // Fonte de verdade: a tabela `quiz_answers` — conta a primeira resposta a cada pergunta.
