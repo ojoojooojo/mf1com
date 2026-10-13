@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { ChevronDown, ChevronRight, Download, ShieldAlert, Users } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ChevronDown, ChevronRight, Download, ShieldAlert, Trash2, Users } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { deleteParticipant } from "@/lib/participants.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { ACTIVITIES, BLOCK_QUIZ_IDS, STOPS } from "@/lib/course-data";
 import { MF2_ACTIVITIES, MF2_BLOCK_QUIZ_IDS, MF2_STOPS } from "@/lib/course-data-mf2";
@@ -9,6 +11,7 @@ import { MF3_ACTIVITIES, MF3_BLOCK_QUIZ_IDS, MF3_STOPS } from "@/lib/course-data
 import {
   exportClassWorkbook,
   exportParticipantWorkbook,
+  fullNameOf,
   readOption,
   type Dataset,
   type ExportModule,
@@ -427,7 +430,9 @@ function TrainerPage() {
     enabled: isFormador,
     queryFn: async () => {
       const [profiles, progress, quiz, responses] = await Promise.all([
-        supabase.from("profiles").select("id, email, role, created_at"),
+        supabase
+          .from("profiles")
+          .select("id, email, role, created_at, nome_proprio, apelido, nota_formador"),
         supabase.from("progress").select("user_id, section_id, status, updated_at"),
         supabase
           .from("quiz_answers")
@@ -481,8 +486,9 @@ function TrainerPage() {
         </p>
         <h1 className="mt-2 font-display text-3xl leading-tight">Acompanhamento dos participantes</h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          Vista de leitura: progresso por secção, respostas aos micro-quizzes e produções escritas.
-          Nada nesta página é editável e nada é classificado.
+          Progresso por secção, respostas aos micro-quizzes e produções escritas. Pode ainda
+          adicionar uma nota a cada participante e remover registos incorretos (contas de teste ou
+          inscrições duplicadas) — essas ações não alteram o conteúdo avaliado.
         </p>
       </header>
 
@@ -695,7 +701,23 @@ function ParticipantsTable({
                     )}
                     onClick={() => setOpenId(isOpen ? null : row.profile.id)}
                   >
-                    <td className="px-4 py-3 font-medium">{row.profile.email}</td>
+                    <td className="px-4 py-3">
+                      {fullNameOf(row.profile) ? (
+                        <>
+                          <span className="font-medium">{fullNameOf(row.profile)}</span>
+                          <span className="block text-xs text-muted-foreground">
+                            {row.profile.email}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="font-medium">{row.profile.email}</span>
+                      )}
+                      {row.profile.nota_formador?.trim() ? (
+                        <span className="mt-0.5 block text-xs font-normal text-accent">
+                          Nota: {row.profile.nota_formador}
+                        </span>
+                      ) : null}
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {formatDate(row.profile.created_at)}
                     </td>
@@ -739,6 +761,7 @@ function ParticipantsTable({
                           profile={row.profile}
                           dataset={data}
                           email={row.profile.email}
+                          onDeleted={() => setOpenId(null)}
                           progress={row.progress}
                           quiz={row.quiz}
                           responses={row.responses}
@@ -764,6 +787,7 @@ function ParticipantDetail({
   profile,
   dataset,
   email,
+  onDeleted,
   progress,
   quiz,
   responses,
@@ -773,6 +797,7 @@ function ParticipantDetail({
   profile: ProfileRow;
   dataset: Dataset;
   email: string;
+  onDeleted: () => void;
   progress: ProgressRow[];
   quiz: QuizRow[];
   responses: ResponseRow[];
@@ -801,6 +826,10 @@ function ParticipantDetail({
           onExport={() => exportParticipantWorkbook(profile, ALL_MODULES, dataset)}
         />
       </div>
+
+      <ParticipantNote profile={profile} />
+
+      <DeleteParticipant profile={profile} onDeleted={onDeleted} />
 
       <section>
         <h3 className="font-display text-lg">Estado das secções</h3>
@@ -905,5 +934,147 @@ function ParticipantDetail({
         )}
       </section>
     </div>
+  );
+}
+
+/* ---------- Nota do formador por participante ---------- */
+
+function ParticipantNote({ profile }: { profile: ProfileRow }) {
+  const queryClient = useQueryClient();
+  const [value, setValue] = useState(profile.nota_formador ?? "");
+  const [state, setState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  const dirty = value.trim() !== (profile.nota_formador ?? "").trim();
+
+  async function save() {
+    setState("saving");
+    const { error } = await supabase
+      .from("profiles")
+      .update({ nota_formador: value.trim() || null })
+      .eq("id", profile.id);
+    if (error) {
+      setState("error");
+      return;
+    }
+    setState("saved");
+    await queryClient.invalidateQueries({ queryKey: ["formador", "dados"] });
+  }
+
+  return (
+    <section className="rounded-xl border border-border bg-card p-5">
+      <h3 className="font-display text-lg">Nota do formador</h3>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Etiqueta privada, visível apenas neste painel — útil para identificar participantes
+        registados antes de o registo pedir o nome.
+      </p>
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <input
+          type="text"
+          value={value}
+          maxLength={200}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setState("idle");
+          }}
+          placeholder="Ex.: Ana Martins — inscrição presencial"
+          aria-label={`Nota do formador para ${profile.email}`}
+          className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+        <button
+          type="button"
+          disabled={!dirty || state === "saving"}
+          onClick={() => void save()}
+          className="inline-flex shrink-0 items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+        >
+          {state === "saving" ? "A guardar…" : "Guardar nota"}
+        </button>
+      </div>
+      {state === "saved" ? (
+        <p className="mt-2 text-xs font-medium text-success">Nota guardada.</p>
+      ) : null}
+      {state === "error" ? (
+        <p className="mt-2 text-xs font-medium text-destructive">
+          Não foi possível guardar a nota. Tente novamente.
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
+/* ---------- Remoção definitiva de um participante ---------- */
+
+function DeleteParticipant({
+  profile,
+  onDeleted,
+}: {
+  profile: ProfileRow;
+  onDeleted: () => void;
+}) {
+  const queryClient = useQueryClient();
+  const deleteFn = useServerFn(deleteParticipant);
+  const [confirming, setConfirming] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function confirmDelete() {
+    setBusy(true);
+    setError(null);
+    try {
+      await deleteFn({ data: { userId: profile.id } });
+      await queryClient.invalidateQueries({ queryKey: ["formador", "dados"] });
+      onDeleted();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Não foi possível remover o participante.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="rounded-xl border border-destructive/40 bg-destructive-soft p-5">
+      <h3 className="font-display text-lg text-destructive">Remover participante</h3>
+      {!confirming ? (
+        <>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Elimina por completo esta conta e todos os dados associados (progresso, respostas a
+            quizzes e produções escritas). Indicado para contas de teste ou registos incorretos.
+          </p>
+          <button
+            type="button"
+            onClick={() => setConfirming(true)}
+            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-destructive/50 bg-card px-3.5 py-2 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/10"
+          >
+            <Trash2 className="size-4" aria-hidden /> Apagar participante…
+          </button>
+        </>
+      ) : (
+        <>
+          <p className="mt-1 text-sm font-medium text-destructive">
+            Ação irreversível: a conta {profile.email} e todos os seus dados de percurso serão
+            apagados definitivamente.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void confirmDelete()}
+              className="inline-flex items-center gap-2 rounded-lg bg-destructive px-3.5 py-2 text-sm font-semibold text-destructive-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+            >
+              <Trash2 className="size-4" aria-hidden />
+              {busy ? "A eliminar…" : "Confirmar eliminação definitiva"}
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => setConfirming(false)}
+              className="rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-semibold transition-colors hover:bg-muted"
+            >
+              Cancelar
+            </button>
+          </div>
+          {error ? <p className="mt-2 text-sm font-medium text-destructive">{error}</p> : null}
+        </>
+      )}
+    </section>
   );
 }

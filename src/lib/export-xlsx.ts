@@ -3,7 +3,23 @@ import { average, npsOf, type EvaluationRow, type LikertKey } from "./evaluation
 
 /* ---------- Tipos partilhados com o painel do formador ---------- */
 
-export type ProfileRow = { id: string; email: string; role: string; created_at: string };
+export type ProfileRow = {
+  id: string;
+  email: string;
+  role: string;
+  created_at: string;
+  nome_proprio: string | null;
+  apelido: string | null;
+  nota_formador: string | null;
+};
+
+/** Nome completo para exibição; string vazia para participantes registados sem nome. */
+export function fullNameOf(p: Pick<ProfileRow, "nome_proprio" | "apelido">) {
+  return [p.nome_proprio, p.apelido]
+    .map((s) => s?.trim() ?? "")
+    .filter(Boolean)
+    .join(" ");
+}
 export type ProgressRow = {
   user_id: string;
   section_id: string;
@@ -314,9 +330,13 @@ export async function exportParticipantWorkbook(
     ...stats.map((s) => summaryRow(s.module.label, s)),
     totalsRow("TOTAL DA FORMAÇÃO (MF1+MF2+MF3)", stats),
   ]);
-  resumo.spliceRows(1, 0, [`Participante: ${profile.email}`], [
-    `Exportado em: ${new Date().toLocaleString("pt-PT")}`,
-  ]);
+  const nomeCompleto = fullNameOf(profile);
+  resumo.spliceRows(
+    1,
+    0,
+    [`Participante: ${nomeCompleto ? `${nomeCompleto} (${profile.email})` : profile.email}`],
+    [`Exportado em: ${new Date().toLocaleString("pt-PT")}`],
+  );
   resumo.getRow(1).font = { bold: true, name: "Arial", size: 12 };
   resumo.getRow(2).font = { name: "Arial", size: 10 };
   resumo.views = [{ state: "frozen", ySplit: 3 }];
@@ -356,6 +376,7 @@ export async function exportClassWorkbook(
 
   const participantColumns: ColumnDef[] = [
     { header: "Participante", width: 34 },
+    { header: "Nome", width: 28 },
     { header: "Registo", width: 20, kind: "date" },
     ...modules.flatMap((m) => {
       const k = m.key.toUpperCase();
@@ -383,6 +404,7 @@ export async function exportClassWorkbook(
       const total = sum((s) => s.totalStops);
       return [
         profile.email,
+        fullNameOf(profile),
         toDate(profile.created_at),
         ...stats.flatMap((s) => [
           s.percent,
@@ -404,9 +426,11 @@ export async function exportClassWorkbook(
 
   const ids = new Set(participants.map((p) => p.id));
   const emailOf = new Map(participants.map((p) => [p.id, p.email]));
+  const nameOf = new Map(participants.map((p) => [p.id, fullNameOf(p)]));
 
   const quizDetailColumns: ColumnDef[] = [
     { header: "Participante", width: 34 },
+    { header: "Nome", width: 28 },
     { header: "Módulo", width: 12 },
     ...QUIZ_COLUMNS,
   ];
@@ -418,7 +442,7 @@ export async function exportClassWorkbook(
         quizRowsFor(
           module,
           data.quiz.filter((r) => r.user_id === profile.id),
-        ).map((row) => [profile.email, module.key.toUpperCase(), ...row]),
+        ).map((row) => [profile.email, fullNameOf(profile), module.key.toUpperCase(), ...row]),
       ),
     );
   addSheet(workbook, "QUIZZES (DETALHE)", quizDetailColumns, quizDetailRows, {
@@ -427,6 +451,7 @@ export async function exportClassWorkbook(
 
   const writtenDetailColumns: ColumnDef[] = [
     { header: "Participante", width: 34 },
+    { header: "Nome", width: 28 },
     ...WRITTEN_COLUMNS,
   ];
   const writtenWithEmail = data.responses
@@ -440,6 +465,7 @@ export async function exportClassWorkbook(
       (r) =>
         [
           emailOf.get(r.user_id) ?? r.user_id,
+          nameOf.get(r.user_id) ?? "",
           moduleKeyOf(modules, r.activity_id),
           r.activity_id,
           r.response_text,

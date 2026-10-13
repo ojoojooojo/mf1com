@@ -15,6 +15,27 @@
       "when": 1789646429375,
       "tag": "0001_module_status_allow_avaliacao",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791926179522,
+      "tag": "0002_profiles_nome_e_nota_formador",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791926610069,
+      "tag": "0003_profiles_nota_apenas_formador",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791926669930,
+      "tag": "0004_profiles_nota_politica_formador_estrita",
+      "breakpoints": true
     }
   ]
 }

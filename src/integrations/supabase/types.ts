@@ -109,23 +109,32 @@ export type Database = {
       }
       profiles: {
         Row: {
+          apelido: string | null
           created_at: string
           email: string
           id: string
+          nome_proprio: string | null
+          nota_formador: string | null
           role: Database["public"]["Enums"]["app_role"]
           updated_at: string
         }
         Insert: {
+          apelido?: string | null
           created_at?: string
           email: string
           id: string
+          nome_proprio?: string | null
+          nota_formador?: string | null
           role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string
         }
         Update: {
+          apelido?: string | null
           created_at?: string
           email?: string
           id?: string
+          nome_proprio?: string | null
+          nota_formador?: string | null
           role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string
         }
@@ -237,6 +246,11 @@ export type Database = {
         Returns: boolean
       }
       module_key_of: { Args: { _id: string }; Returns: string }
+      nota_formador_of: { Args: { _user_id: string }; Returns: string }
+      role_of: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       submit_course_evaluation: {
         Args: {
           _escala_conteudos: number

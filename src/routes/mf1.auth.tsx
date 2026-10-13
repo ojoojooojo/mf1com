@@ -68,6 +68,8 @@ function AuthPage() {
   const [mode, setMode] = useState<Mode>("entrar");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [nomeProprio, setNomeProprio] = useState("");
+  const [apelido, setApelido] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -93,6 +95,11 @@ function AuthPage() {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setError("Introduza um endereço de email válido.");
+      return;
+    }
+
+    if (mode === "criar" && (!nomeProprio.trim() || !apelido.trim())) {
+      setError("Indique o seu nome próprio e apelido.");
       return;
     }
 
@@ -123,7 +130,10 @@ function AuthPage() {
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: email.trim(),
           password,
-          options: { emailRedirectTo: `${window.location.origin}${moduleMeta.home}` },
+          options: {
+            emailRedirectTo: `${window.location.origin}${moduleMeta.home}`,
+            data: { nome_proprio: nomeProprio.trim(), apelido: apelido.trim() },
+          },
         });
         if (signUpError) {
           setError(authErrorMessage(signUpError.message));
@@ -188,6 +198,40 @@ function AuthPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+          {mode === "criar" ? (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="nome-proprio" className="block text-sm font-medium">
+                  Nome próprio
+                </label>
+                <input
+                  id="nome-proprio"
+                  type="text"
+                  autoComplete="given-name"
+                  value={nomeProprio}
+                  onChange={(e) => setNomeProprio(e.target.value)}
+                  className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  placeholder="Maria"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="apelido" className="block text-sm font-medium">
+                  Apelido
+                </label>
+                <input
+                  id="apelido"
+                  type="text"
+                  autoComplete="family-name"
+                  value={apelido}
+                  onChange={(e) => setApelido(e.target.value)}
+                  className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  placeholder="Silva"
+                  required
+                />
+              </div>
+            </div>
+          ) : null}
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
               Email
@@ -270,7 +314,8 @@ function AuthPage() {
             <div className="rounded-lg border border-border bg-surface p-3 text-xs leading-relaxed text-muted-foreground">
               <p className="font-semibold text-foreground">Proteção de dados</p>
               <p className="mt-1">
-                Ao criar conta, recolhemos o seu <strong>email</strong> e, ao longo do curso, o{" "}
+                Ao criar conta, recolhemos o seu <strong>nome</strong> e <strong>email</strong> e,
+                ao longo do curso, o{" "}
                 <strong>progresso</strong>, as <strong>respostas às atividades</strong> e os{" "}
                 <strong>resultados dos quizzes</strong>. Estes dados servem apenas para o
                 acompanhamento pedagógico do seu percurso nesta formação, no âmbito do Referencial de
