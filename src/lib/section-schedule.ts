@@ -54,7 +54,7 @@ export function formatOpening(date: Date): string {
   const parts = Object.fromEntries(
     openingFormat.formatToParts(date).map((p) => [p.type, p.value]),
   );
-  return `${parts.weekday}, ${parts.day}/${parts.month}, às ${parts.hour}h${parts.minute}`;
+  return `${parts["weekday"]}, ${parts["day"]}/${parts["month"]}, às ${parts["hour"]}h${parts["minute"]}`;
 }
 
 const lisbonWallClockFormat = new Intl.DateTimeFormat("pt-PT", {
@@ -72,7 +72,7 @@ function lisbonWallClock(utc: Date): string {
   const parts = Object.fromEntries(
     lisbonWallClockFormat.formatToParts(utc).map((p) => [p.type, p.value]),
   );
-  return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`;
+  return `${parts["year"]}-${parts["month"]}-${parts["day"]}T${parts["hour"]}:${parts["minute"]}:${parts["second"]}`;
 }
 
 /** Converte «AAAA-MM-DDTHH:mm» interpretado como hora de Lisboa para ISO UTC. */
