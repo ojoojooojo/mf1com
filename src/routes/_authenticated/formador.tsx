@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useMemo, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight, Download, ShieldAlert, Trash2, Users } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteParticipant } from "@/lib/participants.functions";
@@ -30,6 +30,13 @@ import {
   type ControlKey,
 } from "@/lib/module-status";
 import { Lock, LockOpen } from "lucide-react";
+import {
+  formatOpening,
+  isoToLisbonLocal,
+  lisbonLocalToIso,
+  sectionScheduleQueryKey,
+  type SectionScheduleRow,
+} from "@/lib/section-schedule";
 import { exportEvaluationWorkbook } from "@/lib/export-xlsx";
 import {
   LIKERT_DIMENSIONS,
@@ -116,6 +123,156 @@ function ModuleAvailabilityPanel() {
       {setOpen.isError && (
         <p className="mt-3 text-sm text-destructive">
           Não foi possível alterar o estado do módulo. Tente novamente.
+        </p>
+      )}
+    </section>
+  );
+}
+
+/* ---------- Calendário de abertura das subsecções ---------- */
+
+const SECTION_LABELS: Record<string, string> = {
+  ...Object.fromEntries(STOPS.map((s) => [s.id, s.shortTitle])),
+  ...Object.fromEntries(MF2_STOPS.map((s) => [s.id, s.shortTitle])),
+  ...Object.fromEntries(MF3_STOPS.map((s) => [s.id, s.shortTitle])),
+  ...Object.fromEntries(
+    ACTIVITIES.map((a) => [`atividade-${a.id}`, `Atividade ${a.letter} · ${a.title}`]),
+  ),
+  ...Object.fromEntries(
+    MF2_ACTIVITIES.map((a) => [`mf2-atividade-${a.id}`, `Atividade ${a.letter} · ${a.title}`]),
+  ),
+  ...Object.fromEntries(
+    MF3_ACTIVITIES.map((a) => [`mf3-atividade-${a.id}`, `Atividade ${a.letter} · ${a.title}`]),
+  ),
+};
+
+const scheduleFullQueryKey = ["section-schedule-full"] as const;
+
+function ScheduleRow({
+  row,
+  busy,
+  onSave,
+}: {
+  row: SectionScheduleRow;
+  busy: boolean;
+  onSave: (iso: string) => void;
+}) {
+  const [value, setValue] = useState(() => isoToLisbonLocal(row.opens_at));
+  const saved = isoToLisbonLocal(row.opens_at);
+  const dirty = value !== saved;
+  const open = new Date(row.opens_at).getTime() <= Date.now();
+  const label = SECTION_LABELS[row.section_id] ?? row.section_id;
+
+  return (
+    <li className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0">
+        <p className="truncate text-sm font-medium">{label}</p>
+        <p
+          className={cn(
+            "mt-0.5 inline-flex items-center gap-1.5 text-xs font-semibold",
+            open ? "text-success" : "text-muted-foreground",
+          )}
+        >
+          {open ? <LockOpen className="size-3" /> : <Lock className="size-3" />}
+          {open ? "Aberta" : `Abre ${formatOpening(new Date(row.opens_at))}`}
+        </p>
+      </div>
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
+        <input
+          type="datetime-local"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          aria-label={`Data de abertura de ${label}`}
+          className="rounded-lg border border-input bg-background px-2.5 py-1.5 text-xs"
+        />
+        {dirty ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => onSave(lisbonLocalToIso(value))}
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          >
+            {busy ? "A guardar…" : "Guardar"}
+          </button>
+        ) : null}
+        {!open && !dirty ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => onSave(new Date().toISOString())}
+            className="inline-flex items-center justify-center rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-muted disabled:opacity-60"
+          >
+            {busy ? "A guardar…" : "Abrir agora"}
+          </button>
+        ) : null}
+      </div>
+    </li>
+  );
+}
+
+function SectionSchedulePanel() {
+  const queryClient = useQueryClient();
+  const scheduleQuery = useQuery({
+    queryKey: scheduleFullQueryKey,
+    queryFn: async (): Promise<SectionScheduleRow[]> => {
+      const { data, error } = await supabase
+        .from("section_schedule")
+        .select("section_id, module_key, opens_at, updated_at, updated_by")
+        .order("module_key")
+        .order("opens_at");
+      if (error) throw error;
+      return (data ?? []) as SectionScheduleRow[];
+    },
+  });
+  const save = useMutation({
+    mutationFn: async ({ sectionId, opensAt }: { sectionId: string; opensAt: string }) => {
+      const { data: auth } = await supabase.auth.getUser();
+      const { error } = await supabase
+        .from("section_schedule")
+        .update({ opens_at: opensAt, updated_by: auth.user?.id ?? null })
+        .eq("section_id", sectionId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: scheduleFullQueryKey });
+      void queryClient.invalidateQueries({ queryKey: sectionScheduleQueryKey });
+    },
+  });
+
+  return (
+    <section className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-8">
+      <h2 className="font-display text-xl leading-tight">Calendário de abertura</h2>
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        Cada parte abre automaticamente à data indicada (hora de Portugal continental). O que já
+        abriu fica aberto até ao fim da ação. Fechar o módulo inteiro (acima) tem sempre prioridade
+        sobre este calendário.
+      </p>
+      {scheduleQuery.isLoading ? (
+        <p className="mt-4 text-sm text-muted-foreground">A carregar calendário…</p>
+      ) : (
+        <div className="mt-5 space-y-6">
+          {MODULE_KEYS.map((moduleKey) => (
+            <div key={moduleKey}>
+              <p className="eyebrow">{MODULE_SHORT_LABELS[moduleKey]}</p>
+              <ul className="mt-3 space-y-2">
+                {(scheduleQuery.data ?? [])
+                  .filter((r) => r.module_key === moduleKey)
+                  .map((row) => (
+                    <ScheduleRow
+                      key={`${row.section_id}:${row.opens_at}`}
+                      row={row}
+                      busy={save.isPending && save.variables?.sectionId === row.section_id}
+                      onSave={(iso) => save.mutate({ sectionId: row.section_id, opensAt: iso })}
+                    />
+                  ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+      {save.isError && (
+        <p className="mt-3 text-sm text-destructive">
+          Não foi possível guardar a data de abertura. Tente novamente.
         </p>
       )}
     </section>
@@ -495,6 +652,7 @@ function TrainerPage() {
       </header>
 
       <ModuleAvailabilityPanel />
+      <SectionSchedulePanel />
 
 
       <nav
