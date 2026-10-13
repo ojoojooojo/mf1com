@@ -436,7 +436,9 @@ function TrainerPage() {
         supabase.from("progress").select("user_id, section_id, status, updated_at"),
         supabase
           .from("quiz_answers")
-          .select("user_id, quiz_id, selected_option, is_correct, answered_at")
+          .select(
+            "user_id, quiz_id, selected_option, is_correct, answered_at, first_option, first_is_correct, first_answered_at, attempts, first_is_legacy",
+          )
           .in("quiz_id", [
             ...BLOCK_QUIZ_IDS,
             ...MF2_BLOCK_QUIZ_IDS,
@@ -447,7 +449,7 @@ function TrainerPage() {
           ]),
         supabase
           .from("written_responses")
-          .select("user_id, activity_id, response_text, submitted_at"),
+          .select("user_id, activity_id, response_text, submitted_at, revealed_text, revealed_at"),
       ]);
       return {
         profiles: (profiles.data ?? []) as ProfileRow[],
@@ -605,7 +607,9 @@ function ParticipantsTable({
         const quiz = data.quiz.filter(
           (r) => r.user_id === profile.id && module.quizIds.includes(r.quiz_id),
         );
-        const correct = quiz.filter((r) => r.is_correct).length;
+        // Conta a primeira resposta; em registos anteriores à correção usa o valor atual.
+        const correct = quiz.filter((r) => r.first_is_correct ?? r.is_correct).length;
+        const legacy = quiz.filter((r) => r.first_is_legacy).length;
         return {
           profile,
           progress,
@@ -616,6 +620,7 @@ function ParticipantsTable({
           percent: Math.min(100, Math.round((completedStops / module.stopIds.length) * 100)),
           answered: quiz.length,
           correct,
+          legacy,
         };
       })
       .sort((a, b) => {
@@ -739,8 +744,15 @@ function ParticipantsTable({
                             {row.correct}/{row.answered}
                           </span>
                           <span className="ml-2 text-xs text-muted-foreground">
-                            corretas ({module.quizIds.length} micro-quizzes avaliados nos blocos)
+                            corretas à primeira ({module.quizIds.length} micro-quizzes avaliados
+                            nos blocos)
                           </span>
+                          {row.legacy > 0 ? (
+                            <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                              {row.legacy} registo{row.legacy === 1 ? "" : "s"} anterior
+                              {row.legacy === 1 ? "" : "es"} à correção
+                            </span>
+                          ) : null}
                         </>
                       )}
                     </td>
