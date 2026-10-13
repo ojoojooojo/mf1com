@@ -279,39 +279,54 @@ function totalsRow(label: string, all: ModuleStats[]) {
 const QUIZ_COLUMNS: ColumnDef[] = [
   { header: "Categoria", width: 28 },
   { header: "Quiz (id)", width: 34 },
-  { header: "Opção", width: 8 },
-  { header: "Resposta escolhida", width: 60, kind: "long" },
-  { header: "Correta", width: 10 },
-  { header: "Data da resposta", width: 20, kind: "date" },
+  { header: "Primeira resposta", width: 60, kind: "long" },
+  { header: "Correta à primeira", width: 16 },
+  { header: "Tentativas", width: 11, kind: "number" },
+  { header: "Última resposta", width: 60, kind: "long" },
+  { header: "Correta (última)", width: 14 },
+  { header: "Data da primeira resposta", width: 22, kind: "date" },
+  { header: "Registo anterior à correção", width: 24 },
 ];
 
 const MICRO_LABEL = "Micro-quiz avaliado (bloco)";
 const FINAL_LABEL = "Avaliação final da formação";
+
+/** Letra + texto de uma opção guardada como "índice|texto". */
+function optionLabel(value: string | null) {
+  if (!value) return "(não registada)";
+  const option = readOption(value);
+  return `${option.letter}) ${option.text || "(texto não registado)"}`;
+}
 
 function quizRowsFor(module: ExportModule, rows: QuizRow[]) {
   const build = (category: string, ids: readonly string[]) =>
     rows
       .filter((r) => ids.includes(r.quiz_id))
       .sort((a, b) => a.quiz_id.localeCompare(b.quiz_id))
-      .map((r) => {
-        const option = readOption(r.selected_option);
-        return [
-          category,
-          r.quiz_id,
-          `${option.letter})`,
-          option.text || "(texto não registado)",
-          r.is_correct ? "Sim" : "Não",
-          toDate(r.answered_at),
-        ] as (string | number | Date | null)[];
-      });
+      .map(
+        (r) =>
+          [
+            category,
+            r.quiz_id,
+            optionLabel(r.first_option ?? r.selected_option),
+            firstCorrectOf(r) ? "Sim" : "Não",
+            r.attempts,
+            optionLabel(r.selected_option),
+            r.is_correct ? "Sim" : "Não",
+            toDate(r.first_answered_at ?? r.answered_at),
+            r.first_is_legacy ? "Sim" : "Não",
+          ] as (string | number | Date | null)[],
+      );
   return [...build(MICRO_LABEL, module.quizIds), ...build(FINAL_LABEL, module.finalQuizIds)];
 }
 
 const WRITTEN_COLUMNS: ColumnDef[] = [
   { header: "Módulo", width: 12 },
   { header: "Atividade / reflexão (id)", width: 40 },
-  { header: "Resposta escrita", width: 100, kind: "long" },
-  { header: "Data de submissão", width: 20, kind: "date" },
+  { header: "Texto submetido antes do comentário", width: 80, kind: "long" },
+  { header: "Data da submissão antes do comentário", width: 26, kind: "date" },
+  { header: "Resposta escrita (atual)", width: 100, kind: "long" },
+  { header: "Data da última atualização", width: 22, kind: "date" },
 ];
 
 function moduleKeyOf(modules: ExportModule[], id: string) {
@@ -327,6 +342,8 @@ function writtenRowsFor(modules: ExportModule[], rows: ResponseRow[]) {
         [
           moduleKeyOf(modules, r.activity_id),
           r.activity_id,
+          r.revealed_text ?? "",
+          toDate(r.revealed_at),
           r.response_text,
           toDate(r.submitted_at),
         ] as (string | number | Date | null)[],
@@ -402,15 +419,16 @@ export async function exportClassWorkbook(
       const k = m.key.toUpperCase();
       return [
         { header: `${k} progresso`, width: 15, kind: "percent" as ColumnKind },
-        { header: `${k} micro-quizzes corretos`, width: 24, kind: "number" as ColumnKind },
+        { header: `${k} micro-quizzes corretos à primeira`, width: 30, kind: "number" as ColumnKind },
         { header: `${k} micro-quizzes respondidos`, width: 26, kind: "number" as ColumnKind },
-        { header: `${k} avaliação final corretas`, width: 25, kind: "number" as ColumnKind },
+        { header: `${k} avaliação final corretas à primeira`, width: 31, kind: "number" as ColumnKind },
         { header: `${k} respostas escritas`, width: 20, kind: "number" as ColumnKind },
       ];
     }),
-    { header: "Total micro-quizzes corretos", width: 27, kind: "number" },
+    { header: "Total micro-quizzes corretos à primeira", width: 33, kind: "number" },
     { header: "Total micro-quizzes respondidos", width: 29, kind: "number" },
-    { header: "Total avaliação final corretas", width: 28, kind: "number" },
+    { header: "Total avaliação final corretas à primeira", width: 34, kind: "number" },
+    { header: "Registos anteriores à correção", width: 28, kind: "number" },
     { header: "Progresso global", width: 18, kind: "percent" },
   ];
 
@@ -436,6 +454,7 @@ export async function exportClassWorkbook(
         sum((s) => s.microCorrect),
         sum((s) => s.microAnswered),
         sum((s) => s.finalCorrect),
+        sum((s) => s.legacyCount),
         total > 0 ? completed / total : 0,
       ] as (string | number | Date | null)[];
     });
@@ -488,6 +507,8 @@ export async function exportClassWorkbook(
           nameOf.get(r.user_id) ?? "",
           moduleKeyOf(modules, r.activity_id),
           r.activity_id,
+          r.revealed_text ?? "",
+          toDate(r.revealed_at),
           r.response_text,
           toDate(r.submitted_at),
         ] as (string | number | Date | null)[],
