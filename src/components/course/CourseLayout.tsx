@@ -115,6 +115,7 @@ function TrailList({ onNavigate }: { onNavigate?: () => void }) {
 function ProgressPanel() {
   const { percent, reset, hydrated, synced } = useProgress();
   const { user } = useAuth();
+  const isFormador = useIsFormador();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [justReset, setJustReset] = useState(false);
 
@@ -142,6 +143,8 @@ function ProgressPanel() {
           O seu percurso foi reiniciado.
         </p>
       ) : null}
+      {/* Repor o progresso apaga registos de avaliação — só o formador o pode fazer. */}
+      {isFormador ? (
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogTrigger asChild>
           <button
@@ -173,6 +176,7 @@ function ProgressPanel() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      ) : null}
     </div>
   );
 }
