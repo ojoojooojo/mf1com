@@ -6,10 +6,15 @@ import { supabase } from "@/integrations/supabase/client";
 export async function ensureProfile(user: User) {
   const { data } = await supabase.from("profiles").select("id").eq("id", user.id).maybeSingle();
   if (data) return;
+  const meta = (user.user_metadata ?? {}) as { nome_proprio?: unknown; apelido?: unknown };
+  const nome = typeof meta.nome_proprio === "string" ? meta.nome_proprio.trim() : "";
+  const apelido = typeof meta.apelido === "string" ? meta.apelido.trim() : "";
   await supabase.from("profiles").insert({
     id: user.id,
     email: user.email ?? "",
     role: "formando",
+    nome_proprio: nome || null,
+    apelido: apelido || null,
   });
 }
 
