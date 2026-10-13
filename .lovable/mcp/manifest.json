@@ -61,7 +61,7 @@
       {
         "name": "my_quiz_results",
         "title": "As minhas respostas aos quizzes",
-        "description": "Devolve as respostas aos quizzes do participante autenticado, com o total de respostas certas por módulo.",
+        "description": "Devolve as respostas aos quizzes do participante autenticado, com o total de respostas certas À PRIMEIRA por módulo (a primeira resposta é a que conta para a avaliação).",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,

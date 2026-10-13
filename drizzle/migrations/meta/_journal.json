@@ -36,6 +36,13 @@
       "when": 1791926669930,
       "tag": "0004_profiles_nota_politica_formador_estrita",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791930319738,
+      "tag": "0005_integridade_primeira_resposta_e_revelacao",
+      "breakpoints": true
     }
   ]
 }

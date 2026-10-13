@@ -173,6 +173,7 @@ function ActivityBItem({ item, idResposta }: { item: Item; idResposta: string })
       />
       <RevealPanel
         id={`${idResposta}-revelado`}
+        activityPrefix={idResposta}
         canReveal={filled}
         buttonLabel="Submeter e ver a reformulação de referência"
         lockedHint="Escreva primeiro a sua versão — comparar só tem valor depois de produzir a sua."

@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Check, FlaskConical, Lock, Pencil, ShieldCheck } from "lucide-react";
-import { useProgress } from "@/lib/progress";
+import { flushResponses, useProgress } from "@/lib/progress";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 /* ---------- Aviso de cenário simulado ---------- */
@@ -188,41 +189,64 @@ export function RevealPanel({
   buttonLabel = "Submeter e comparar com a análise de referência",
   lockedHint = "Escreva a sua resposta antes de ver a análise de referência.",
   canReveal,
+  activityPrefix,
   children,
 }: {
   id: string;
   buttonLabel?: string;
   lockedHint?: string;
   canReveal: boolean;
+  /** Prefixo dos campos da atividade; por omissão deriva do id (`${k}-revelado` → `${k}-`). */
+  activityPrefix?: string;
   children: ReactNode;
 }) {
   const { saveFlag } = useProgress();
   // Guardar o id revelado (em vez de um booleano) garante que o painel volta a
   // fechar quando o componente é reutilizado noutra atividade sem remontar.
   const [openId, setOpenId] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const open = openId === id;
 
   if (open) {
     return <div className="mt-5">{children}</div>;
   }
 
+  const prefix = activityPrefix ?? id.replace(/-revelado$/, "-");
+
+  const reveal = async () => {
+    setSubmitting(true);
+    try {
+      // 1) Gravar de imediato o que está no debounce; 2) fotografar as respostas
+      // desta atividade na conta (o backend preserva esta primeira fotografia);
+      // 3) só então abrir o comentário.
+      await flushResponses();
+      await supabase.rpc("snapshot_reveal", { p_prefix: prefix }).then(() => {
+        /* sem sessão ou offline — o comentário abre na mesma */
+      });
+    } finally {
+      setSubmitting(false);
+      setOpenId(id);
+      saveFlag(id);
+    }
+  };
+
   return (
     <div className="mt-5">
       <button
         type="button"
-        disabled={!canReveal}
-        onClick={() => {
-          setOpenId(id);
-          saveFlag(id);
-        }}
+        disabled={!canReveal || submitting}
+        onClick={() => void reveal()}
         className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
       >
         {canReveal ? <Check className="size-4" /> : <Lock className="size-4" />}
-        {buttonLabel}
+        {submitting ? "A registar a sua resposta…" : buttonLabel}
       </button>
       {!canReveal ? (
         <p className="mt-2 text-xs text-muted-foreground">{lockedHint}</p>
       ) : null}
+      <p className="mt-2 text-xs text-muted-foreground">
+        A resposta que submeter antes de ver o comentário fica registada para o formador.
+      </p>
     </div>
   );
 }

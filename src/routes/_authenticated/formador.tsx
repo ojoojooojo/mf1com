@@ -436,7 +436,9 @@ function TrainerPage() {
         supabase.from("progress").select("user_id, section_id, status, updated_at"),
         supabase
           .from("quiz_answers")
-          .select("user_id, quiz_id, selected_option, is_correct, answered_at")
+          .select(
+            "user_id, quiz_id, selected_option, is_correct, answered_at, first_option, first_is_correct, first_answered_at, attempts, first_is_legacy",
+          )
           .in("quiz_id", [
             ...BLOCK_QUIZ_IDS,
             ...MF2_BLOCK_QUIZ_IDS,
@@ -447,7 +449,7 @@ function TrainerPage() {
           ]),
         supabase
           .from("written_responses")
-          .select("user_id, activity_id, response_text, submitted_at"),
+          .select("user_id, activity_id, response_text, submitted_at, revealed_text, revealed_at"),
       ]);
       return {
         profiles: (profiles.data ?? []) as ProfileRow[],
@@ -605,7 +607,9 @@ function ParticipantsTable({
         const quiz = data.quiz.filter(
           (r) => r.user_id === profile.id && module.quizIds.includes(r.quiz_id),
         );
-        const correct = quiz.filter((r) => r.is_correct).length;
+        // Conta a primeira resposta; em registos anteriores à correção usa o valor atual.
+        const correct = quiz.filter((r) => r.first_is_correct ?? r.is_correct).length;
+        const legacy = quiz.filter((r) => r.first_is_legacy).length;
         return {
           profile,
           progress,
@@ -616,6 +620,7 @@ function ParticipantsTable({
           percent: Math.min(100, Math.round((completedStops / module.stopIds.length) * 100)),
           answered: quiz.length,
           correct,
+          legacy,
         };
       })
       .sort((a, b) => {
@@ -739,8 +744,15 @@ function ParticipantsTable({
                             {row.correct}/{row.answered}
                           </span>
                           <span className="ml-2 text-xs text-muted-foreground">
-                            corretas ({module.quizIds.length} micro-quizzes avaliados nos blocos)
+                            corretas à primeira ({module.quizIds.length} micro-quizzes avaliados
+                            nos blocos)
                           </span>
+                          {row.legacy > 0 ? (
+                            <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                              {row.legacy} registo{row.legacy === 1 ? "" : "s"} anterior
+                              {row.legacy === 1 ? "" : "es"} à correção
+                            </span>
+                          ) : null}
                         </>
                       )}
                     </td>
@@ -872,35 +884,52 @@ function ParticipantDetail({
               <thead className="border-b border-border bg-surface text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="px-3 py-2 text-left">Quiz</th>
-                  <th className="px-3 py-2 text-left">Opção escolhida</th>
-                  <th className="px-3 py-2 text-left">Correta</th>
-                  <th className="px-3 py-2 text-left">Quando</th>
+                  <th className="px-3 py-2 text-left">Primeira resposta</th>
+                  <th className="px-3 py-2 text-left">Correta à primeira</th>
+                  <th className="px-3 py-2 text-left">Tent.</th>
+                  <th className="px-3 py-2 text-left">Última resposta</th>
+                  <th className="px-3 py-2 text-left">Quando (1.ª)</th>
                 </tr>
               </thead>
               <tbody>
                 {sortedQuiz.map((row) => {
-                  const option = readOption(row.selected_option);
+                  const first = readOption(row.first_option ?? row.selected_option);
+                  const last = readOption(row.selected_option);
+                  const firstCorrect = row.first_is_correct ?? row.is_correct;
                   return (
                     <tr key={row.quiz_id} className="border-b border-border/60 last:border-0">
                       <td className="px-3 py-2 font-mono text-xs">{row.quiz_id}</td>
                       <td className="px-3 py-2">
-                        <span className="font-semibold">{option.letter})</span>{" "}
-                        {option.text || "(texto não registado)"}
+                        <span className="font-semibold">{first.letter})</span>{" "}
+                        {first.text || "(texto não registado)"}
+                        {row.first_is_legacy ? (
+                          <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-[0.7rem] text-muted-foreground">
+                            anterior à correção
+                          </span>
+                        ) : null}
                       </td>
                       <td className="px-3 py-2">
                         <span
                           className={cn(
                             "rounded-full px-2.5 py-0.5 text-xs font-semibold",
-                            row.is_correct
+                            firstCorrect
                               ? "bg-success-soft text-success"
                               : "bg-accent-soft text-accent",
                           )}
                         >
-                          {row.is_correct ? "Sim" : "Não"}
+                          {firstCorrect ? "Sim" : "Não"}
                         </span>
                       </td>
+                      <td className="px-3 py-2 tabular-nums text-muted-foreground">
+                        {row.attempts}
+                      </td>
                       <td className="px-3 py-2 text-muted-foreground">
-                        {formatDate(row.answered_at)}
+                        <span className="font-semibold">{last.letter})</span>{" "}
+                        {last.text || "(texto não registado)"} —{" "}
+                        {row.is_correct ? "correta" : "incorreta"}
+                      </td>
+                      <td className="px-3 py-2 text-muted-foreground">
+                        {formatDate(row.first_answered_at ?? row.answered_at)}
                       </td>
                     </tr>
                   );
@@ -928,6 +957,17 @@ function ParticipantDetail({
                 <p className="mt-2 whitespace-pre-wrap text-[0.95rem] leading-relaxed">
                   {row.response_text}
                 </p>
+                {row.revealed_at ? (
+                  <div className="mt-3 rounded-lg border border-primary/25 bg-primary-soft p-3">
+                    <p className="text-xs font-semibold text-primary">
+                      Submetido antes de ver o comentário (
+                      {formatDate(row.revealed_at)})
+                    </p>
+                    <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed">
+                      {row.revealed_text}
+                    </p>
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>

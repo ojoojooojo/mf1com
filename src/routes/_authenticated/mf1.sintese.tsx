@@ -4,7 +4,6 @@ import { BLOCK_QUIZ_IDS, BLOCKS, LEARNING_OBJECTIVES } from "@/lib/course-data";
 import { ContentCard, Quiz, ReflectionPrompt, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useIsFormador } from "@/lib/auth";
-import { useProgress } from "@/lib/progress";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -39,29 +38,37 @@ const RECAP: Record<string, string> = {
 };
 
 const FINAL_QUIZ_IDS = ["final-1", "final-2", "final-3", "final-4", "final-5"];
-const FINAL_CORRECT: Record<string, number> = {
-  "final-1": 1,
-  "final-2": 0,
-  "final-3": 1,
-  "final-4": 2,
-  "final-5": 1,
-};
 
 function ScorePanel() {
-  const { state, hydrated } = useProgress();
-  const answered = FINAL_QUIZ_IDS.filter((id) => typeof state.quiz[id] === "number");
-  const correct = answered.filter((id) => state.quiz[id] === FINAL_CORRECT[id]).length;
+  // Fonte de verdade: a tabela `quiz_answers` — conta a primeira resposta a cada pergunta.
+  const { data } = useQuery({
+    queryKey: ["sintese", "quiz-final-primeira"],
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      const userId = auth.user?.id;
+      if (!userId) return { answered: 0, correct: 0 };
+      const { data: rows } = await supabase
+        .from("quiz_answers")
+        .select("quiz_id, first_is_correct")
+        .eq("user_id", userId)
+        .in("quiz_id", FINAL_QUIZ_IDS);
+      const relevant = rows ?? [];
+      return {
+        answered: relevant.length,
+        correct: relevant.filter((r) => r.first_is_correct ?? false).length,
+      };
+    },
+  });
 
-  if (!hydrated || answered.length === 0) return null;
+  if (!data || data.answered === 0) return null;
+  const { answered, correct } = data;
 
   return (
     <div className="mt-6 rounded-xl border border-border bg-surface p-5">
       <p className="eyebrow">Balanço</p>
       <p className="mt-1 font-display text-xl">
         Acertou {correct} de {FINAL_QUIZ_IDS.length}
-        {answered.length < FINAL_QUIZ_IDS.length
-          ? ` (${answered.length} respondidas até agora)`
-          : ""}
+        {answered < FINAL_QUIZ_IDS.length ? ` (${answered} respondidas até agora)` : ""}
         .
       </p>
       <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">
@@ -84,13 +91,13 @@ function QuizSummary() {
       if (!userId) return { answered: 0, correct: 0 };
       const { data: rows } = await supabase
         .from("quiz_answers")
-        .select("quiz_id, is_correct")
+        .select("quiz_id, first_is_correct")
         .eq("user_id", userId)
         .in("quiz_id", [...BLOCK_QUIZ_IDS]);
       const relevant = rows ?? [];
       return {
         answered: relevant.length,
-        correct: relevant.filter((r) => r.is_correct).length,
+        correct: relevant.filter((r) => r.first_is_correct ?? false).length,
       };
     },
   });
@@ -108,8 +115,9 @@ function QuizSummary() {
         {answered < BLOCK_QUIZ_IDS.length
           ? `Respondeu a ${answered} dos ${BLOCK_QUIZ_IDS.length} micro-quizzes ao longo dos cinco blocos. `
           : "Respondeu a todos os micro-quizzes dos cinco blocos. "}
-        Isto não é uma classificação: é apenas feedback formativo para si. Pode voltar a qualquer
-        bloco e responder de novo — fica guardada a resposta mais recente.
+        Isto não é uma classificação: é apenas feedback formativo para si. Conta a primeira
+        resposta a cada pergunta. Pode voltar aos blocos e explorar as outras opções, para
+        aprender com o feedback.
       </p>
     </div>
   );
