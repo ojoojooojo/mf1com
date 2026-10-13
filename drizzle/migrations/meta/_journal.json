@@ -43,6 +43,13 @@
       "when": 1791930319738,
       "tag": "0005_integridade_primeira_resposta_e_revelacao",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791931473628,
+      "tag": "0006_section_schedule_calendario_abertura",
+      "breakpoints": true
     }
   ]
 }
