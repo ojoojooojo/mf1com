@@ -173,6 +173,26 @@ function queueResponse(activityId: string, text: string) {
   );
 }
 
+/**
+ * Envia de imediato todas as respostas que estão à espera no debounce.
+ * Resolve quando todas ficarem gravadas (ou sem sessão, mantendo a cache local).
+ */
+export async function flushResponses(): Promise<void> {
+  const pending = [...responseTimers.entries()];
+  for (const [, timer] of pending) clearTimeout(timer);
+  responseTimers.clear();
+  if (pending.length === 0) return;
+  const userId = await currentUserId();
+  if (!userId) return;
+  await Promise.all(
+    pending.map(([activityId, text]) =>
+      pushResponse(activityId, text).catch(() => {
+        /* offline — a cache local mantém a resposta */
+      }),
+    ),
+  );
+}
+
 async function pushResponse(activityId: string, text: string) {
   const userId = await currentUserId();
   if (!userId) return;

@@ -278,6 +278,12 @@ export function Quiz({
           );
         })}
       </ul>
+      {typeof stored === "number" ? (
+        <p className="mt-3 text-xs text-muted-foreground">
+          A sua primeira resposta fica registada para a avaliação. Pode explorar as outras opções
+          para ver o feedback.
+        </p>
+      ) : null}
       {chosen ? (
         <div
           className={cn(
