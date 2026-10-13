@@ -14,6 +14,7 @@ import {
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useProgress } from "@/lib/progress";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/mf3/sintese")({
@@ -170,7 +171,16 @@ function EvaluationCallout() {
 }
 
 function Mf3SynthesisPage() {
-  useVisit("mf3-sintese");
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor("mf3-sintese");
+  useVisit("mf3-sintese", !lock);
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article>

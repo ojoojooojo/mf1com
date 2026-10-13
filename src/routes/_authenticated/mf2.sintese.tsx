@@ -13,6 +13,7 @@ import {
   SectionHeading,
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/mf2/sintese")({
@@ -134,7 +135,16 @@ function QuizSummary() {
 }
 
 function Mf2SynthesisPage() {
-  useVisit("mf2-sintese");
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor("mf2-sintese");
+  useVisit("mf2-sintese", !lock);
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article>
