@@ -82,9 +82,7 @@ function ScorePanel() {
       <p className="eyebrow">Balanço</p>
       <p className="mt-1 font-display text-xl">
         Acertou {correct} de {FINAL_QUIZ_IDS.length}
-        {answered.length < FINAL_QUIZ_IDS.length
-          ? ` (${answered.length} respondidas até agora)`
-          : ""}
+        {answered < FINAL_QUIZ_IDS.length ? ` (${answered} respondidas até agora)` : ""}
         .
       </p>
       <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">

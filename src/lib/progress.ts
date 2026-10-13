@@ -157,15 +157,19 @@ async function pushQuiz(
 }
 
 const responseTimers = new Map<string, ReturnType<typeof setTimeout>>();
+/** Texto à espera do debounce, por campo — permite enviar tudo de imediato (flush). */
+const pendingResponses = new Map<string, string>();
 
 /** Debounce por campo: o localStorage serve de buffer enquanto a pessoa escreve. */
 function queueResponse(activityId: string, text: string) {
   const existing = responseTimers.get(activityId);
   if (existing) clearTimeout(existing);
+  pendingResponses.set(activityId, text);
   responseTimers.set(
     activityId,
     setTimeout(() => {
       responseTimers.delete(activityId);
+      pendingResponses.delete(activityId);
       void pushResponse(activityId, text).catch(() => {
         /* sem sessão ou offline — a cache local mantém a resposta */
       });
@@ -178,9 +182,10 @@ function queueResponse(activityId: string, text: string) {
  * Resolve quando todas ficarem gravadas (ou sem sessão, mantendo a cache local).
  */
 export async function flushResponses(): Promise<void> {
-  const pending = [...responseTimers.entries()];
-  for (const [, timer] of pending) clearTimeout(timer);
+  for (const timer of responseTimers.values()) clearTimeout(timer);
   responseTimers.clear();
+  const pending = [...pendingResponses.entries()];
+  pendingResponses.clear();
   if (pending.length === 0) return;
   const userId = await currentUserId();
   if (!userId) return;
