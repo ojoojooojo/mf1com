@@ -1,12 +1,14 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
+import { Check, Circle, Dot, Lock, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
 import { STOPS, MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { MF2_STOPS, MF2_MODULE_CODE, MF2_MODULE_TITLE } from "@/lib/course-data-mf2";
 import { MF3_STOPS, MF3_MODULE_CODE, MF3_MODULE_TITLE } from "@/lib/course-data-mf3";
 import { useProgress } from "@/lib/progress";
 import { useAuth, useIsFormador } from "@/lib/auth";
+import { useSectionLocks } from "@/components/course/SectionGate";
+import { formatOpening } from "@/lib/section-schedule";
 import {
   AlertDialog,
   AlertDialogAction,
