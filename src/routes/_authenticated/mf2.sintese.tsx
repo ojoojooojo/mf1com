@@ -13,7 +13,6 @@ import {
   SectionHeading,
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
-import { useProgress } from "@/lib/progress";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/mf2/sintese")({
