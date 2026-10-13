@@ -1,12 +1,14 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-import { Check, Circle, Dot, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
+import { Check, Circle, Dot, Lock, LogIn, LogOut, Menu, RotateCcw, Users, X } from "lucide-react";
 import { STOPS, MODULE_CODE, MODULE_TITLE } from "@/lib/course-data";
 import { MF2_STOPS, MF2_MODULE_CODE, MF2_MODULE_TITLE } from "@/lib/course-data-mf2";
 import { MF3_STOPS, MF3_MODULE_CODE, MF3_MODULE_TITLE } from "@/lib/course-data-mf3";
 import { useProgress } from "@/lib/progress";
 import { useAuth, useIsFormador } from "@/lib/auth";
+import { useSectionLocks } from "@/components/course/SectionGate";
+import { formatOpening } from "@/lib/section-schedule";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -53,6 +55,7 @@ function useModule() {
 function TrailList({ onNavigate }: { onNavigate?: () => void }) {
   const { isCompleted, isVisited } = useProgress();
   const { pathname, stops, isMf2, isMf3 } = useModule();
+  const { lockFor } = useSectionLocks();
 
   return (
     <nav aria-label="Mapa do módulo" className="space-y-1">
@@ -68,6 +71,29 @@ function TrailList({ onNavigate }: { onNavigate?: () => void }) {
 
         const done = isCompleted(stop.id);
         const seen = isVisited(stop.id);
+        const lock = lockFor(stop.id);
+        if (lock) {
+          return (
+            <div
+              key={stop.id}
+              className="flex items-start gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground"
+              aria-label={`${stop.shortTitle} — fechado`}
+            >
+              <span
+                className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-sidebar-border"
+                aria-hidden
+              >
+                <Lock className="size-3" />
+              </span>
+              <span className="min-w-0">
+                <span className="block leading-snug">{stop.shortTitle}</span>
+                <span className="text-xs text-muted-foreground">
+                  Abre {formatOpening(lock)}
+                </span>
+              </span>
+            </div>
+          );
+        }
         return (
           <Link
             key={stop.id}

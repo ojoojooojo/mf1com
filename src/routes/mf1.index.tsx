@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, Target, Users } from "lucide-react";
+import { ArrowRight, Clock, Lock, Target, Users } from "lucide-react";
 import {
   BLOCKS,
   COURSE_TITLE,
@@ -9,6 +9,9 @@ import {
 } from "@/lib/course-data";
 import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { useSectionLocks } from "@/components/course/SectionGate";
+import { formatOpening } from "@/lib/section-schedule";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/mf1/")({
   head: () => ({
@@ -86,6 +89,7 @@ function CommunicationDiagram() {
 
 function Landing() {
   useVisit("abertura");
+  const { lockFor } = useSectionLocks();
 
   return (
     <article>
@@ -174,15 +178,19 @@ function Landing() {
           lead="Cada bloco alterna conteúdo, exemplos, interação e aplicação."
         />
         <ul className="space-y-3">
-          {BLOCKS.map((block) => (
-            <li key={block.id}>
-              <Link
-                to="/mf1/blocos/$blocoId"
-                params={{ blocoId: block.id }}
-                className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:bg-secondary"
-              >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground">
-                  {block.number}
+          {BLOCKS.map((block) => {
+            const lock = lockFor(`bloco-${block.id}`);
+            const inner = (
+              <>
+                <span
+                  className={cn(
+                    "flex size-9 shrink-0 items-center justify-center rounded-lg text-sm font-semibold",
+                    lock
+                      ? "bg-muted text-muted-foreground"
+                      : "bg-primary text-primary-foreground",
+                  )}
+                >
+                  {lock ? <Lock className="size-4" /> : block.number}
                 </span>
                 <span className="min-w-0">
                   <span className="block font-display text-lg">{block.title}</span>
@@ -192,11 +200,35 @@ function Landing() {
                   <span className="mt-2 block text-xs text-muted-foreground">
                     ~{block.minutes} min · {block.focus.join(" · ")}
                   </span>
+                  {lock ? (
+                    <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                      <Lock className="size-3" /> Abre {formatOpening(lock)}
+                    </span>
+                  ) : null}
                 </span>
-                <ArrowRight className="ml-auto mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </li>
-          ))}
+                {!lock ? (
+                  <ArrowRight className="ml-auto mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                ) : null}
+              </>
+            );
+            return (
+              <li key={block.id}>
+                {lock ? (
+                  <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-5 opacity-80">
+                    {inner}
+                  </div>
+                ) : (
+                  <Link
+                    to="/mf1/blocos/$blocoId"
+                    params={{ blocoId: block.id }}
+                    className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:bg-secondary"
+                  >
+                    {inner}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </section>
 

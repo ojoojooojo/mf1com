@@ -215,6 +215,30 @@ export type Database = {
         }
         Relationships: []
       }
+      section_schedule: {
+        Row: {
+          module_key: string
+          opens_at: string
+          section_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          module_key: string
+          opens_at: string
+          section_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          module_key?: string
+          opens_at?: string
+          section_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       written_responses: {
         Row: {
           activity_id: string
@@ -272,6 +296,7 @@ export type Database = {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      section_of: { Args: { _id: string }; Returns: string }
       snapshot_reveal: { Args: { p_prefix: string }; Returns: number }
       submit_course_evaluation: {
         Args: {

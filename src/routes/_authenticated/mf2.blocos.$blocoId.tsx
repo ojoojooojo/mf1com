@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Clock } from "lucide-react";
 import { MF2_BLOCKS, getMf2Block } from "@/lib/course-data-mf2";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { Block1ContentMf2 } from "@/components/course/Block1ContentMf2";
 import { Block2ContentMf2 } from "@/components/course/Block2ContentMf2";
 import { Block3ContentMf2 } from "@/components/course/Block3ContentMf2";
@@ -61,7 +62,16 @@ function Mf2BlockNotFound() {
 function Mf2BlockPage() {
   const { block } = Route.useLoaderData();
   const stopId = `mf2-bloco-${block.id}`;
-  useVisit(stopId);
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor(stopId);
+  useVisit(stopId, !lock);
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article key={block.id}>

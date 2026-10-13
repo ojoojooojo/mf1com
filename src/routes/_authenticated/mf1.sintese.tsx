@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { BLOCK_QUIZ_IDS, BLOCKS, LEARNING_OBJECTIVES } from "@/lib/course-data";
 import { ContentCard, Quiz, ReflectionPrompt, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { useIsFormador } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -124,8 +125,17 @@ function QuizSummary() {
 }
 
 function SynthesisPage() {
-  useVisit("sintese");
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor("sintese");
+  useVisit("sintese", !lock);
   const isFormador = useIsFormador();
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article>

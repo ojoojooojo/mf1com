@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Clock } from "lucide-react";
+import { ArrowRight, Check, Clock, Lock } from "lucide-react";
 import { MF2_ACTIVITIES } from "@/lib/course-data-mf2";
 import { ContentCard, SectionHeading } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useProgress } from "@/lib/progress";
+import { useSectionLocks } from "@/components/course/SectionGate";
+import { formatOpening } from "@/lib/section-schedule";
 
 export const Route = createFileRoute("/_authenticated/mf2/atividades/")({
   head: () => ({
@@ -29,6 +31,7 @@ function Mf2ActivitiesHub() {
   useVisit("mf2-atividades");
   const { isCompleted, hydrated } = useProgress();
   const doneCount = MF2_ACTIVITIES.filter((a) => isCompleted(`mf2-atividade-${a.id}`)).length;
+  const { lockFor } = useSectionLocks();
 
   return (
     <article>
@@ -52,28 +55,29 @@ function Mf2ActivitiesHub() {
         <ul className="space-y-3">
           {MF2_ACTIVITIES.map((activity) => {
             const done = hydrated && isCompleted(`mf2-atividade-${activity.id}`);
-            return (
-              <li key={activity.id}>
-                <Link
-                  to="/mf2/atividades/$atividadeId"
-                  params={{ atividadeId: activity.id }}
-                  className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent/50 hover:bg-secondary"
-                >
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-accent-foreground">
-                    {activity.letter}
+            const lock = lockFor(`mf2-atividade-${activity.id}`);
+            const inner = (
+              <>
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-accent-foreground">
+                  {lock ? <Lock className="size-4" /> : activity.letter}
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-display text-lg">{activity.title}</span>
+                  <span className="mt-1 block text-sm text-muted-foreground">
+                    {activity.description}
                   </span>
-                  <span className="min-w-0">
-                    <span className="block font-display text-lg">{activity.title}</span>
-                    <span className="mt-1 block text-sm text-muted-foreground">
-                      {activity.description}
+                  <span className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-muted-foreground">
+                      <Clock className="size-3" /> ~{activity.minutes} min
                     </span>
-                    <span className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-muted-foreground">
-                        <Clock className="size-3" /> ~{activity.minutes} min
+                    <span className="rounded-full bg-muted px-2.5 py-0.5 text-muted-foreground">
+                      {activity.kind}
+                    </span>
+                    {lock ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 font-medium text-muted-foreground">
+                        <Lock className="size-3" /> Abre {formatOpening(lock)}
                       </span>
-                      <span className="rounded-full bg-muted px-2.5 py-0.5 text-muted-foreground">
-                        {activity.kind}
-                      </span>
+                    ) : (
                       <span
                         className={
                           done
@@ -89,10 +93,29 @@ function Mf2ActivitiesHub() {
                           "Por fazer"
                         )}
                       </span>
-                    </span>
+                    )}
                   </span>
+                </span>
+                {!lock ? (
                   <ArrowRight className="ml-auto mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                ) : null}
+              </>
+            );
+            return (
+              <li key={activity.id}>
+                {lock ? (
+                  <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-5 opacity-80">
+                    {inner}
+                  </div>
+                ) : (
+                  <Link
+                    to="/mf2/atividades/$atividadeId"
+                    params={{ atividadeId: activity.id }}
+                    className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent/50 hover:bg-secondary"
+                  >
+                    {inner}
+                  </Link>
+                )}
               </li>
             );
           })}

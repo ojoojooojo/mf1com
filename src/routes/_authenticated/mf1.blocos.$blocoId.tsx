@@ -15,6 +15,7 @@ import {
   SourceNote,
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { Block1Content } from "@/components/course/Block1Content";
 import { Block2Content } from "@/components/course/Block2Content";
 import { Block3Content } from "@/components/course/Block3Content";
@@ -75,7 +76,16 @@ function BlockNotFound() {
 function BlockPage() {
   const { block } = Route.useLoaderData();
   const stopId = `bloco-${block.id}`;
-  useVisit(stopId);
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor(stopId);
+  useVisit(stopId, !lock);
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article key={block.id}>

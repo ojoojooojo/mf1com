@@ -8,6 +8,7 @@ import { ActivityMf2_3 } from "@/components/course/activities/ActivityMf2_3";
 import { ActivityMf2_4 } from "@/components/course/activities/ActivityMf2_4";
 import { ActivityMf2_5 } from "@/components/course/activities/ActivityMf2_5";
 import { useProgress } from "@/lib/progress";
+import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/mf2/atividades/$atividadeId")({
@@ -61,6 +62,15 @@ function Mf2ActivityPage() {
   const done = hydrated && isCompleted(key);
   const index = MF2_ACTIVITIES.findIndex((a) => a.id === activity.id);
   const next = MF2_ACTIVITIES[index + 1];
+  const { loading, lockFor } = useSectionLocks();
+  const lock = lockFor(key);
+
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">A verificar a disponibilidade…</p>;
+  }
+  if (lock) {
+    return <SectionLockedCard until={lock} />;
+  }
 
   return (
     <article key={activity.id}>
