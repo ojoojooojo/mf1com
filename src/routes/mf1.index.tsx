@@ -11,6 +11,7 @@ import { ContentCard, Figure, SectionHeading } from "@/components/course/LessonK
 import { StopNav, useVisit } from "@/components/course/StopNav";
 import { useSectionLocks } from "@/components/course/SectionGate";
 import { formatOpening } from "@/lib/section-schedule";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/mf1/")({
   head: () => ({

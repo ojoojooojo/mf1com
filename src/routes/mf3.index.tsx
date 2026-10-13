@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, Target, Users } from "lucide-react";
+import { ArrowRight, Clock, Lock, Target, Users } from "lucide-react";
 import { COURSE_TITLE } from "@/lib/course-data";
 import {
   MF3_BLOCKS,
@@ -13,6 +13,9 @@ import {
   SectionHeading,
 } from "@/components/course/LessonKit";
 import { StopNav, useVisit } from "@/components/course/StopNav";
+import { useSectionLocks } from "@/components/course/SectionGate";
+import { formatOpening } from "@/lib/section-schedule";
+import { cn } from "@/lib/utils";
 
 /* ---------- Infográfico: percurso conceptual do módulo ---------- */
 
