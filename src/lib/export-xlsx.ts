@@ -32,12 +32,22 @@ export type QuizRow = {
   selected_option: string;
   is_correct: boolean;
   answered_at: string;
+  /** Primeira resposta registada ("índice|texto"); nunca muda após o insert. */
+  first_option: string | null;
+  first_is_correct: boolean | null;
+  first_answered_at: string | null;
+  attempts: number;
+  /** true em registos anteriores à correção de integridade (primeira resposta desconhecida). */
+  first_is_legacy: boolean;
 };
 export type ResponseRow = {
   user_id: string;
   activity_id: string;
   response_text: string;
   submitted_at: string;
+  /** Fotografia do texto no momento em que o formando pediu o comentário. */
+  revealed_text: string | null;
+  revealed_at: string | null;
 };
 
 export type ExportModule = {
@@ -162,8 +172,14 @@ type ModuleStats = {
   microCorrect: number;
   finalAnswered: number;
   finalCorrect: number;
+  legacyCount: number;
   writtenCount: number;
 };
+
+/** Conta a primeira resposta; em registos legados (anteriores à correção) usa o valor atual. */
+function firstCorrectOf(r: QuizRow) {
+  return r.first_is_correct ?? r.is_correct;
+}
 
 function statsFor(module: ExportModule, data: Dataset, userId: string): ModuleStats {
   const progress = data.progress.filter(
@@ -188,9 +204,10 @@ function statsFor(module: ExportModule, data: Dataset, userId: string): ModuleSt
     totalStops: module.stopIds.length,
     percent: Math.min(1, completedStops / Math.max(1, module.stopIds.length)),
     microAnswered: micro.length,
-    microCorrect: micro.filter((r) => r.is_correct).length,
+    microCorrect: micro.filter(firstCorrectOf).length,
     finalAnswered: final.length,
-    finalCorrect: final.filter((r) => r.is_correct).length,
+    finalCorrect: final.filter(firstCorrectOf).length,
+    legacyCount: [...micro, ...final].filter((r) => r.first_is_legacy).length,
     writtenCount: written.length,
   };
 }
@@ -202,12 +219,13 @@ const SUMMARY_COLUMNS: ColumnDef[] = [
   { header: "Progresso", width: 12, kind: "percent" },
   { header: "Micro-quizzes avaliados (total)", width: 30, kind: "number" },
   { header: "Micro-quizzes respondidos", width: 26, kind: "number" },
-  { header: "Micro-quizzes corretos", width: 24, kind: "number" },
-  { header: "% acerto micro-quizzes", width: 22, kind: "percent" },
+  { header: "Micro-quizzes corretos à primeira", width: 30, kind: "number" },
+  { header: "% acerto à primeira (micro-quizzes)", width: 28, kind: "percent" },
   { header: "Avaliação final (total)", width: 22, kind: "number" },
   { header: "Avaliação final respondidas", width: 27, kind: "number" },
-  { header: "Avaliação final corretas", width: 25, kind: "number" },
-  { header: "% acerto avaliação final", width: 24, kind: "percent" },
+  { header: "Avaliação final corretas à primeira", width: 30, kind: "number" },
+  { header: "% acerto à primeira (avaliação final)", width: 30, kind: "percent" },
+  { header: "Registos anteriores à correção", width: 28, kind: "number" },
   { header: "Respostas escritas", width: 20, kind: "number" },
 ];
 
@@ -225,6 +243,7 @@ function summaryRow(label: string, s: ModuleStats) {
     s.finalAnswered,
     s.finalCorrect,
     s.finalAnswered > 0 ? s.finalCorrect / s.finalAnswered : 0,
+    s.legacyCount,
     s.writtenCount,
   ];
 }
@@ -250,6 +269,7 @@ function totalsRow(label: string, all: ModuleStats[]) {
     finalAnswered,
     finalCorrect,
     finalAnswered > 0 ? finalCorrect / finalAnswered : 0,
+    sum((s) => s.legacyCount),
     sum((s) => s.writtenCount),
   ];
 }
