@@ -246,6 +246,7 @@ export type Database = {
         Returns: boolean
       }
       module_key_of: { Args: { _id: string }; Returns: string }
+      nota_formador_of: { Args: { _user_id: string }; Returns: string }
       role_of: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
