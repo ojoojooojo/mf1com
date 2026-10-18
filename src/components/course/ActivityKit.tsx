@@ -43,7 +43,7 @@ export function TaskField({
   const value = state.answers[id] ?? "";
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div data-req={id} className="rounded-xl border border-border bg-card p-5">
       <label htmlFor={id} className="block font-display text-base">
         {label}
       </label>
@@ -94,7 +94,7 @@ export function CheckboxGroup({
     );
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div data-req={id} className="rounded-xl border border-border bg-card p-5">
       <p className="font-display text-base">{label}</p>
       {instruction ? (
         <p className="mt-1 text-sm text-muted-foreground">{instruction}</p>
@@ -145,7 +145,7 @@ export function ChoiceGroup({
   const value = hydrated ? state.answers[id] : undefined;
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div data-req={id} className="rounded-xl border border-border bg-card p-5">
       <p className="font-display text-base">{label}</p>
       {instruction ? (
         <p className="mt-1 text-sm text-muted-foreground">{instruction}</p>
