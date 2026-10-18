@@ -368,15 +368,19 @@ export async function exportParticipantWorkbook(
     totalsRow("TOTAL DA FORMAÇÃO (MF1+MF2+MF3)", stats),
   ]);
   const nomeCompleto = fullNameOf(profile);
+  const etiqueta = profile.nota_formador?.trim() ?? "";
   resumo.spliceRows(
     1,
     0,
     [`Participante: ${nomeCompleto ? `${nomeCompleto} (${profile.email})` : profile.email}`],
+    [`Etiqueta: ${etiqueta}`],
     [`Exportado em: ${new Date().toLocaleString("pt-PT")}`],
   );
   resumo.getRow(1).font = { bold: true, name: "Arial", size: 12 };
   resumo.getRow(2).font = { name: "Arial", size: 10 };
-  resumo.views = [{ state: "frozen", ySplit: 3 }];
+  resumo.getRow(3).font = { name: "Arial", size: 10 };
+  resumo.views = [{ state: "frozen", ySplit: 4 }];
+
 
   modules.forEach((module) => {
     const rows = quizRowsFor(
@@ -414,7 +418,9 @@ export async function exportClassWorkbook(
   const participantColumns: ColumnDef[] = [
     { header: "Participante", width: 34 },
     { header: "Nome", width: 28 },
+    { header: "Etiqueta", width: 34, kind: "long" },
     { header: "Registo", width: 20, kind: "date" },
+
     ...modules.flatMap((m) => {
       const k = m.key.toUpperCase();
       return [
@@ -443,7 +449,9 @@ export async function exportClassWorkbook(
       return [
         profile.email,
         fullNameOf(profile),
+        profile.nota_formador ?? "",
         toDate(profile.created_at),
+
         ...stats.flatMap((s) => [
           s.percent,
           s.microCorrect,
@@ -466,10 +474,12 @@ export async function exportClassWorkbook(
   const ids = new Set(participants.map((p) => p.id));
   const emailOf = new Map(participants.map((p) => [p.id, p.email]));
   const nameOf = new Map(participants.map((p) => [p.id, fullNameOf(p)]));
+  const notaOf = new Map(participants.map((p) => [p.id, p.nota_formador ?? ""]));
 
   const quizDetailColumns: ColumnDef[] = [
     { header: "Participante", width: 34 },
     { header: "Nome", width: 28 },
+    { header: "Etiqueta", width: 34, kind: "long" },
     { header: "Módulo", width: 12 },
     ...QUIZ_COLUMNS,
   ];
@@ -481,7 +491,16 @@ export async function exportClassWorkbook(
         quizRowsFor(
           module,
           data.quiz.filter((r) => r.user_id === profile.id),
-        ).map((row) => [profile.email, fullNameOf(profile), module.key.toUpperCase(), ...row]),
+        ).map(
+          (row) =>
+            [
+              profile.email,
+              fullNameOf(profile),
+              profile.nota_formador ?? "",
+              module.key.toUpperCase(),
+              ...row,
+            ] as (string | number | Date | null)[],
+        ),
       ),
     );
   addSheet(workbook, "QUIZZES (DETALHE)", quizDetailColumns, quizDetailRows, {
@@ -491,8 +510,10 @@ export async function exportClassWorkbook(
   const writtenDetailColumns: ColumnDef[] = [
     { header: "Participante", width: 34 },
     { header: "Nome", width: 28 },
+    { header: "Etiqueta", width: 34, kind: "long" },
     ...WRITTEN_COLUMNS,
   ];
+
   const writtenWithEmail = data.responses
     .filter((r) => ids.has(r.user_id) && r.response_text.trim().length > 0)
     .sort(
@@ -505,6 +526,7 @@ export async function exportClassWorkbook(
         [
           emailOf.get(r.user_id) ?? r.user_id,
           nameOf.get(r.user_id) ?? "",
+          notaOf.get(r.user_id) ?? "",
           moduleKeyOf(modules, r.activity_id),
           r.activity_id,
           r.revealed_text ?? "",
@@ -513,6 +535,7 @@ export async function exportClassWorkbook(
           toDate(r.submitted_at),
         ] as (string | number | Date | null)[],
     );
+
   addSheet(workbook, "ACTIVIDADES (DETALHE)", writtenDetailColumns, writtenWithEmail, {
     autofilter: true,
   });
