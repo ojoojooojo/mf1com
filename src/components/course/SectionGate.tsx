@@ -5,7 +5,7 @@ import { useProgress } from "@/lib/progress";
 import { formatOpening, lockedUntil, useSectionSchedule } from "@/lib/section-schedule";
 
 /** Papel do utilizador — partilha a cache com o ModuleGate (mesma queryKey/queryFn). */
-function useViewerRole() {
+export function useViewerRole() {
   return useQuery({
     queryKey: ["module-gate", "role"],
     queryFn: async () => {

@@ -6,6 +6,7 @@ import { MF2_STOPS } from "@/lib/course-data-mf2";
 import { MF3_STOPS } from "@/lib/course-data-mf3";
 import { useProgress } from "@/lib/progress";
 import { useSectionLocks } from "@/components/course/SectionGate";
+import { MissingRequirementsList, useCompletionGate } from "@/components/course/CompletionGate";
 import { formatOpening } from "@/lib/section-schedule";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +18,7 @@ export function useVisit(stopId: string, enabled = true) {
 }
 
 export function StopNav({ stopId }: { stopId: string }) {
-  const { isCompleted, markCompleted, unmarkCompleted } = useProgress();
+  const { done, blocked, completing, missing, complete, uncomplete } = useCompletionGate(stopId);
   const pathname = useLocation({ select: (l) => l.pathname });
   const stops = pathname.startsWith("/mf3")
     ? MF3_STOPS
