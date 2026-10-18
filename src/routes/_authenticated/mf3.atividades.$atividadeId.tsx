@@ -7,8 +7,8 @@ import { ActivityMf3_2 } from "@/components/course/activities/ActivityMf3_2";
 import { ActivityMf3_3 } from "@/components/course/activities/ActivityMf3_3";
 import { ActivityMf3_4 } from "@/components/course/activities/ActivityMf3_4";
 import { ActivityMf3_5 } from "@/components/course/activities/ActivityMf3_5";
-import { useProgress } from "@/lib/progress";
 import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
+import { MissingRequirementsList, useCompletionGate } from "@/components/course/CompletionGate";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/mf3/atividades/$atividadeId")({
@@ -57,9 +57,8 @@ function Mf3ActivityNotFound() {
 
 function Mf3ActivityPage() {
   const { activity } = Route.useLoaderData();
-  const { isCompleted, markCompleted, unmarkCompleted, hydrated } = useProgress();
   const key = `mf3-atividade-${activity.id}`;
-  const done = hydrated && isCompleted(key);
+  const { done, blocked, completing, missing, complete, uncomplete } = useCompletionGate(key);
   const index = MF3_ACTIVITIES.findIndex((a) => a.id === activity.id);
   const next = MF3_ACTIVITIES[index + 1];
   const { loading, lockFor } = useSectionLocks();
@@ -107,17 +106,24 @@ function Mf3ActivityPage() {
       <div className="mt-8 space-y-4 border-t border-border pt-6">
         <button
           type="button"
-          onClick={() => (done ? unmarkCompleted(key) : markCompleted(key))}
+          disabled={blocked || completing}
+          onClick={() => (done ? uncomplete() : void complete())}
           className={cn(
             "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
+            "disabled:cursor-not-allowed disabled:opacity-50",
             done
               ? "bg-success-soft text-foreground hover:bg-muted"
               : "bg-accent text-accent-foreground hover:opacity-90",
           )}
         >
           <Check className="size-4" />
-          {done ? "Atividade concluída — desmarcar" : "Marcar atividade como concluída"}
+          {done
+            ? "Atividade concluída — desmarcar"
+            : completing
+              ? "A registar as suas respostas…"
+              : "Marcar atividade como concluída"}
         </button>
+        {blocked ? <MissingRequirementsList missing={missing} /> : null}
         {next ? (
           <div>
             <ContentCard title="A seguir">

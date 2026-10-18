@@ -193,7 +193,7 @@ export function ReflectionPrompt({
   const value = state.answers[id] ?? "";
 
   return (
-    <section className="my-6 rounded-xl border border-accent/30 bg-card p-5">
+    <section data-req={id} className="my-6 rounded-xl border border-accent/30 bg-card p-5">
       <p className="eyebrow flex items-center gap-2 text-accent">
         <Pencil className="size-3.5" /> Reflexão
       </p>
@@ -239,7 +239,7 @@ export function Quiz({
   const chosen = current !== null ? options[current] : undefined;
 
   return (
-    <section className="my-6 rounded-xl border border-border bg-card p-5 shadow-soft">
+    <section data-req={id} className="my-6 rounded-xl border border-border bg-card p-5 shadow-soft">
       <p className="eyebrow flex items-center gap-2">
         <CircleDot className="size-3.5" /> Micro-quiz
       </p>

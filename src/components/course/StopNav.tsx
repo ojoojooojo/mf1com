@@ -6,6 +6,7 @@ import { MF2_STOPS } from "@/lib/course-data-mf2";
 import { MF3_STOPS } from "@/lib/course-data-mf3";
 import { useProgress } from "@/lib/progress";
 import { useSectionLocks } from "@/components/course/SectionGate";
+import { MissingRequirementsList, useCompletionGate } from "@/components/course/CompletionGate";
 import { formatOpening } from "@/lib/section-schedule";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +18,7 @@ export function useVisit(stopId: string, enabled = true) {
 }
 
 export function StopNav({ stopId }: { stopId: string }) {
-  const { isCompleted, markCompleted, unmarkCompleted } = useProgress();
+  const { done, blocked, completing, missing, complete, uncomplete } = useCompletionGate(stopId);
   const pathname = useLocation({ select: (l) => l.pathname });
   const stops = pathname.startsWith("/mf3")
     ? MF3_STOPS
@@ -27,7 +28,6 @@ export function StopNav({ stopId }: { stopId: string }) {
   const index = stops.findIndex((s) => s.id === stopId);
   const prev = index > 0 ? stops[index - 1] : undefined;
   const next = index >= 0 && index < stops.length - 1 ? stops[index + 1] : undefined;
-  const done = isCompleted(stopId);
   const { lockFor } = useSectionLocks();
   const prevLock = prev ? lockFor(prev.id) : null;
   const nextLock = next ? lockFor(next.id) : null;
@@ -36,17 +36,25 @@ export function StopNav({ stopId }: { stopId: string }) {
     <div className="mt-12 space-y-4 border-t border-border pt-6">
       <button
         type="button"
-        onClick={() => (done ? unmarkCompleted(stopId) : markCompleted(stopId))}
+        disabled={blocked || completing}
+        onClick={() => (done ? uncomplete() : void complete())}
         className={cn(
           "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
+          "disabled:cursor-not-allowed disabled:opacity-50",
           done
             ? "bg-success-soft text-foreground hover:bg-muted"
             : "bg-primary text-primary-foreground hover:bg-primary/90",
         )}
       >
         <Check className="size-4" />
-        {done ? "Secção concluída — desmarcar" : "Marcar secção como concluída"}
+        {done
+          ? "Secção concluída — desmarcar"
+          : completing
+            ? "A registar as suas respostas…"
+            : "Marcar secção como concluída"}
       </button>
+
+      {blocked ? <MissingRequirementsList missing={missing} /> : null}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         {prev ? (

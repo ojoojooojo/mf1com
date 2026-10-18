@@ -297,6 +297,13 @@ export type Database = {
         Returns: Database["public"]["Enums"]["app_role"]
       }
       section_of: { Args: { _id: string }; Returns: string }
+      section_requirements: {
+        Args: { _section_id: string }
+        Returns: {
+          item_id: string
+          kind: string
+        }[]
+      }
       snapshot_reveal: { Args: { p_prefix: string }; Returns: number }
       submit_course_evaluation: {
         Args: {
