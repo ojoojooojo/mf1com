@@ -521,14 +521,14 @@ const MF3_FINAL_QUIZ_IDS = [
   "mf3-sintese-quiz-4",
 ] as const;
 
-/** Ordem canónica das secções, igual ao mapa do módulo (com as atividades aninhadas). */
+/** Ordem canónica das secções, igual ao mapa do módulo (com as atividades aninhadas). A Abertura não conta para o progresso. */
 function buildSectionOrder(
   stops: typeof STOPS,
   activitiesStopId: string,
   activities: typeof ACTIVITIES,
   activityPrefix: string,
 ) {
-  return stops.flatMap((stop) =>
+  return stops.filter((stop) => stop.kind !== "abertura").flatMap((stop) =>
     stop.id === activitiesStopId
       ? [
           { id: stop.id, label: stop.shortTitle },
@@ -546,7 +546,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     key: "mf1",
     label: "MF1 · Comunicação e Escuta Ativa",
     sectionOrder: buildSectionOrder(STOPS, "aprendizagem-ativa", ACTIVITIES, "atividade-"),
-    stopIds: STOPS.map((s) => s.id),
+    stopIds: STOPS.filter((s) => s.kind !== "abertura").map((s) => s.id),
     quizIds: BLOCK_QUIZ_IDS,
     finalQuizIds: MF1_FINAL_QUIZ_IDS,
     owns: (id) => !id.startsWith("mf2-") && !id.startsWith("mf3-"),
@@ -555,7 +555,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     key: "mf2",
     label: "MF2 · Dinâmicas e Causas do Conflito",
     sectionOrder: buildSectionOrder(MF2_STOPS, "mf2-atividades", MF2_ACTIVITIES, "mf2-atividade-"),
-    stopIds: MF2_STOPS.map((s) => s.id),
+    stopIds: MF2_STOPS.filter((s) => s.kind !== "abertura").map((s) => s.id),
     quizIds: MF2_BLOCK_QUIZ_IDS,
     finalQuizIds: MF2_FINAL_QUIZ_IDS,
     owns: (id) => id.startsWith("mf2-"),
@@ -564,7 +564,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
     key: "mf3",
     label: "MF3 · Estratégias de Resolução de Conflitos",
     sectionOrder: buildSectionOrder(MF3_STOPS, "mf3-atividades", MF3_ACTIVITIES, "mf3-atividade-"),
-    stopIds: MF3_STOPS.map((s) => s.id),
+    stopIds: MF3_STOPS.filter((s) => s.kind !== "abertura").map((s) => s.id),
     quizIds: MF3_BLOCK_QUIZ_IDS,
     finalQuizIds: MF3_FINAL_QUIZ_IDS,
     owns: (id) => id.startsWith("mf3-"),

@@ -71,6 +71,13 @@
       "when": 1792529941451,
       "tag": "0009_progress_preserva_conclusao_admin_no_upsert",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792531713669,
+      "tag": "0010_admin_completion_sem_abertura",
+      "breakpoints": true
     }
   ]
 }

@@ -290,7 +290,7 @@ function Mf3Landing() {
         </ul>
       </section>
 
-      <StopNav stopId="mf3-abertura" />
+      <StopNav stopId="mf3-abertura" completable={false} />
     </article>
   );
 }

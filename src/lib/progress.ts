@@ -388,10 +388,12 @@ export function useProgress() {
   }, [module, storageKey]);
 
 
-  const trackable = stops.length;
+  // A Abertura não conta para o progresso (não tem «Marcar como concluído»).
+  const countable = useMemo(() => stops.filter((s) => s.kind !== "abertura"), [stops]);
+  const trackable = countable.length;
   const done = useMemo(
-    () => state.completed.filter((id) => stops.some((s) => s.id === id)).length,
-    [state.completed, stops],
+    () => state.completed.filter((id) => countable.some((s) => s.id === id)).length,
+    [state.completed, countable],
   );
 
   return {

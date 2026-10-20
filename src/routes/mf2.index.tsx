@@ -288,7 +288,7 @@ function Mf2Landing() {
         </ul>
       </section>
 
-      <StopNav stopId="mf2-abertura" />
+      <StopNav stopId="mf2-abertura" completable={false} />
     </article>
   );
 }

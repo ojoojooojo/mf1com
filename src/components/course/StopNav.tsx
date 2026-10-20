@@ -18,7 +18,7 @@ export function useVisit(stopId: string, enabled = true) {
   }, [stopId, enabled, markVisited]);
 }
 
-export function StopNav({ stopId }: { stopId: string }) {
+export function StopNav({ stopId, completable = true }: { stopId: string; completable?: boolean }) {
   const { done, adminDone, blocked, completing, missing, complete, uncomplete } = useCompletionGate(stopId);
   const pathname = useLocation({ select: (l) => l.pathname });
   const stops = pathname.startsWith("/mf3")
@@ -35,28 +35,32 @@ export function StopNav({ stopId }: { stopId: string }) {
 
   return (
     <div className="mt-12 space-y-4 border-t border-border pt-6">
-      <button
-        type="button"
-        disabled={adminDone || blocked || completing}
-        onClick={() => (done ? uncomplete() : void complete())}
-        className={cn(
-          "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          done
-            ? "bg-success-soft text-foreground hover:bg-muted"
-            : "bg-primary text-primary-foreground hover:bg-primary/90",
-        )}
-      >
-        <Check className="size-4" />
-        {done
-          ? adminDone ? "Secção concluída" : "Secção concluída — desmarcar"
-          : completing
-            ? "A registar as suas respostas…"
-            : "Marcar secção como concluída"}
-      </button>
-      <AdminCompletionNote sectionId={stopId} />
+      {completable ? (
+        <>
+          <button
+            type="button"
+            disabled={adminDone || blocked || completing}
+            onClick={() => (done ? uncomplete() : void complete())}
+            className={cn(
+              "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
+              "disabled:cursor-not-allowed disabled:opacity-50",
+              done
+                ? "bg-success-soft text-foreground hover:bg-muted"
+                : "bg-primary text-primary-foreground hover:bg-primary/90",
+            )}
+          >
+            <Check className="size-4" />
+            {done
+              ? adminDone ? "Secção concluída" : "Secção concluída — desmarcar"
+              : completing
+                ? "A registar as suas respostas…"
+                : "Marcar secção como concluída"}
+          </button>
+          <AdminCompletionNote sectionId={stopId} />
 
-      {blocked ? <MissingRequirementsList missing={missing} /> : null}
+          {blocked ? <MissingRequirementsList missing={missing} /> : null}
+        </>
+      ) : null}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         {prev ? (
