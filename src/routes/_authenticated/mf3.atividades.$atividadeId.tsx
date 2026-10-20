@@ -10,6 +10,7 @@ import { ActivityMf3_5 } from "@/components/course/activities/ActivityMf3_5";
 import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { MissingRequirementsList, useCompletionGate } from "@/components/course/CompletionGate";
 import { cn } from "@/lib/utils";
+import { AdminCompletionNote } from "@/components/course/AdminCompletionNote";
 
 export const Route = createFileRoute("/_authenticated/mf3/atividades/$atividadeId")({
   loader: ({ params }) => {
@@ -34,6 +35,8 @@ export const Route = createFileRoute("/_authenticated/mf3/atividades/$atividadeI
         { name: "description", content: activity.description },
         { property: "og:title", content: title },
         { property: "og:description", content: activity.description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },
@@ -58,7 +61,7 @@ function Mf3ActivityNotFound() {
 function Mf3ActivityPage() {
   const { activity } = Route.useLoaderData();
   const key = `mf3-atividade-${activity.id}`;
-  const { done, blocked, completing, missing, complete, uncomplete } = useCompletionGate(key);
+  const { done, adminDone, blocked, completing, missing, complete, uncomplete } = useCompletionGate(key);
   const index = MF3_ACTIVITIES.findIndex((a) => a.id === activity.id);
   const next = MF3_ACTIVITIES[index + 1];
   const { loading, lockFor } = useSectionLocks();
@@ -106,7 +109,7 @@ function Mf3ActivityPage() {
       <div className="mt-8 space-y-4 border-t border-border pt-6">
         <button
           type="button"
-          disabled={blocked || completing}
+          disabled={adminDone || blocked || completing}
           onClick={() => (done ? uncomplete() : void complete())}
           className={cn(
             "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
@@ -118,11 +121,12 @@ function Mf3ActivityPage() {
         >
           <Check className="size-4" />
           {done
-            ? "Atividade concluída — desmarcar"
+            ? adminDone ? "Atividade concluída" : "Atividade concluída — desmarcar"
             : completing
               ? "A registar as suas respostas…"
               : "Marcar atividade como concluída"}
         </button>
+        <AdminCompletionNote sectionId={key} />
         {blocked ? <MissingRequirementsList missing={missing} /> : null}
         {next ? (
           <div>

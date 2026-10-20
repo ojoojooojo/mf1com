@@ -4,6 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight, Download, ShieldAlert, Trash2, Users } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteParticipant } from "@/lib/participants.functions";
+import { AdminCompletionControl } from "@/components/course/AdminCompletionControl";
+import type { AdminProgress } from "@/lib/admin-completion";
 import { supabase } from "@/integrations/supabase/client";
 import { ACTIVITIES, BLOCK_QUIZ_IDS, STOPS } from "@/lib/course-data";
 import { MF2_ACTIVITIES, MF2_BLOCK_QUIZ_IDS, MF2_STOPS } from "@/lib/course-data-mf2";
@@ -489,6 +491,7 @@ export const Route = createFileRoute("/_authenticated/formador")({
 /* ---------- Tipos e utilitários ---------- */
 
 type ModuleTab = "mf1" | "mf2" | "mf3";
+type TrainerProgressRow = ProgressRow & AdminProgress;
 type PanelTab = ModuleTab | "avaliacao";
 
 type ModuleConfig = {
@@ -607,7 +610,7 @@ function TrainerPage() {
         supabase
           .from("profiles")
           .select("id, email, role, created_at, nome_proprio, apelido, nota_formador"),
-        supabase.from("progress").select("user_id, section_id, status, updated_at"),
+        supabase.from("progress").select("user_id, section_id, status, updated_at, completed_by_admin, admin_completed_at, admin_completed_by"),
         supabase
           .from("quiz_answers")
           .select(
@@ -627,7 +630,7 @@ function TrainerPage() {
       ]);
       return {
         profiles: (profiles.data ?? []) as ProfileRow[],
-        progress: (progress.data ?? []) as ProgressRow[],
+        progress: (progress.data ?? []) as TrainerProgressRow[],
         quiz: (quiz.data ?? []) as QuizRow[],
         responses: (responses.data ?? []) as ResponseRow[],
       };
@@ -989,7 +992,7 @@ function ParticipantDetail({
   dataset: Dataset;
   email: string;
   onDeleted: () => void;
-  progress: ProgressRow[];
+  progress: TrainerProgressRow[];
   quiz: QuizRow[];
   responses: ResponseRow[];
 }) {
@@ -1030,9 +1033,10 @@ function ParticipantDetail({
             return (
               <li
                 key={section.id}
-                className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-2.5 text-[0.9rem]"
+                className="flex flex-col items-start justify-between gap-3 rounded-lg border border-border bg-card px-4 py-2.5 text-[0.9rem]"
               >
-                <span className="min-w-0 truncate">{section.label.trim()}</span>
+                <span className="min-w-0">{section.label.trim()}</span>
+                <div className="flex flex-wrap items-center gap-2">
                 <span
                   className={cn(
                     "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold",
@@ -1045,6 +1049,12 @@ function ParticipantDetail({
                 >
                   {status.label}
                 </span>
+                {progress.find((r) => r.section_id === section.id)?.completed_by_admin && (
+                  <span className="text-xs font-semibold text-primary" title="Concluído pela administração">Adm.</span>
+                )}
+                {isFormador && <AdminCompletionControl userId={profile.id} sectionId={section.id}
+                  label={section.label.trim()} progress={progress.find((r) => r.section_id === section.id)} />}
+                </div>
               </li>
             );
           })}

@@ -38,6 +38,7 @@ export type ProgressState = {
   quizCorrect: Record<string, boolean>;
   /** Estado de interface (ex. "já revelei a análise de referência") — só localStorage. */
   flags: Record<string, boolean>;
+  adminCompleted?: string[];
 };
 
 const EMPTY: ProgressState = { visited: [], completed: [], answers: {}, quiz: {}, quizCorrect: {}, flags: {} };
@@ -55,6 +56,7 @@ function read(storageKey: string): ProgressState {
       quiz: parsed.quiz ?? {},
       quizCorrect: parsed.quizCorrect ?? {},
       flags: parsed.flags ?? {},
+      adminCompleted: parsed.adminCompleted ?? [],
     };
   } catch {
     return EMPTY;
@@ -82,7 +84,7 @@ async function pullRemote(module: ModuleKey, storageKey: string): Promise<Progre
   if (!userId) return null;
 
   const [{ data: rows }, { data: responses }, { data: quizRows }] = await Promise.all([
-    supabase.from("progress").select("section_id, status").eq("user_id", userId),
+    supabase.from("progress").select("section_id, status, completed_by_admin").eq("user_id", userId),
     supabase.from("written_responses").select("activity_id, response_text").eq("user_id", userId),
     supabase.from("quiz_answers").select("quiz_id, selected_option, is_correct").eq("user_id", userId),
   ]);
@@ -90,11 +92,13 @@ async function pullRemote(module: ModuleKey, storageKey: string): Promise<Progre
   const local = read(storageKey);
   const visited = new Set(local.visited);
   const completed = new Set(local.completed);
+  const adminCompleted: string[] = [];
   for (const row of rows ?? []) {
     if (!belongsTo(module, row.section_id)) continue;
     visited.add(row.section_id);
     if (row.status === "concluido") completed.add(row.section_id);
     else completed.delete(row.section_id);
+    if (row.completed_by_admin) adminCompleted.push(row.section_id);
   }
 
   const answers = { ...local.answers };
@@ -117,6 +121,7 @@ async function pullRemote(module: ModuleKey, storageKey: string): Promise<Progre
     ...local,
     visited: [...visited],
     completed: [...completed],
+    adminCompleted,
     answers,
     quiz,
     quizCorrect,
@@ -285,10 +290,11 @@ export function useProgress() {
 
   const unmarkCompleted = useCallback(
     (id: string) => {
+      if (read(storageKey).adminCompleted?.includes(id)) return;
       update((p) => ({ ...p, completed: p.completed.filter((x) => x !== id) }));
       void pushSection(id, "iniciado");
     },
-    [update],
+    [update, storageKey],
   );
 
   const saveAnswer = useCallback(
@@ -402,6 +408,7 @@ export function useProgress() {
     percent: Math.min(100, Math.round((done / trackable) * 100)),
     isVisited: (id: string) => state.visited.includes(id),
     isCompleted: (id: string) => state.completed.includes(id),
+    isAdminCompleted: (id: string) => state.adminCompleted?.includes(id) ?? false,
   };
 }
 

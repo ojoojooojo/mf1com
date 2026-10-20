@@ -57,6 +57,13 @@
       "when": 1792356924944,
       "tag": "0007_progress_exige_respostas_mf2_mf3",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792529591927,
+      "tag": "0008_progress_conclusao_administrativa",
+      "breakpoints": true
     }
   ]
 }
