@@ -22,6 +22,12 @@ import {
 } from "@/lib/export-xlsx";
 import { cn } from "@/lib/utils";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   EVALUATION_KEY,
   MODULE_KEYS,
   MODULE_SHORT_LABELS,
@@ -53,9 +59,14 @@ function ModuleAvailabilityPanel() {
   const setOpen = useSetModuleOpen();
 
   return (
-    <section className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-8">
-      <h2 className="font-display text-xl leading-tight">Módulos do curso</h2>
-      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+    <section className="mt-6 rounded-2xl border border-border bg-card shadow-soft">
+      <Accordion type="single" collapsible className="px-6 sm:px-8">
+        <AccordionItem value="modulos" className="border-b-0">
+          <AccordionTrigger className="font-display text-xl leading-tight">
+            Módulos do curso
+          </AccordionTrigger>
+          <AccordionContent>
+      <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
         Controle que módulos estão disponíveis aos participantes. Fechar um módulo não apaga nem
         altera qualquer progresso, resposta a quizzes ou produção escrita.
       </p>
@@ -125,6 +136,9 @@ function ModuleAvailabilityPanel() {
           Não foi possível alterar o estado do módulo. Tente novamente.
         </p>
       )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </section>
   );
 }
