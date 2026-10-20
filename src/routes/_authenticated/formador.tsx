@@ -521,14 +521,14 @@ const MF3_FINAL_QUIZ_IDS = [
   "mf3-sintese-quiz-4",
 ] as const;
 
-/** Ordem canónica das secções, igual ao mapa do módulo (com as atividades aninhadas). */
+/** Ordem canónica das secções, igual ao mapa do módulo (com as atividades aninhadas). A Abertura não conta para o progresso. */
 function buildSectionOrder(
   stops: typeof STOPS,
   activitiesStopId: string,
   activities: typeof ACTIVITIES,
   activityPrefix: string,
 ) {
-  return stops.flatMap((stop) =>
+  return stops.filter((stop) => stop.kind !== "abertura").flatMap((stop) =>
     stop.id === activitiesStopId
       ? [
           { id: stop.id, label: stop.shortTitle },
