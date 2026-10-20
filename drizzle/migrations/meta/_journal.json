@@ -64,6 +64,13 @@
       "when": 1792529591927,
       "tag": "0008_progress_conclusao_administrativa",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792529941451,
+      "tag": "0009_progress_preserva_conclusao_admin_no_upsert",
+      "breakpoints": true
     }
   ]
 }
