@@ -258,41 +258,51 @@ function SectionSchedulePanel() {
   });
 
   return (
-    <section className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-8">
-      <h2 className="font-display text-xl leading-tight">Calendário de abertura</h2>
-      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-        Cada parte abre automaticamente à data indicada (hora de Portugal continental). O que já
-        abriu fica aberto até ao fim da ação. Fechar o módulo inteiro (acima) tem sempre prioridade
-        sobre este calendário.
-      </p>
-      {scheduleQuery.isLoading ? (
-        <p className="mt-4 text-sm text-muted-foreground">A carregar calendário…</p>
-      ) : (
-        <div className="mt-5 space-y-6">
-          {MODULE_KEYS.map((moduleKey) => (
-            <div key={moduleKey}>
-              <p className="eyebrow">{MODULE_SHORT_LABELS[moduleKey]}</p>
-              <ul className="mt-3 space-y-2">
-                {(scheduleQuery.data ?? [])
-                  .filter((r) => r.module_key === moduleKey)
-                  .map((row) => (
-                    <ScheduleRow
-                      key={`${row.section_id}:${row.opens_at}`}
-                      row={row}
-                      busy={save.isPending && save.variables?.sectionId === row.section_id}
-                      onSave={(iso) => save.mutate({ sectionId: row.section_id, opensAt: iso })}
-                    />
-                  ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
-      {save.isError && (
-        <p className="mt-3 text-sm text-destructive">
-          Não foi possível guardar a data de abertura. Tente novamente.
-        </p>
-      )}
+    <section className="mt-6 rounded-2xl border border-border bg-card shadow-soft">
+      <Accordion type="single" collapsible className="px-6 sm:px-8">
+        <AccordionItem value="calendario" className="border-b-0">
+          <AccordionTrigger className="font-display text-xl leading-tight">
+            Calendário de abertura
+          </AccordionTrigger>
+          <AccordionContent>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Cada parte abre automaticamente à data indicada (hora de Portugal continental). O que
+              já abriu fica aberto até ao fim da ação. Fechar o módulo inteiro (acima) tem sempre
+              prioridade sobre este calendário.
+            </p>
+            {scheduleQuery.isLoading ? (
+              <p className="mt-4 text-sm text-muted-foreground">A carregar calendário…</p>
+            ) : (
+              <div className="mt-5 space-y-6">
+                {MODULE_KEYS.map((moduleKey) => (
+                  <div key={moduleKey}>
+                    <p className="eyebrow">{MODULE_SHORT_LABELS[moduleKey]}</p>
+                    <ul className="mt-3 space-y-2">
+                      {(scheduleQuery.data ?? [])
+                        .filter((r) => r.module_key === moduleKey)
+                        .map((row) => (
+                          <ScheduleRow
+                            key={`${row.section_id}:${row.opens_at}`}
+                            row={row}
+                            busy={save.isPending && save.variables?.sectionId === row.section_id}
+                            onSave={(iso) =>
+                              save.mutate({ sectionId: row.section_id, opensAt: iso })
+                            }
+                          />
+                        ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+            {save.isError && (
+              <p className="mt-3 text-sm text-destructive">
+                Não foi possível guardar a data de abertura. Tente novamente.
+              </p>
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </section>
   );
 }
