@@ -66,76 +66,80 @@ function ModuleAvailabilityPanel() {
             Módulos do curso
           </AccordionTrigger>
           <AccordionContent>
-      <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-        Controle que módulos estão disponíveis aos participantes. Fechar um módulo não apaga nem
-        altera qualquer progresso, resposta a quizzes ou produção escrita.
-      </p>
+            <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Controle que módulos estão disponíveis aos participantes. Fechar um módulo não apaga
+              nem altera qualquer progresso, resposta a quizzes ou produção escrita.
+            </p>
 
-      {statuses.isLoading ? (
-        <p className="mt-4 text-sm text-muted-foreground">A carregar estado dos módulos…</p>
-      ) : (
-        <ul className="mt-5 space-y-3">
-          {([...MODULE_KEYS, EVALUATION_KEY] as ControlKey[]).map((key) => {
-            const isEvaluation = key === EVALUATION_KEY;
-            const isOpen = statuses.data?.[key].is_open ?? true;
-            const busy = setOpen.isPending && setOpen.variables?.moduleKey === key;
-            return (
-              <li
-                key={key}
-                className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold">{MODULE_SHORT_LABELS[key]}</p>
-                  <p
-                    className={cn(
-                      "mt-1 inline-flex items-center gap-1.5 text-xs font-semibold",
-                      isOpen ? "text-success" : "text-destructive",
-                    )}
-                  >
-                    {isOpen ? <LockOpen className="size-3.5" /> : <Lock className="size-3.5" />}
-                    {isEvaluation
-                      ? isOpen
-                        ? "Aberta"
-                        : "Fechada"
-                      : isOpen
-                        ? "Aberto"
-                        : "Fechado"}
-                  </p>
-                  {isEvaluation && (
-                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                      Fecho manual do 4.º passo. Aberta por omissão: abre automaticamente a cada
-                      participante que conclua o MF3. Fechar impede novas submissões, mas não apaga
-                      respostas já registadas nem o seu acesso aos resultados.
-                    </p>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => setOpen.mutate({ moduleKey: key, isOpen: !isOpen })}
-                  aria-label={`${isOpen ? "Fechar" : "Abrir"} ${MODULE_SHORT_LABELS[key]}`}
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold transition-colors hover:bg-muted disabled:opacity-60 sm:text-sm"
-                >
-                  {busy
-                    ? "A guardar…"
-                    : isEvaluation
-                      ? isOpen
-                        ? "Fechar avaliação"
-                        : "Abrir avaliação"
-                      : isOpen
-                        ? "Fechar módulo"
-                        : "Abrir módulo"}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      {setOpen.isError && (
-        <p className="mt-3 text-sm text-destructive">
-          Não foi possível alterar o estado do módulo. Tente novamente.
-        </p>
-      )}
+            {statuses.isLoading ? (
+              <p className="mt-4 text-sm text-muted-foreground">A carregar estado dos módulos…</p>
+            ) : (
+              <ul className="mt-5 space-y-3">
+                {([...MODULE_KEYS, EVALUATION_KEY] as ControlKey[]).map((key) => {
+                  const isEvaluation = key === EVALUATION_KEY;
+                  const isOpen = statuses.data?.[key].is_open ?? true;
+                  const busy = setOpen.isPending && setOpen.variables?.moduleKey === key;
+                  return (
+                    <li
+                      key={key}
+                      className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">{MODULE_SHORT_LABELS[key]}</p>
+                        <p
+                          className={cn(
+                            "mt-1 inline-flex items-center gap-1.5 text-xs font-semibold",
+                            isOpen ? "text-success" : "text-destructive",
+                          )}
+                        >
+                          {isOpen ? (
+                            <LockOpen className="size-3.5" />
+                          ) : (
+                            <Lock className="size-3.5" />
+                          )}
+                          {isEvaluation
+                            ? isOpen
+                              ? "Aberta"
+                              : "Fechada"
+                            : isOpen
+                              ? "Aberto"
+                              : "Fechado"}
+                        </p>
+                        {isEvaluation && (
+                          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                            Fecho manual do 4.º passo. Aberta por omissão: abre automaticamente a
+                            cada participante que conclua o MF3. Fechar impede novas submissões, mas
+                            não apaga respostas já registadas nem o seu acesso aos resultados.
+                          </p>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        disabled={busy}
+                        onClick={() => setOpen.mutate({ moduleKey: key, isOpen: !isOpen })}
+                        aria-label={`${isOpen ? "Fechar" : "Abrir"} ${MODULE_SHORT_LABELS[key]}`}
+                        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold transition-colors hover:bg-muted disabled:opacity-60 sm:text-sm"
+                      >
+                        {busy
+                          ? "A guardar…"
+                          : isEvaluation
+                            ? isOpen
+                              ? "Fechar avaliação"
+                              : "Abrir avaliação"
+                            : isOpen
+                              ? "Fechar módulo"
+                              : "Abrir módulo"}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {setOpen.isError && (
+              <p className="mt-3 text-sm text-destructive">
+                Não foi possível alterar o estado do módulo. Tente novamente.
+              </p>
+            )}
           </AccordionContent>
         </AccordionItem>
       </Accordion>
@@ -323,8 +327,8 @@ function EvaluationSummary({ isFormador }: { isFormador: boolean }) {
             identificação do participante.
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            As respostas são guardadas numa tabela sem coluna de utilizador; o controlo de
-            «já respondeu» é privado de cada conta e não é consultável nesta página.
+            As respostas são guardadas numa tabela sem coluna de utilizador; o controlo de «já
+            respondeu» é privado de cada conta e não é consultável nesta página.
           </p>
         </div>
         <ExportButton
@@ -362,9 +366,7 @@ function EvaluationSummary({ isFormador }: { isFormador: boolean }) {
                   { key: "satisfacao_global" as const, label: "Satisfação global" },
                 ].map((dim) => {
                   const values = rows.map((r) =>
-                    dim.key === "satisfacao_global"
-                      ? r.satisfacao_global
-                      : r[dim.key as LikertKey],
+                    dim.key === "satisfacao_global" ? r.satisfacao_global : r[dim.key as LikertKey],
                   );
                   const counts = [1, 2, 3, 4, 5].map((n) => values.filter((v) => v === n).length);
                   return (
@@ -409,15 +411,18 @@ function EvaluationSummary({ isFormador }: { isFormador: boolean }) {
           <div className="space-y-3">
             <h2 className="font-display text-xl">Comentários (anónimos)</h2>
             {rows.every(
-              (r) =>
-                !r.pontos_fortes.trim() && !r.pontos_melhorar.trim() && !r.sugestoes.trim(),
+              (r) => !r.pontos_fortes.trim() && !r.pontos_melhorar.trim() && !r.sugestoes.trim(),
             ) ? (
               <p className="rounded-xl border border-border bg-surface p-5 text-sm text-muted-foreground">
                 Nenhuma resposta aberta preenchida até agora.
               </p>
             ) : (
               rows.map((row, i) => {
-                if (!row.pontos_fortes.trim() && !row.pontos_melhorar.trim() && !row.sugestoes.trim())
+                if (
+                  !row.pontos_fortes.trim() &&
+                  !row.pontos_melhorar.trim() &&
+                  !row.sugestoes.trim()
+                )
                   return null;
                 return (
                   <article key={row.id} className="rounded-xl border border-border bg-card p-5">
@@ -449,7 +454,6 @@ function EvaluationSummary({ isFormador }: { isFormador: boolean }) {
     </section>
   );
 }
-
 
 export const Route = createFileRoute("/_authenticated/formador")({
   head: () => ({
@@ -537,12 +541,7 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
   mf2: {
     key: "mf2",
     label: "MF2 · Dinâmicas e Causas do Conflito",
-    sectionOrder: buildSectionOrder(
-      MF2_STOPS,
-      "mf2-atividades",
-      MF2_ACTIVITIES,
-      "mf2-atividade-",
-    ),
+    sectionOrder: buildSectionOrder(MF2_STOPS, "mf2-atividades", MF2_ACTIVITIES, "mf2-atividade-"),
     stopIds: MF2_STOPS.map((s) => s.id),
     quizIds: MF2_BLOCK_QUIZ_IDS,
     finalQuizIds: MF2_FINAL_QUIZ_IDS,
@@ -551,19 +550,13 @@ const MODULES: Record<ModuleTab, ModuleConfig> = {
   mf3: {
     key: "mf3",
     label: "MF3 · Estratégias de Resolução de Conflitos",
-    sectionOrder: buildSectionOrder(
-      MF3_STOPS,
-      "mf3-atividades",
-      MF3_ACTIVITIES,
-      "mf3-atividade-",
-    ),
+    sectionOrder: buildSectionOrder(MF3_STOPS, "mf3-atividades", MF3_ACTIVITIES, "mf3-atividade-"),
     stopIds: MF3_STOPS.map((s) => s.id),
     quizIds: MF3_BLOCK_QUIZ_IDS,
     finalQuizIds: MF3_FINAL_QUIZ_IDS,
     owns: (id) => id.startsWith("mf3-"),
   },
 };
-
 
 function formatDate(value: string) {
   return new Date(value).toLocaleString("pt-PT", {
@@ -657,7 +650,9 @@ function TrainerPage() {
         <p className="eyebrow flex items-center gap-2">
           <Users className="size-4" /> Painel do formador
         </p>
-        <h1 className="mt-2 font-display text-3xl leading-tight">Acompanhamento dos participantes</h1>
+        <h1 className="mt-2 font-display text-3xl leading-tight">
+          Acompanhamento dos participantes
+        </h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
           Progresso por secção, respostas aos micro-quizzes e produções escritas. Pode ainda
           adicionar uma nota a cada participante e remover registos incorretos (contas de teste ou
@@ -667,7 +662,6 @@ function TrainerPage() {
 
       <ModuleAvailabilityPanel />
       <SectionSchedulePanel />
-
 
       <nav
         aria-label="Módulos e avaliação"
@@ -901,9 +895,12 @@ function ParticipantsTable({
                     <td className="px-4 py-3">
                       <span className="font-display">{row.percent}%</span>
                       <span className="ml-2 text-xs text-muted-foreground">
-                        {row.progress.filter(
-                          (r) => r.status === "concluido" && module.stopIds.includes(r.section_id),
-                        ).length}
+                        {
+                          row.progress.filter(
+                            (r) =>
+                              r.status === "concluido" && module.stopIds.includes(r.section_id),
+                          ).length
+                        }
                         /{module.stopIds.length} secções
                       </span>
                     </td>
@@ -916,8 +913,8 @@ function ParticipantsTable({
                             {row.correct}/{row.answered}
                           </span>
                           <span className="ml-2 text-xs text-muted-foreground">
-                            corretas à primeira ({module.quizIds.length} micro-quizzes avaliados
-                            nos blocos)
+                            corretas à primeira ({module.quizIds.length} micro-quizzes avaliados nos
+                            blocos)
                           </span>
                           {row.legacy > 0 ? (
                             <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
@@ -1132,8 +1129,7 @@ function ParticipantDetail({
                 {row.revealed_at ? (
                   <div className="mt-3 rounded-lg border border-primary/25 bg-primary-soft p-3">
                     <p className="text-xs font-semibold text-primary">
-                      Submetido antes de ver o comentário (
-                      {formatDate(row.revealed_at)})
+                      Submetido antes de ver o comentário ({formatDate(row.revealed_at)})
                     </p>
                     <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed">
                       {row.revealed_text}
@@ -1215,13 +1211,7 @@ function ParticipantNote({ profile }: { profile: ProfileRow }) {
 
 /* ---------- Remoção definitiva de um participante ---------- */
 
-function DeleteParticipant({
-  profile,
-  onDeleted,
-}: {
-  profile: ProfileRow;
-  onDeleted: () => void;
-}) {
+function DeleteParticipant({ profile, onDeleted }: { profile: ProfileRow; onDeleted: () => void }) {
   const queryClient = useQueryClient();
   const deleteFn = useServerFn(deleteParticipant);
   const [confirming, setConfirming] = useState(false);
