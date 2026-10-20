@@ -1,4 +1,4 @@
-- [ ] Acrescentar identificação administrativa protegida e conclusão/anulação pelo formador.
-- [ ] Mostrar confirmação com contagens e marca Adm. no painel.
-- [ ] Mostrar nota de conclusão administrativa ao formando em MF1–MF3.
-- [ ] Testar permissões, conclusão/anulação, contagens e vistas desktop/mobile.
+- [x] Acrescentar identificação administrativa protegida e conclusão/anulação pelo formador.
+- [x] Mostrar confirmação com contagens e marca Adm. no painel.
+- [x] Mostrar nota de conclusão administrativa ao formando em MF1–MF3.
+- [x] Testar permissões, conclusão/anulação, contagens e vistas desktop/mobile.
