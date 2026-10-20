@@ -232,7 +232,7 @@ function Landing() {
         </ul>
       </section>
 
-      <StopNav stopId="abertura" />
+      <StopNav stopId="abertura" completable={false} />
     </article>
   );
 }
