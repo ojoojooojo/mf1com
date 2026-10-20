@@ -8,6 +8,7 @@ import { ActivityC } from "@/components/course/activities/ActivityC";
 import { ActivityD } from "@/components/course/activities/ActivityD";
 import { ActivityE } from "@/components/course/activities/ActivityE";
 import { useProgress } from "@/lib/progress";
+import { AdminCompletionNote } from "@/components/course/AdminCompletionNote";
 import { SectionLockedCard, useSectionLocks } from "@/components/course/SectionGate";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,8 @@ export const Route = createFileRoute("/_authenticated/mf1/atividades/$atividadeI
         { name: "description", content: activity.description },
         { property: "og:title", content: title },
         { property: "og:description", content: activity.description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },
@@ -57,9 +60,10 @@ function ActivityNotFound() {
 
 function ActivityPage() {
   const { activity } = Route.useLoaderData();
-  const { isCompleted, markCompleted, unmarkCompleted, hydrated } = useProgress();
+  const { isCompleted, isAdminCompleted, markCompleted, unmarkCompleted, hydrated } = useProgress();
   const key = `atividade-${activity.id}`;
   const done = hydrated && isCompleted(key);
+  const adminDone = hydrated && isAdminCompleted(key);
   const index = ACTIVITIES.findIndex((a) => a.id === activity.id);
   const next = ACTIVITIES[index + 1];
   const { loading, lockFor } = useSectionLocks();
@@ -107,6 +111,7 @@ function ActivityPage() {
       <div className="mt-8 space-y-4 border-t border-border pt-6">
         <button
           type="button"
+          disabled={adminDone}
           onClick={() => (done ? unmarkCompleted(key) : markCompleted(key))}
           className={cn(
             "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
@@ -116,8 +121,9 @@ function ActivityPage() {
           )}
         >
           <Check className="size-4" />
-          {done ? "Atividade concluída — desmarcar" : "Marcar atividade como concluída"}
+          {done ? adminDone ? "Atividade concluída" : "Atividade concluída — desmarcar" : "Marcar atividade como concluída"}
         </button>
+        <AdminCompletionNote sectionId={key} />
         {next ? (
           <div>
             <ContentCard title="A seguir">

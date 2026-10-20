@@ -142,6 +142,9 @@ export type Database = {
       }
       progress: {
         Row: {
+          admin_completed_at: string | null
+          admin_completed_by: string | null
+          completed_by_admin: boolean
           created_at: string
           id: string
           section_id: string
@@ -150,6 +153,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          admin_completed_at?: string | null
+          admin_completed_by?: string | null
+          completed_by_admin?: boolean
           created_at?: string
           id?: string
           section_id: string
@@ -158,6 +164,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          admin_completed_at?: string | null
+          admin_completed_by?: string | null
+          completed_by_admin?: boolean
           created_at?: string
           id?: string
           section_id?: string
@@ -303,6 +312,10 @@ export type Database = {
           item_id: string
           kind: string
         }[]
+      }
+      set_admin_section_completion: {
+        Args: { p_complete: boolean; p_section_id: string; p_user_id: string }
+        Returns: undefined
       }
       snapshot_reveal: { Args: { p_prefix: string }; Returns: number }
       submit_course_evaluation: {

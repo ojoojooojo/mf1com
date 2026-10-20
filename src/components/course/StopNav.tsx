@@ -9,6 +9,7 @@ import { useSectionLocks } from "@/components/course/SectionGate";
 import { MissingRequirementsList, useCompletionGate } from "@/components/course/CompletionGate";
 import { formatOpening } from "@/lib/section-schedule";
 import { cn } from "@/lib/utils";
+import { AdminCompletionNote } from "@/components/course/AdminCompletionNote";
 
 export function useVisit(stopId: string, enabled = true) {
   const { markVisited } = useProgress();
@@ -18,7 +19,7 @@ export function useVisit(stopId: string, enabled = true) {
 }
 
 export function StopNav({ stopId }: { stopId: string }) {
-  const { done, blocked, completing, missing, complete, uncomplete } = useCompletionGate(stopId);
+  const { done, adminDone, blocked, completing, missing, complete, uncomplete } = useCompletionGate(stopId);
   const pathname = useLocation({ select: (l) => l.pathname });
   const stops = pathname.startsWith("/mf3")
     ? MF3_STOPS
@@ -36,7 +37,7 @@ export function StopNav({ stopId }: { stopId: string }) {
     <div className="mt-12 space-y-4 border-t border-border pt-6">
       <button
         type="button"
-        disabled={blocked || completing}
+        disabled={adminDone || blocked || completing}
         onClick={() => (done ? uncomplete() : void complete())}
         className={cn(
           "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors",
@@ -48,11 +49,12 @@ export function StopNav({ stopId }: { stopId: string }) {
       >
         <Check className="size-4" />
         {done
-          ? "Secção concluída — desmarcar"
+          ? adminDone ? "Secção concluída" : "Secção concluída — desmarcar"
           : completing
             ? "A registar as suas respostas…"
             : "Marcar secção como concluída"}
       </button>
+      <AdminCompletionNote sectionId={stopId} />
 
       {blocked ? <MissingRequirementsList missing={missing} /> : null}
 

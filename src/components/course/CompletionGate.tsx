@@ -16,7 +16,7 @@ function scrollToRequirement(id: string) {
  * concluir fazemos primeiro flush das respostas ainda no debounce.
  */
 export function useCompletionGate(sectionId: string) {
-  const { state, hydrated, isCompleted, markCompleted, unmarkCompleted } = useProgress();
+  const { state, hydrated, isCompleted, isAdminCompleted, markCompleted, unmarkCompleted } = useProgress();
   const role = useViewerRole();
   const [completing, setCompleting] = useState(false);
 
@@ -35,7 +35,7 @@ export function useCompletionGate(sectionId: string) {
     markCompleted(sectionId);
   };
 
-  return { done, blocked, completing, missing, complete, uncomplete: () => unmarkCompleted(sectionId) };
+  return { done, adminDone: hydrated && isAdminCompleted(sectionId), blocked, completing, missing, complete, uncomplete: () => unmarkCompleted(sectionId) };
 }
 
 /** Lista do que falta responder, com ligação/scroll até cada elemento em falta. */
